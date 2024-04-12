@@ -8,14 +8,14 @@ This is the front end of the capstone project of GraduGolorious Group
 
 ## Installation
 
-### 1. Install Android Studio
+### 1. Follow the installation guide in Flutter document site: https://docs.flutter.dev/get-started/install
 
-### 2. Install the VSCode
+### 2. Run the project by using powershell (Windows 11)
 
-### 3. Run the project
+a. cd pest_lens_app
 
-a. cd PestLens
+b. run "flutter emulators" after enit the virtual device in Android Studio 
 
-b. npm start
+c. check for the VM device id and run "flutter emulators --launch '<'emulator id>"
 
-c. follow avaiable option
+
