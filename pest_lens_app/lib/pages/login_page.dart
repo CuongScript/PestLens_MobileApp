@@ -93,12 +93,17 @@ class LoginPage extends StatelessWidget {
               // Sign in button
               MySubmitButton(
                 onTap: signUserIn,
+                buttonText: 'Sign In',
+              ),
+
+              const SizedBox(
+                height: 10,
               ),
 
               // Sign up button
-              // Sign in button
               MySubmitButton(
                 onTap: signUserUp,
+                buttonText: 'Sign Up',
               ),
 
               const SizedBox(
