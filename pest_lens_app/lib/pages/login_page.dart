@@ -5,6 +5,8 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/round_tile.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
@@ -30,6 +32,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
+                Text(AppLocalizations.of(context)!.helloWorld),
                 // Logo
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 90.0),
@@ -37,18 +40,18 @@ class LoginPage extends StatelessWidget {
                     'lib/assets/images/appIcon.png',
                   ),
                 ),
-          
+
                 const SizedBox(
                   height: 39.05,
                 ),
-          
+
                 // App name
                 const Text("InsectInsight", style: CustomTextStyles.appName),
-          
+
                 const SizedBox(
                   height: 56,
                 ),
-          
+
                 // Username textfield
                 MyTextField(
                   controller: usernameController,
@@ -57,11 +60,11 @@ class LoginPage extends StatelessWidget {
                   hintText: 'Email',
                   showRevealButton: false,
                 ),
-          
+
                 const SizedBox(
                   height: 13,
                 ),
-          
+
                 // Password textfield
                 MyTextField(
                   controller: passwordController,
@@ -70,11 +73,11 @@ class LoginPage extends StatelessWidget {
                   hintText: 'Password',
                   showRevealButton: true,
                 ),
-          
+
                 const SizedBox(
                   height: 10,
                 ),
-          
+
                 // Forgot password
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -88,42 +91,50 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                 ),
-          
+
                 const SizedBox(
                   height: 30,
                 ),
-          
+
                 // Sign in button
                 MySubmitButton(
                   onTap: signUserIn,
                   buttonText: 'Sign In',
                 ),
-          
+
                 const SizedBox(
                   height: 10,
                 ),
-          
+
                 // Sign up button
                 MySubmitButton(
                   onTap: signUserUp,
                   buttonText: 'Sign Up',
                 ),
-          
+
                 const SizedBox(
                   height: 50,
                 ),
-          
+
                 // Viet+Eng icon button
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     //Vietnam icon
-                    RoundTile(imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
-          
-                    SizedBox(width: 25),
-          
+                    GestureDetector(
+                      onTap: () => const (Locale('vi'),),
+                      child: const RoundTile(
+                          imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
+                    ),
+
+                    const SizedBox(width: 25),
+
                     //English icon
-                    RoundTile(imagePath: 'lib/assets/images/Flag_of_the_United_Kingdom.png'),
+                    GestureDetector(
+                      onTap: () => const (Locale('en'),),
+                      child: const RoundTile(
+                          imagePath: 'lib/assets/images/Flag_of_the_United_Kingdom.png'),
+                    ),
                   ],
                 ),
               ],
