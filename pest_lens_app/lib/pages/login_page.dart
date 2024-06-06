@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
-import 'package:pest_lens_app/components/text_style.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:pest_lens_app/components/my_text_field.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -36,28 +37,13 @@ class LoginPage extends StatelessWidget {
               ),
 
               // Username textfield
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: textFieldBorder),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade900,
-                        width: 2.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              const MyTextField(prefixIcon: Icon(Icons.email, color: Colors.grey),),
 
               const SizedBox(
                 height: 13,
               ),
               // Password textfield
+              const MyTextField(),
 
               // Forgot password
 
