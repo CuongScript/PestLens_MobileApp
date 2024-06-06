@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -6,7 +7,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(227, 236, 254, 0),
+      backgroundColor: primaryBackgroundColor,
+      body: Column(
+        children: [],
+      ),
     );
-  }  
+  }
 }
