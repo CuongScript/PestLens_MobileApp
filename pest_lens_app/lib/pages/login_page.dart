@@ -5,7 +5,10 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/round_tile.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//Call package below for language pack
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//Sample call
+// Text(AppLocalizations.of(context)!.helloWorld),
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -32,7 +35,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                Text(AppLocalizations.of(context)!.helloWorld),
+                
                 // Logo
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 90.0),
