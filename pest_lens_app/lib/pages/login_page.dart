@@ -37,7 +37,10 @@ class LoginPage extends StatelessWidget {
               ),
 
               // Username textfield
-              const MyTextField(prefixIcon: Icon(Icons.email, color: Colors.grey),),
+              const MyTextField(
+                prefixIcon: Icon(Icons.email, color: Colors.grey),
+                hintText: 'Enter your email',
+              ),
 
               const SizedBox(
                 height: 13,
