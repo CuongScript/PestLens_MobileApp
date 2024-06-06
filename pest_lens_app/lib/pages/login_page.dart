@@ -55,6 +55,7 @@ class LoginPage extends StatelessWidget {
                   obscureText: false,
                   prefixIcon: const Icon(Icons.email, color: Colors.black),
                   hintText: 'Email',
+                  showRevealButton: false,
                 ),
           
                 const SizedBox(
@@ -64,9 +65,10 @@ class LoginPage extends StatelessWidget {
                 // Password textfield
                 MyTextField(
                   controller: passwordController,
-                  obscureText: true, //Hide typed text
+                  obscureText: true,
                   prefixIcon: const Icon(Icons.lock, color: Colors.black),
                   hintText: 'Password',
+                  showRevealButton: true,
                 ),
           
                 const SizedBox(
