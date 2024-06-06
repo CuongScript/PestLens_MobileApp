@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
-import 'package:pest_lens_app/components/text_style.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:pest_lens_app/components/my_text_field.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
@@ -20,9 +20,10 @@ class LoginPage extends StatelessWidget {
               // Logo
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 90.0),
-                child: Image.asset('lib/assets/images/appIcon.png', ),
+                child: Image.asset(
+                  'lib/assets/images/appIcon.png',
+                ),
               ),
-              
 
               const SizedBox(
                 height: 39.05,
@@ -36,8 +37,13 @@ class LoginPage extends StatelessWidget {
               ),
 
               // Username textfield
+              const MyTextField(prefixIcon: Icon(Icons.email, color: Colors.grey),),
 
+              const SizedBox(
+                height: 13,
+              ),
               // Password textfield
+              const MyTextField(),
 
               // Forgot password
 
