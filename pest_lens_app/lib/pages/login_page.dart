@@ -22,108 +22,110 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              // Logo
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 90.0),
-                child: Image.asset(
-                  'lib/assets/images/appIcon.png',
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 50,
                 ),
-              ),
-
-              const SizedBox(
-                height: 39.05,
-              ),
-
-              // App name
-              const Text("InsectInsight", style: CustomTextStyles.appName),
-
-              const SizedBox(
-                height: 56,
-              ),
-
-              // Username textfield
-              MyTextField(
-                controller: usernameController,
-                obscureText: false,
-                prefixIcon: const Icon(Icons.email, color: Colors.black),
-                hintText: 'Email',
-              ),
-
-              const SizedBox(
-                height: 13,
-              ),
-
-              // Password textfield
-              MyTextField(
-                controller: passwordController,
-                obscureText: true, //Hide typed text
-                prefixIcon: const Icon(Icons.lock, color: Colors.black),
-                hintText: 'Password',
-              ),
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              // Forgot password
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                // Logo
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 90.0),
+                  child: Image.asset(
+                    'lib/assets/images/appIcon.png',
+                  ),
+                ),
+          
+                const SizedBox(
+                  height: 39.05,
+                ),
+          
+                // App name
+                const Text("InsectInsight", style: CustomTextStyles.appName),
+          
+                const SizedBox(
+                  height: 56,
+                ),
+          
+                // Username textfield
+                MyTextField(
+                  controller: usernameController,
+                  obscureText: false,
+                  prefixIcon: const Icon(Icons.email, color: Colors.black),
+                  hintText: 'Email',
+                ),
+          
+                const SizedBox(
+                  height: 13,
+                ),
+          
+                // Password textfield
+                MyTextField(
+                  controller: passwordController,
+                  obscureText: true, //Hide typed text
+                  prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                  hintText: 'Password',
+                ),
+          
+                const SizedBox(
+                  height: 10,
+                ),
+          
+                // Forgot password
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Forgot Password?',
+                        style: CustomTextStyles.forgotPass,
+                      ),
+                    ],
+                  ),
+                ),
+          
+                const SizedBox(
+                  height: 30,
+                ),
+          
+                // Sign in button
+                MySubmitButton(
+                  onTap: signUserIn,
+                  buttonText: 'Sign In',
+                ),
+          
+                const SizedBox(
+                  height: 10,
+                ),
+          
+                // Sign up button
+                MySubmitButton(
+                  onTap: signUserUp,
+                  buttonText: 'Sign Up',
+                ),
+          
+                const SizedBox(
+                  height: 50,
+                ),
+          
+                // Viet+Eng icon button
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Forgot Password?',
-                      style: CustomTextStyles.forgotPass,
-                    ),
+                    //Vietnam icon
+                    RoundTile(imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
+          
+                    SizedBox(width: 25),
+          
+                    //English icon
+                    RoundTile(imagePath: 'lib/assets/images/Flag_of_the_United_Kingdom.png'),
                   ],
                 ),
-              ),
-
-              const SizedBox(
-                height: 30,
-              ),
-
-              // Sign in button
-              MySubmitButton(
-                onTap: signUserIn,
-                buttonText: 'Sign In',
-              ),
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              // Sign up button
-              MySubmitButton(
-                onTap: signUserUp,
-                buttonText: 'Sign Up',
-              ),
-
-              const SizedBox(
-                height: 50,
-              ),
-
-              // Viet+Eng icon button
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //Vietnam icon
-                  RoundTile(imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
-
-                  SizedBox(width: 25),
-
-                  //English icon
-                  RoundTile(imagePath: 'lib/assets/images/Flag_of_the_United_Kingdom.png'),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

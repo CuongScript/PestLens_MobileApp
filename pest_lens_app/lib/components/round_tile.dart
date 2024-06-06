@@ -11,16 +11,15 @@ class RoundTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.grey[200],
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+        ),
       ),
-      child: Image.asset(
-        imagePath,
-        height: 40,
-      ),
+      width: 24,
+      height: 24,
     );
   }
 }
