@@ -21,6 +21,15 @@ class CustomTextStyles {
     letterSpacing: 0.105,
   );
 
+  static TextStyle forgotPass = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w500,
+    height: 1.0,
+    color: Colors.grey.shade600,
+  );
+
 
   // Add more text styles as needed
   // static const TextStyle appName = TextStyle(

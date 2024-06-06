@@ -3,23 +3,35 @@ import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 
 //How to call!
-// const MyTextField(
-//   prefixIcon: Icon(Icons.email, color: Colors.grey),
-//   hintText: 'Enter your email',
+// MyTextField(
+//   controller: passwordController,
+//   obscureText: true, //Hide typed text
+//   prefixIcon: const Icon(Icons.lock, color: Colors.black),
+//   hintText: 'Password',
 // )
 // const MyTextField()
 
 class MyTextField extends StatelessWidget {
+  final controller;
+  final bool obscureText;
   final Icon? prefixIcon;
   final String? hintText;
 
-  const MyTextField({super.key, this.prefixIcon, this.hintText});
+  const MyTextField({
+    super.key,
+    required this.controller,
+    required this.obscureText,
+    this.prefixIcon,
+    this.hintText,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50.0),
       child: TextField(
+        controller: controller,
+        obscureText: obscureText,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           hintText: hintText,
