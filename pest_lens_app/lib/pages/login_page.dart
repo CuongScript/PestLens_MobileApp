@@ -9,7 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //Call package below for language pack
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 //Sample call
-// Text(AppLocalizations.of(context)!.helloWorld),
+// Text(AppLocalizations.of(context)!.key),
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key, required this.onLocaleChange});
@@ -39,7 +39,6 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                Text(AppLocalizations.of(context)!.helloWorld),
                 // Logo
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 90.0),
@@ -64,7 +63,7 @@ class LoginPage extends StatelessWidget {
                   controller: usernameController,
                   obscureText: false,
                   prefixIcon: const Icon(Icons.email, color: Colors.black),
-                  hintText: 'Email',
+                  hintText: AppLocalizations.of(context)!.logInEmail,
                   showRevealButton: false,
                 ),
 
@@ -77,7 +76,7 @@ class LoginPage extends StatelessWidget {
                   controller: passwordController,
                   obscureText: true,
                   prefixIcon: const Icon(Icons.lock, color: Colors.black),
-                  hintText: 'Password',
+                  hintText: AppLocalizations.of(context)!.logInPass,
                   showRevealButton: true,
                 ),
 
@@ -92,7 +91,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Forgot Password?',
+                        AppLocalizations.of(context)!.logInForgotPass,
                         style: CustomTextStyles.forgotPass,
                       ),
                     ],
@@ -106,7 +105,7 @@ class LoginPage extends StatelessWidget {
                 // Sign in button
                 MySubmitButton(
                   onTap: signUserIn,
-                  buttonText: 'Sign In',
+                  buttonText: AppLocalizations.of(context)!.signIn,
                 ),
 
                 const SizedBox(
@@ -116,7 +115,7 @@ class LoginPage extends StatelessWidget {
                 // Sign up button
                 MySubmitButton(
                   onTap: signUserUp,
-                  buttonText: 'Sign Up',
+                  buttonText: AppLocalizations.of(context)!.signUp,
                 ),
 
                 const SizedBox(
@@ -140,7 +139,8 @@ class LoginPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () => onLocaleChange(const Locale('en')),
                       child: const RoundTile(
-                          imagePath: 'lib/assets/images/Flag_of_the_United_Kingdom.png'),
+                          imagePath:
+                              'lib/assets/images/Flag_of_the_United_Kingdom.png'),
                     ),
                   ],
                 ),

@@ -1,3 +1,7 @@
 {
-  "helloWorld": "Xin Chao!"
+  "logInEmail": "Email",
+  "logInPass": "Mật khẩu",
+  "logInForgotPass": "Quên mật khẩu?",
+  "signIn": "Đăng nhập",
+  "signUp": "Đăng ký"
 }

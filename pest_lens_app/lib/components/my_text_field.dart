@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //How to call!
 // MyTextField(
