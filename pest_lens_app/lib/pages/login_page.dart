@@ -65,6 +65,7 @@ class LoginPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.email, color: Colors.black),
                   hintText: AppLocalizations.of(context)!.logInEmail,
                   showRevealButton: false,
+                  textInputAction: TextInputAction.next,
                 ),
 
                 const SizedBox(
@@ -78,6 +79,7 @@ class LoginPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.lock, color: Colors.black),
                   hintText: AppLocalizations.of(context)!.logInPass,
                   showRevealButton: true,
+                  textInputAction: TextInputAction.done,
                 ),
 
                 const SizedBox(

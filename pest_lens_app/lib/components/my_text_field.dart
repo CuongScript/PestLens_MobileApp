@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //How to call!
 // MyTextField(
-//   controller: passwordController,
-//   obscureText: true, //Hide typed text
-//   prefixIcon: const Icon(Icons.lock, color: Colors.black),
-//   hintText: 'Password',
-//   showRevealButton: true, //The eye icon for password reveal
-// )
-// const MyTextField()
+//   controller: usernameController,
+//   obscureText: false,
+//   prefixIcon: const Icon(Icons.email, color: Colors.black),
+//   hintText: AppLocalizations.of(context)!.logInEmail,
+//   showRevealButton: false,
+//   textInputAction: TextInputAction.next, //TextInputAction.done to stop and hide keyboard
+//   )
+
 
 class MyTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -19,6 +19,7 @@ class MyTextField extends StatefulWidget {
   final Icon? prefixIcon;
   final String? hintText;
   final bool showRevealButton;
+  final TextInputAction textInputAction;
 
   const MyTextField({
     super.key,
@@ -27,6 +28,7 @@ class MyTextField extends StatefulWidget {
     this.prefixIcon,
     this.hintText,
     this.showRevealButton = false,
+    required this.textInputAction,
   });
 
   @override
@@ -58,6 +60,7 @@ class MyTextFieldState extends State<MyTextField> {
           TextField(
             controller: widget.controller,
             obscureText: _obscureText,
+            textInputAction: widget.textInputAction,
             decoration: InputDecoration(
               prefixIcon: widget.prefixIcon,
               hintText: widget.hintText,
