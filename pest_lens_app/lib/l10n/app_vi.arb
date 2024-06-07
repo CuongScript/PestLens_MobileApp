@@ -5,5 +5,8 @@
   "signIn": "Đăng nhập",
   "signUp": "Đăng ký",
   "username": "Username",
-  "reEnterPass": "Nhập lại mật khẩu"
+  "reEnterPass": "Nhập lại mật khẩu",
+  "createAccount": "Tạo tài khoản",
+  "termAndPolicy": "Tôi chấp nhận các điều khoản và chính sách bảo mật",
+  "alreadyAccount": "Đã có tài khoản? Đăng nhập"
 }

@@ -64,6 +64,7 @@ class LoginPage extends StatelessWidget {
                   hintText: AppLocalizations.of(context)!.logInEmail,
                   showRevealButton: false,
                   textInputAction: TextInputAction.next,
+                  labelText: AppLocalizations.of(context)!.logInEmail,
                 ),
 
                 const SizedBox(
@@ -78,6 +79,7 @@ class LoginPage extends StatelessWidget {
                   hintText: AppLocalizations.of(context)!.logInPass,
                   showRevealButton: true,
                   textInputAction: TextInputAction.done,
+                  labelText: AppLocalizations.of(context)!.logInPass,
                 ),
 
                 const SizedBox(

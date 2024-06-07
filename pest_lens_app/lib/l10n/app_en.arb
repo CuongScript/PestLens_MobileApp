@@ -5,5 +5,8 @@
   "signIn": "Sign In",
   "signUp": "Sign Up",
   "username": "Username",
-  "reEnterPass": "Re-enter password"
+  "reEnterPass": "Re-enter password",
+  "createAccount": "Create Account",
+  "termAndPolicy": "I accept the terms and privacy policy",
+  "alreadyAccount": "Already have an account? Log in"
 }
