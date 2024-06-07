@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import "package:flutter/material.dart";
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_pie_chart.dart';
@@ -17,7 +16,7 @@ class AdminMainPage extends StatelessWidget {
       ),
       body: const SingleChildScrollView(
           child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(5.0),
               child: Column(
                 children: [
                   PieChartWidget(),

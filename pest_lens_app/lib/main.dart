@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/admin_main_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,9 +23,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AdminMainPage(),
+      home: const AdminMainPage(),
+      theme: ThemeData(
+        dividerTheme: const DividerThemeData(
+          thickness: 2,
+          color: Colors.black,
+        ),
+      ),
     );
   }
 }

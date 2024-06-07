@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/components/chart_indicator.dart';
 import 'package:fl_chart/fl_chart.dart' as charts;
 
 class PieChartWidget extends StatefulWidget {
@@ -42,32 +43,55 @@ class _PieChartWidgetState extends State<PieChartWidget> {
           children: [
             Text(
               'Users Account Distribution',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const Divider(),
+            SizedBox(
+              height: 300,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  charts.PieChart(
+                    charts.PieChartData(
+                      pieTouchData: charts.PieTouchData(
+                        touchCallback: pieTouchHandler,
+                      ),
+                      sections: _createSampleData(),
+                      sectionsSpace: 1,
+                      centerSpaceRadius: 60,
+                    ),
+                  ),
+                  Center(
+                    child: Text(
+                      'Total\n$total',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              height: 250,
-              child: charts.PieChart(
-                charts.PieChartData(
-                  pieTouchData: charts.PieTouchData(
-                    touchCallback: pieTouchHandler,
-                  ),
-                  sections: _createSampleData(),
-                  sectionsSpace: 2,
-                  centerSpaceRadius: 60,
-                ),
-              ),
+            const Divider(),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Indicator(color: Colors.blue, text: "active", isSquare: false),
+                Indicator(color: Colors.green, text: "new", isSquare: false),
+              ],
             ),
-            Center(
-              child: Text(
-                'Total\n$total',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Indicator(
+                    color: Colors.red, text: "deactivated", isSquare: false),
+                Indicator(
+                    color: Colors.orange, text: "pending", isSquare: false),
+              ],
             ),
           ],
         ),
@@ -77,10 +101,10 @@ class _PieChartWidgetState extends State<PieChartWidget> {
 
   List<charts.PieChartSectionData> _createSampleData() {
     final data = [
-      UserAccountStatus('Active Users', 917),
-      UserAccountStatus('New Users', 606),
-      UserAccountStatus('Deactivated Users', 383),
-      UserAccountStatus('Pending Users', 789),
+      UserAccountStatus('Active Users', 10),
+      UserAccountStatus('New Users', 20),
+      UserAccountStatus('Deactivated Users', 50),
+      UserAccountStatus('Pending Users', 20),
     ];
 
     return List.generate(data.length, (i) {
