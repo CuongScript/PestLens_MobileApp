@@ -1,2 +1,8 @@
-
+/pest_lens_app/ios
+/pest_lens_app/ios/Runner.xcodeproj
+/pest_lens_app/ios
+/pest_lens_app/ios/Runner.xcworkspace
+pest_lens_app/ios/Runner.xcodeproj/project.pbxproj
+pest_lens_app/ios/Runner.xcworkspace/contents.xcworkspacedata
 .DS_Store
+*.lock

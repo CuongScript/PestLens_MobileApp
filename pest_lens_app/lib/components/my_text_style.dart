@@ -11,6 +11,15 @@ class CustomTextStyles {
     color: appNameColor,
   );
 
+  static const TextStyle pageTitle = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.0,
+    color: fontTitleColor,
+  );
+
   static const TextStyle hintTextField = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 15,
