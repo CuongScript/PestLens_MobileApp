@@ -6,13 +6,19 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 
-class SignUpPage extends StatelessWidget {
-  SignUpPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
+  @override
+  SignUpPageState createState() => SignUpPageState();
+}
+
+class SignUpPageState extends State<SignUpPage> {
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final rePasswordController = TextEditingController();
+  bool isChecked = false;
 
   void signUserUP() {}
 
@@ -36,13 +42,14 @@ class SignUpPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 100,
               ),
-              Text(AppLocalizations.of(context)!.createAccount,
-                  style: CustomTextStyles.appName),
+              Text(
+                AppLocalizations.of(context)!.createAccount,
+                style: CustomTextStyles.appName,
+              ),
               const SizedBox(
                 height: 37,
               ),
@@ -106,8 +113,12 @@ class SignUpPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Checkbox(
-                      value: true,
-                      onChanged: (bool? value) {},
+                      value: isChecked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value ?? false;
+                        });
+                      },
                     ),
                     Expanded(
                       child: Text(
