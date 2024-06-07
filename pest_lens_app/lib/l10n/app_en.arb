@@ -3,5 +3,7 @@
   "logInPass": "Password",
   "logInForgotPass": "Forgot Password?",
   "signIn": "Sign In",
-  "signUp": "Sign Up"
+  "signUp": "Sign Up",
+  "username": "Username",
+  "reEnterPass": "Re-enter password"
 }

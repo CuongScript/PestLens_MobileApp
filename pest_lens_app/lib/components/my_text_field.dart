@@ -10,6 +10,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 //   hintText: AppLocalizations.of(context)!.logInEmail,
 //   showRevealButton: false,
 //   textInputAction: TextInputAction.next, //TextInputAction.done to stop and hide keyboard
+//   labelText: 'Username',
 //   )
 
 
@@ -20,6 +21,7 @@ class MyTextField extends StatefulWidget {
   final String? hintText;
   final bool showRevealButton;
   final TextInputAction textInputAction;
+  final String? labelText;
 
   const MyTextField({
     super.key,
@@ -29,6 +31,7 @@ class MyTextField extends StatefulWidget {
     this.hintText,
     this.showRevealButton = false,
     required this.textInputAction,
+    this.labelText,
   });
 
   @override
@@ -65,6 +68,8 @@ class MyTextFieldState extends State<MyTextField> {
               prefixIcon: widget.prefixIcon,
               hintText: widget.hintText,
               hintStyle: CustomTextStyles.hintTextField,
+              labelText: widget.labelText,
+              labelStyle: CustomTextStyles.labelTextField,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(color: textFieldBorder),

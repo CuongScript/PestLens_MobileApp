@@ -3,5 +3,7 @@
   "logInPass": "Mật khẩu",
   "logInForgotPass": "Quên mật khẩu?",
   "signIn": "Đăng nhập",
-  "signUp": "Đăng ký"
+  "signUp": "Đăng ký",
+  "username": "Username",
+  "reEnterPass": "Nhập lại mật khẩu"
 }

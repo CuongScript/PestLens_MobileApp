@@ -30,6 +30,15 @@ class CustomTextStyles {
     letterSpacing: 0.105,
   );
 
+  static const TextStyle labelTextField = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.0,
+    color: Colors.black,
+  );
+
   static TextStyle forgotPass = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 14,

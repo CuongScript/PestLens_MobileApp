@@ -29,7 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pest_lens_app/assets/colors.dart';
-import 'package:pest_lens_app/components/locale_handler.dart'; // Import the locale handler
+import 'package:pest_lens_app/locale_handler.dart';
 
 class SplashScreen extends StatelessWidget {
   // const SplashScreen({Key? key}) : super(key: key);

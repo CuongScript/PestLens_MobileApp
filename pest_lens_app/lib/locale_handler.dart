@@ -4,6 +4,7 @@ import 'package:pest_lens_app/pages/login_page.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/l10n/l10n.dart';
+import 'package:pest_lens_app/pages/sign_up_page.dart';
 
 class LocaleHandler extends StatefulWidget {
   const LocaleHandler({super.key});
@@ -36,6 +37,9 @@ class LocaleHandlerState extends State<LocaleHandler> {
       home: LoginPage(
         onLocaleChange: setLocale,
       ),
+      routes: {
+        '/sign-up': (context) => SignUpPage(),
+      },
     );
   }
 }

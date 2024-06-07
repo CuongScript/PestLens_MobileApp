@@ -24,8 +24,6 @@ class LoginPage extends StatelessWidget {
   // Sign user in method
   void signUserIn() {}
 
-  void signUserUp() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,7 +114,9 @@ class LoginPage extends StatelessWidget {
 
                 // Sign up button
                 MySubmitButton(
-                  onTap: signUserUp,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/sign-up');
+                  },
                   buttonText: AppLocalizations.of(context)!.signUp,
                 ),
 
