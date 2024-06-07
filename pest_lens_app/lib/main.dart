@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/admin_main_page.dart';
-import 'package:pest_lens_app/pages/login_page.dart';
-
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

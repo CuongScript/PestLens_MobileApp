@@ -10,3 +10,4 @@ const pieChartColors = [
   Colors.green,
   Colors.red,
 ];
+const Color submitButton = Color(0xFF3599EE);
