@@ -74,12 +74,13 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#E3ECFE"
-  image: lib/assets/images/appIcon1.png
   color_dark: "#E3ECFE"
-  android_12:
-    image: lib/assets/images/appIcon1.png
-  android: true
-  ios: true
+  # image: lib/assets/images/appIcon1.png
+  # android_12:
+    # image: lib/assets/images/appIcon1.png
+
+  # android: true
+  # ios: true
 
 # The following section is specific to Flutter packages.
 flutter:
