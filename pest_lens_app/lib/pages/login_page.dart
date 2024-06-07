@@ -4,6 +4,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/round_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //Call package below for language pack
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,7 +12,10 @@ import 'package:pest_lens_app/components/round_tile.dart';
 // Text(AppLocalizations.of(context)!.helloWorld),
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  LoginPage({super.key, required this.onLocaleChange});
+
+  //Locale change
+  final Function(Locale) onLocaleChange;
 
   // Text editing controllers
   final usernameController = TextEditingController();
@@ -35,7 +39,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                
+                Text(AppLocalizations.of(context)!.helloWorld),
                 // Logo
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 90.0),
@@ -125,7 +129,7 @@ class LoginPage extends StatelessWidget {
                   children: [
                     //Vietnam icon
                     GestureDetector(
-                      onTap: () => const (Locale('vi'),),
+                      onTap: () => onLocaleChange(const Locale('vi')),
                       child: const RoundTile(
                           imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
                     ),
@@ -134,7 +138,7 @@ class LoginPage extends StatelessWidget {
 
                     //English icon
                     GestureDetector(
-                      onTap: () => const (Locale('en'),),
+                      onTap: () => onLocaleChange(const Locale('en')),
                       child: const RoundTile(
                           imagePath: 'lib/assets/images/Flag_of_the_United_Kingdom.png'),
                     ),
