@@ -39,7 +39,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-  flutter_native_splash: ^2.4.0
   animated_splash_screen: ^1.3.0
   lottie: ^3.1.2
   page_transition: ^2.1.0
@@ -72,15 +71,17 @@ flutter_launcher_icons:
   launcher_name:
     default: "Animated Splash Screen."
 
-flutter_native_splash:
-  color: "#E3ECFE"
-  color_dark: "#E3ECFE"
-  # image: lib/assets/images/appIcon1.png
-  # android_12:
-    # image: lib/assets/images/appIcon1.png
-
-  # android: true
-  # ios: true
+# flutter_native_splash:
+#   android: false
+#   ios: false
+#   color: "#E3ECFE"
+#   color_dark: "#E3ECFE"
+#   android_12:
+#     color: "E3ECFE"
+#     icon_background_color: "E3ECFE"
+#     color_dark: "E3ECFE"
+#     icon_background_color_dark: "E3ECFE"
+  
 
 # The following section is specific to Flutter packages.
 flutter:

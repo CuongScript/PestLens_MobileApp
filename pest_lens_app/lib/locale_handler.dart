@@ -38,7 +38,7 @@ class LocaleHandlerState extends State<LocaleHandler> {
         onLocaleChange: setLocale,
       ),
       routes: {
-        '/sign-up': (context) => SignUpPage(),
+        '/sign-up': (context) => const SignUpPage(),
       },
     );
   }

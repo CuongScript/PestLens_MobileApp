@@ -20,7 +20,9 @@ class SignUpPageState extends State<SignUpPage> {
   final rePasswordController = TextEditingController();
   bool isChecked = false;
 
-  void signUserUP() {}
+  void signUserUP() {
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
