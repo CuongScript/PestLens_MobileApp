@@ -12,9 +12,22 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      splash: Lottie.asset(
-        'lib/assets/splash_animation/splash_animation.json',
-        repeat: true,
+      splash: Stack(
+        alignment: Alignment.center,
+        children: [
+          Lottie.asset(
+            'lib/assets/splash_animation/splash_animation.json',
+            repeat: true,
+          ),
+          Positioned(
+            bottom: 0, // Adjust this value as needed
+            child: Image.asset(
+              'lib/assets/images/appIcon.png',
+              width: 200,
+              height: 30,
+            ),
+          ),
+        ],
       ),
       nextScreen: const LocaleHandler(), // Set the next screen to LocaleHandler
       splashIconSize: 250,
