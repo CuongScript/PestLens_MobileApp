@@ -11,9 +11,17 @@ class PieChartWidget extends StatefulWidget {
 
 class _PieChartWidgetState extends State<PieChartWidget> {
   int touchedIndex = -1;
-  final int total = 2695;
+  final int total = 100;
 
-  pieTouchHandler(event, pieTouchResponse) {
+  final List<UserAccountStatus> data = [
+    UserAccountStatus('Active Users', 10, Colors.blue),
+    UserAccountStatus('New Users', 20, Colors.green),
+    UserAccountStatus('Deactivated Users', 50, Colors.red),
+    UserAccountStatus('Pending Users', 20, Colors.orange),
+  ];
+
+  void pieTouchHandler(
+      charts.FlTouchEvent event, charts.PieTouchResponse? pieTouchResponse) {
     setState(() {
       if (pieTouchResponse == null || pieTouchResponse.touchedSection == null) {
         touchedIndex = -1;
@@ -21,12 +29,55 @@ class _PieChartWidgetState extends State<PieChartWidget> {
       }
       if (event is charts.FlTapUpEvent) {
         final index = pieTouchResponse.touchedSection!.touchedSectionIndex;
-        if (touchedIndex == index) {
-          touchedIndex = -1;
-        } else {
-          touchedIndex = index;
-        }
+        touchedIndex = (touchedIndex == index) ? -1 : index;
       }
+    });
+  }
+
+  List<charts.PieChartSectionData> _createSampleData() {
+    return List.generate(data.length, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 18.0 : 16.0;
+      final radius = isTouched ? 70.0 : 60.0;
+      final color = data[i].color;
+
+      return charts.PieChartSectionData(
+        color: color,
+        value: data[i].count.toDouble(),
+        title: '${data[i].count}',
+        radius: radius,
+        titleStyle: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+        titlePositionPercentageOffset: 1.4,
+      );
+    });
+  }
+
+  List<Widget> _buildIndicators() {
+    return List.generate((data.length / 2).ceil(), (i) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Indicator(
+            color: data[i * 2].color,
+            text: data[i * 2].type,
+            isSquare: false,
+            size: touchedIndex == i * 2 ? 18 : 16,
+            textColor: touchedIndex == i * 2 ? Colors.black : Colors.grey,
+          ),
+          if (i * 2 + 1 < data.length)
+            Indicator(
+              color: data[i * 2 + 1].color,
+              text: data[i * 2 + 1].type,
+              isSquare: false,
+              size: touchedIndex == i * 2 + 1 ? 18 : 16,
+              textColor: touchedIndex == i * 2 + 1 ? Colors.black : Colors.grey,
+            ),
+        ],
+      );
     });
   }
 
@@ -47,7 +98,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
             ),
             const Divider(),
             SizedBox(
-              height: 300,
+              height: 250,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -58,7 +109,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
                       ),
                       sections: _createSampleData(),
                       sectionsSpace: 1,
-                      centerSpaceRadius: 60,
+                      centerSpaceRadius: 60, // Increase white space inside
                     ),
                   ),
                   Center(
@@ -75,63 +126,23 @@ class _PieChartWidgetState extends State<PieChartWidget> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 30),
             const Divider(),
-            const Row(
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Indicator(color: Colors.blue, text: "active", isSquare: false),
-                Indicator(color: Colors.green, text: "new", isSquare: false),
-              ],
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Indicator(
-                    color: Colors.red, text: "deactivated", isSquare: false),
-                Indicator(
-                    color: Colors.orange, text: "pending", isSquare: false),
-              ],
+              children: _buildIndicators(),
             ),
           ],
         ),
       ),
     );
   }
-
-  List<charts.PieChartSectionData> _createSampleData() {
-    final data = [
-      UserAccountStatus('Active Users', 10),
-      UserAccountStatus('New Users', 20),
-      UserAccountStatus('Deactivated Users', 50),
-      UserAccountStatus('Pending Users', 20),
-    ];
-
-    return List.generate(data.length, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 18.0 : 16.0;
-      final radius = isTouched ? 70.0 : 60.0;
-      final color = Colors.primaries[i % Colors.primaries.length];
-
-      return charts.PieChartSectionData(
-        color: color,
-        value: data[i].count.toDouble(),
-        title: '${data[i].count}',
-        radius: radius,
-        titleStyle: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        titlePositionPercentageOffset: 1.4,
-      );
-    });
-  }
 }
 
 class UserAccountStatus {
   final String type;
   final int count;
+  final Color color;
 
-  UserAccountStatus(this.type, this.count);
+  UserAccountStatus(this.type, this.count, this.color);
 }
