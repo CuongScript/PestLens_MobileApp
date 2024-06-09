@@ -92,9 +92,14 @@ class LoginPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        AppLocalizations.of(context)!.logInForgotPass,
-                        style: CustomTextStyles.forgotPass,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/forgot-password');
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.logInForgotPass,
+                          style: CustomTextStyles.forgotPass,
+                        ),
                       ),
                     ],
                   ),

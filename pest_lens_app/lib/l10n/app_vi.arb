@@ -8,5 +8,7 @@
   "reEnterPass": "Nhập lại mật khẩu",
   "createAccount": "Tạo tài khoản",
   "termAndPolicy": "Tôi chấp nhận các điều khoản và chính sách bảo mật",
-  "alreadyAccount": "Đã có tài khoản? Đăng nhập"
+  "alreadyAccount": "Đã có tài khoản? Đăng nhập",
+  "textForgotPass": "Vui lòng nhập email được liên kết với tài khoản của bạn.",
+  "sendCode": "Gửi mã"
 }
