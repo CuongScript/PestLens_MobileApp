@@ -26,11 +26,7 @@ class ResetPassword extends StatelessWidget {
           child: IconButton(
             icon: const MyBackButton(),
             onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const LocaleHandler()),
-                (Route<dynamic> route) =>
-                    false, // This predicate removes all routes
-              );
+              Navigator.of(context).popUntil((route) => route.isFirst);
             },
           ),
         ),
@@ -89,12 +85,7 @@ class ResetPassword extends StatelessWidget {
               MySubmitButton(
                 onTap: () {
                   resetPass;
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const LocaleHandler()),
-                    (Route<dynamic> route) =>
-                        false, // This predicate removes all routes
-                  );
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 buttonText: AppLocalizations.of(context)!.sendCode,
               ),
