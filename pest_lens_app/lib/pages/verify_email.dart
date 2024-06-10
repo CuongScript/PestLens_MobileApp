@@ -13,7 +13,7 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class VerifyEmailState extends State<VerifyEmail> {
-  final List<TextEditingController> _codeControllers = 
+  final List<TextEditingController> _codeControllers =
       List.generate(4, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
 
@@ -76,18 +76,46 @@ class VerifyEmailState extends State<VerifyEmail> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(4, (index) {
                   return SizedBox(
-                    width: 40,
+                    width: 50,
                     child: TextField(
                       focusNode: _focusNodes[index],
                       controller: _codeControllers[index],
                       maxLength: 1,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         counterText: "",
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: const BorderSide(
+                            color: submitButton, // Default border color
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: const BorderSide(
+                            color: submitButton, // Color for the enabled border
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: const BorderSide(
+                            color: Colors.black, // Color for the focused border
+                            width:
+                                2.0, // Optional: Adjust the width of the focused border
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: const BorderSide(
+                            color: Colors.red, // Color for the error border
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.blue,
                       ),
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       autofocus: index == 0,
+                      style: CustomTextStyles.submitButton,
                       onChanged: (value) {
                         if (value.isNotEmpty && index < 3) {
                           FocusScope.of(context).nextFocus();
@@ -102,7 +130,7 @@ class VerifyEmailState extends State<VerifyEmail> {
                 onTap: () {
                   verify;
                   Navigator.pushNamed(context, '/reset-password');
-                  },
+                },
                 buttonText: AppLocalizations.of(context)!.verify,
               ),
             ],
