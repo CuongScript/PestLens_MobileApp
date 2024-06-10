@@ -10,5 +10,8 @@
   "termAndPolicy": "Tôi chấp nhận các điều khoản và chính sách bảo mật",
   "alreadyAccount": "Đã có tài khoản? Đăng nhập",
   "textForgotPass": "Vui lòng nhập email được liên kết với tài khoản của bạn.",
-  "sendCode": "Gửi mã"
+  "sendCode": "Gửi mã",
+  "checkEmail": "Vui lòng kiểm tra email của bạn",
+  "textVerifyEmail": "Chúng tôi đã gửi mã đến email của bạn",
+  "verify": "Xác nhận"
 }

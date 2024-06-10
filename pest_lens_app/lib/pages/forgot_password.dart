@@ -10,9 +10,6 @@ class ForgotPassword extends StatelessWidget {
   ForgotPassword({super.key});
 
   final emailController = TextEditingController();
-  void sendCode() {
-    // Navigator.pushNamed(context, '/sign-up');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +66,9 @@ class ForgotPassword extends StatelessWidget {
                 height: 33,
               ),
               MySubmitButton(
-                onTap: sendCode,
+                onTap: () {
+                  Navigator.pushNamed(context, '/verify-email');
+                },
                 buttonText: AppLocalizations.of(context)!.sendCode,
               ),
             ],

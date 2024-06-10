@@ -10,5 +10,8 @@
   "termAndPolicy": "I accept the terms and privacy policy",
   "alreadyAccount": "Already have an account? Log in",
   "textForgotPass": "Please enter the email associated with your account.",
-  "sendCode": "Send Code"
+  "sendCode": "Send Code",
+  "checkEmail": "Please check your email",
+  "textVerifyEmail": "We've sent a code to your email",
+  "verify": "Verify"
 }
