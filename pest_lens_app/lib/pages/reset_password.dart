@@ -5,7 +5,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
-import 'package:pest_lens_app/locale_handler.dart';
+
 
 class ResetPassword extends StatelessWidget {
   ResetPassword({super.key});

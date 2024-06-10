@@ -1,4 +1,3 @@
-// locale_handler.dart
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/forgot_password.dart';
 import 'package:pest_lens_app/pages/login_page.dart';
@@ -8,6 +7,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/l10n/l10n.dart';
 import 'package:pest_lens_app/pages/sign_up_page.dart';
+import 'package:pest_lens_app/services/connectivity_wrapper.dart';
+
 
 class LocaleHandler extends StatefulWidget {
   const LocaleHandler({super.key});
@@ -27,27 +28,29 @@ class LocaleHandlerState extends State<LocaleHandler> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: _locale,
-      supportedLocales: L10n.all,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      home: LoginPage(
-        onLocaleChange: setLocale,
+    return ConnectivityWrapper(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: _locale,
+        supportedLocales: L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        home: LoginPage(
+          onLocaleChange: setLocale,
+        ),
+        routes: {
+          '/sign-up': (context) => const SignUpPage(),
+          '/forgot-password': (context) => ForgotPassword(),
+          '/verify-email': (context) => const VerifyEmail(),
+          '/reset-password': (context) => ResetPassword(),
+      
+      
+        },
       ),
-      routes: {
-        '/sign-up': (context) => const SignUpPage(),
-        '/forgot-password': (context) => ForgotPassword(),
-        '/verify-email': (context) => const VerifyEmail(),
-        '/reset-password': (context) => ResetPassword(),
-
-
-      },
     );
   }
 }
