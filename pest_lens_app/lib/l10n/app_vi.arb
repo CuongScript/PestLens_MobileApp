@@ -13,5 +13,7 @@
   "sendCode": "Gửi mã",
   "checkEmail": "Vui lòng kiểm tra email của bạn",
   "textVerifyEmail": "Chúng tôi đã gửi mã đến email của bạn",
-  "verify": "Xác nhận"
+  "verify": "Xác nhận",
+  "resetPass": "Đặt lại mật khẩu",
+  "textResetPass": "Đặt mật khẩu mới cho tài khoản của bạn."
 }

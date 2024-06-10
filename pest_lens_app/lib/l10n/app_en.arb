@@ -13,5 +13,7 @@
   "sendCode": "Send Code",
   "checkEmail": "Please check your email",
   "textVerifyEmail": "We've sent a code to your email",
-  "verify": "Verify"
+  "verify": "Verify",
+  "resetPass": "Reset Password",
+  "textResetPass": "Set a new password for your account."
 }
