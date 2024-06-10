@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pest_lens_app/assets/colors.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
 
 class NoInternetPage extends StatelessWidget {
   const NoInternetPage({super.key});
@@ -6,33 +9,36 @@ class NoInternetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.wifi_off,
-              size: 80,
-              color: Colors.blue,
+      backgroundColor: primaryBackgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 253),
+                  const Icon(
+                    Icons.wifi_off,
+                    size: 112,
+                    color: Colors.blue,
+                  ),
+                  const SizedBox(height: 50),
+                  Text(
+                    AppLocalizations.of(context)!.noIntConnect,
+                    style: CustomTextStyles.labelTextField,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    AppLocalizations.of(context)!.noIntConnect1,
+                    style: CustomTextStyles.labelTextField,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'No internet connection!',
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Please check your network',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Add your retry logic here
-              },
-              child: const Text('Try Again'),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -15,5 +15,7 @@
   "textVerifyEmail": "Chúng tôi đã gửi mã đến email của bạn",
   "verify": "Xác nhận",
   "resetPass": "Đặt lại mật khẩu",
-  "textResetPass": "Đặt mật khẩu mới cho tài khoản của bạn."
+  "textResetPass": "Đặt mật khẩu mới cho tài khoản của bạn.",
+  "noIntConnect": "Cần phải có kết nối Internet để kiểm tra côn trùng!",
+  "noIntConnect1": "Vui lòng kết nối lại mạng."
 }

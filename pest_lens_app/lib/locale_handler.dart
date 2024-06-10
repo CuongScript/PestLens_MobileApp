@@ -9,7 +9,6 @@ import 'package:pest_lens_app/l10n/l10n.dart';
 import 'package:pest_lens_app/pages/sign_up_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
 
-
 class LocaleHandler extends StatefulWidget {
   const LocaleHandler({super.key});
 
@@ -28,29 +27,25 @@ class LocaleHandlerState extends State<LocaleHandler> {
 
   @override
   Widget build(BuildContext context) {
-    return ConnectivityWrapper(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: _locale,
-        supportedLocales: L10n.all,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        home: LoginPage(
-          onLocaleChange: setLocale,
-        ),
-        routes: {
-          '/sign-up': (context) => const SignUpPage(),
-          '/forgot-password': (context) => ForgotPassword(),
-          '/verify-email': (context) => const VerifyEmail(),
-          '/reset-password': (context) => ResetPassword(),
-      
-      
-        },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: _locale,
+      supportedLocales: L10n.all,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: LoginPage(
+        onLocaleChange: setLocale,
       ),
+      routes: {
+        '/sign-up': (context) => const SignUpPage(),
+        '/forgot-password': (context) => ForgotPassword(),
+        '/verify-email': (context) => const VerifyEmail(),
+        '/reset-password': (context) => ResetPassword(),
+      },
     );
   }
 }

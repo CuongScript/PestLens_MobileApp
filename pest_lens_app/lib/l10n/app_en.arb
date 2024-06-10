@@ -15,5 +15,7 @@
   "textVerifyEmail": "We've sent a code to your email",
   "verify": "Verify",
   "resetPass": "Reset Password",
-  "textResetPass": "Set a new password for your account."
+  "textResetPass": "Set a new password for your account.",
+  "noIntConnect": "An internet connection is required for checking the insects!",
+  "noIntConnect1": "Please reconnect to your network"
 }
