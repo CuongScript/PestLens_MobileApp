@@ -17,5 +17,8 @@
   "resetPass": "Đặt lại mật khẩu",
   "textResetPass": "Đặt mật khẩu mới cho tài khoản của bạn.",
   "noIntConnect": "Cần phải có kết nối Internet để kiểm tra côn trùng!",
-  "noIntConnect1": "Vui lòng kết nối lại mạng."
+  "noIntConnect1": "Vui lòng kết nối lại mạng.",
+  "noServerConnect": "Lỗi kết nối với máy chủ!",
+  "noServerConnect1": "Máy chủ hiện đang ngừng hoạt động.",
+  "noServerConnect2": "Vui lòng quay lại sau!"
 }

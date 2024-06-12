@@ -17,5 +17,8 @@
   "resetPass": "Reset Password",
   "textResetPass": "Set a new password for your account.",
   "noIntConnect": "An internet connection is required for checking the insects!",
-  "noIntConnect1": "Please reconnect to your network"
+  "noIntConnect1": "Please reconnect to your network",
+  "noServerConnect": "Server error!",
+  "noServerConnect1": "Server is currently down.",
+  "noServerConnect2": "Please come back later!"
 }
