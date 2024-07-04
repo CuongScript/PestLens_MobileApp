@@ -3,5 +3,22 @@
   "logInPass": "Password",
   "logInForgotPass": "Forgot Password?",
   "signIn": "Sign In",
-  "signUp": "Sign Up"
+  "signUp": "Sign Up",
+  "username": "Username",
+  "reEnterPass": "Re-enter password",
+  "createAccount": "Create Account",
+  "termAndPolicy": "I accept the terms and privacy policy",
+  "alreadyAccount": "Already have an account? Log in",
+  "textForgotPass": "Please enter the email associated with your account.",
+  "sendCode": "Send Code",
+  "checkEmail": "Please check your email",
+  "textVerifyEmail": "We've sent a code to your email",
+  "verify": "Verify",
+  "resetPass": "Reset Password",
+  "textResetPass": "Set a new password for your account.",
+  "noIntConnect": "An internet connection is required for checking the insects!",
+  "noIntConnect1": "Please reconnect to your network",
+  "noServerConnect": "Server error!",
+  "noServerConnect1": "Server is currently down.",
+  "noServerConnect2": "Please come back later!"
 }

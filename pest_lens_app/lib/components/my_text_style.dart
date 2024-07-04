@@ -7,7 +7,7 @@ class CustomTextStyles {
     fontSize: 30,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w800,
-    height: 1.0,
+    height: 1.2,
     color: appNameColor,
   );
 
@@ -16,7 +16,7 @@ class CustomTextStyles {
     fontSize: 24,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w700,
-    height: 1.0,
+    height: 1.2,
     color: fontTitleColor,
   );
 
@@ -25,9 +25,18 @@ class CustomTextStyles {
     fontSize: 15,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
-    height: 1.0,
+    height: 1.2,
     color: Colors.black,
     letterSpacing: 0.105,
+  );
+
+  static const TextStyle labelTextField = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    color: Colors.black,
   );
 
   static TextStyle forgotPass = TextStyle(
@@ -35,7 +44,7 @@ class CustomTextStyles {
     fontSize: 14,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w500,
-    height: 1.0,
+    height: 1.2,
     color: Colors.grey.shade600,
   );
 
@@ -44,7 +53,7 @@ class CustomTextStyles {
     fontSize: 20,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w700,
-    height: 1.0,
+    height: 1.2,
     color: primaryBackgroundColor,
     letterSpacing: 0.14,
   );

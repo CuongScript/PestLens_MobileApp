@@ -6,8 +6,11 @@ class MySubmitButton extends StatelessWidget {
   final Function()? onTap;
   final String buttonText;
 
-  const MySubmitButton(
-      {super.key, required this.onTap, required this.buttonText});
+  const MySubmitButton({
+    super.key,
+    required this.onTap,
+    required this.buttonText,
+  });
 
   @override
   Widget build(BuildContext context) {
