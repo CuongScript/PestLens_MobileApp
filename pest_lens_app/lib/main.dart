@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/l10n/l10n.dart';
-import 'package:pest_lens_app/pages/splash_screen.dart'; // Import your splash screen
+import 'package:pest_lens_app/pages/welcome/splash_screen.dart'; // Import your splash screen
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

@@ -1,0 +1,16 @@
+const List<Map<String, String>> insectDetections = [
+  {"name": "Rice Asian Gall Midge", "count": "5"},
+  {"name": "Stem Borers", "count": "3"},
+  {"name": "Thrips", "count": "7"},
+  {"name": "Unidentified insect", "count": "2"},
+  {"name": "Brown Planthopper", "count": "4"},
+  {"name": "Green Leafhopper", "count": "6"},
+  {"name": "Yellow Stem Borer", "count": "8"},
+  {"name": "Whitefly", "count": "9"},
+  {"name": "Armyworm", "count": "11"},
+  {"name": "Leaf Miner", "count": "10"},
+  {"name": "Cutworm", "count": "5"},
+  {"name": "Red Spider Mite", "count": "12"},
+  {"name": "Rice Water Weevil", "count": "7"},
+  {"name": "Rice Root Aphid", "count": "3"},
+];

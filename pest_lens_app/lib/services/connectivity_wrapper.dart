@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:async';
-import 'package:pest_lens_app/pages/no_internet_page.dart';
+import 'package:pest_lens_app/pages/error/no_internet_page.dart';
 
 class ConnectivityWrapper extends StatefulWidget {
   final Widget child;

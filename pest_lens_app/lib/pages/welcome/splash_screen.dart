@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/locale_handler.dart';
+import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 
 class SplashScreen extends StatelessWidget {
   // const SplashScreen({Key? key}) : super(key: key);
@@ -29,7 +30,8 @@ class SplashScreen extends StatelessWidget {
           ),
         ],
       ),
-      nextScreen: const LocaleHandler(), // Set the next screen to LocaleHandler
+      // nextScreen: const LocaleHandler(), // Set the next screen to LocaleHandler
+      nextScreen: const TabPage(),
       splashIconSize: 250,
       duration: 3500,
       splashTransition: SplashTransition.fadeTransition,
