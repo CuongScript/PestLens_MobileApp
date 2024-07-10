@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 
-class MyTextField extends StatefulWidget {
+class MyTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final bool obscureText;
   final Icon? prefixIcon;
@@ -10,8 +10,12 @@ class MyTextField extends StatefulWidget {
   final bool showRevealButton;
   final TextInputAction textInputAction;
   final String? labelText;
+  final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged;
+  final GlobalKey<FormFieldState>?
+      fieldKey; // Change to GlobalKey<FormFieldState>
 
-  const MyTextField({
+  const MyTextFormField({
     super.key,
     required this.controller,
     required this.obscureText,
@@ -20,13 +24,16 @@ class MyTextField extends StatefulWidget {
     this.showRevealButton = false,
     required this.textInputAction,
     this.labelText,
+    this.validator,
+    this.onChanged,
+    this.fieldKey,
   });
 
   @override
-  MyTextFieldState createState() => MyTextFieldState();
+  State<MyTextFormField> createState() => _MyTextFormFieldState();
 }
 
-class MyTextFieldState extends State<MyTextField> {
+class _MyTextFormFieldState extends State<MyTextFormField> {
   late bool _obscureText;
 
   @override
@@ -48,7 +55,8 @@ class MyTextFieldState extends State<MyTextField> {
       child: Stack(
         alignment: Alignment.centerRight,
         children: [
-          TextField(
+          TextFormField(
+            key: widget.fieldKey, // Use GlobalKey<FormFieldState>
             controller: widget.controller,
             obscureText: _obscureText,
             textInputAction: widget.textInputAction,
@@ -70,6 +78,8 @@ class MyTextFieldState extends State<MyTextField> {
                 ),
               ),
             ),
+            validator: widget.validator,
+            onChanged: widget.onChanged,
           ),
           if (widget.showRevealButton)
             Positioned(

@@ -5,6 +5,8 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/round_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pest_lens_app/pages/authen/forgot_password_page.dart';
+import 'package:pest_lens_app/pages/authen/sign_up_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
 
 //Call package below for language pack
@@ -46,18 +48,18 @@ class LoginPage extends StatelessWidget {
                       'lib/assets/images/appIcon.png',
                     ),
                   ),
-      
+
                   const SizedBox(
                     height: 39.05,
                   ),
-      
+
                   // App name
                   const Text("InsectInsight", style: CustomTextStyles.appName),
-      
+
                   const SizedBox(
                     height: 56,
                   ),
-      
+
                   // Username textfield
                   MyTextField(
                     controller: usernameController,
@@ -68,11 +70,11 @@ class LoginPage extends StatelessWidget {
                     textInputAction: TextInputAction.next,
                     labelText: AppLocalizations.of(context)!.logInEmail,
                   ),
-      
+
                   const SizedBox(
                     height: 13,
                   ),
-      
+
                   // Password textfield
                   MyTextField(
                     controller: passwordController,
@@ -83,11 +85,11 @@ class LoginPage extends StatelessWidget {
                     textInputAction: TextInputAction.done,
                     labelText: AppLocalizations.of(context)!.logInPass,
                   ),
-      
+
                   const SizedBox(
                     height: 10,
                   ),
-      
+
                   // Forgot password
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50.0),
@@ -96,7 +98,12 @@ class LoginPage extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, '/forgot-password');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordPage(),
+                              ),
+                            );
                           },
                           child: Text(
                             AppLocalizations.of(context)!.logInForgotPass,
@@ -106,33 +113,36 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-      
+
                   const SizedBox(
                     height: 30,
                   ),
-      
+
                   // Sign in button
                   MySubmitButton(
                     onTap: signUserIn,
                     buttonText: AppLocalizations.of(context)!.signIn,
                   ),
-      
+
                   const SizedBox(
                     height: 10,
                   ),
-      
+
                   // Sign up button
                   MySubmitButton(
                     onTap: () {
-                      Navigator.pushNamed(context, '/sign-up');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
                     },
                     buttonText: AppLocalizations.of(context)!.signUp,
                   ),
-      
+
                   const SizedBox(
                     height: 50,
                   ),
-      
+
                   // Viet+Eng icon button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -143,9 +153,9 @@ class LoginPage extends StatelessWidget {
                         child: const RoundTile(
                             imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
                       ),
-      
+
                       const SizedBox(width: 25),
-      
+
                       //English icon
                       GestureDetector(
                         onTap: () => onLocaleChange(const Locale('en')),

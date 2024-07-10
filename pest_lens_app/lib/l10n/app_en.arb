@@ -20,5 +20,17 @@
   "noIntConnect1": "Please reconnect to your network",
   "noServerConnect": "Server error!",
   "noServerConnect1": "Server is currently down.",
-  "noServerConnect2": "Please come back later!"
+  "noServerConnect2": "Please come back later!",
+  "usernameRequired": "Username is required.",
+  "emailRequired": "Email is required.",
+  "invalidEmail": "Invalid email address.",
+  "passwordRequired": "Password is required.",
+  "passwordTooShort": "Password must be at least 6 characters.",
+  "passwordMismatch": "Passwords do not match.",
+  "signUpFailed": "Sign Up Failed",
+  "signupSuccess": "Sign Up Successfully",
+  "unknownError": "An unknown error occurred.",
+  "comeToLogin": "Come to Login",
+  "signupAgain": "Sign Up Again",
+  "ok": "OK"
 }

@@ -6,8 +6,8 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 
-class ForgotPassword extends StatelessWidget {
-  ForgotPassword({super.key});
+class ForgotPasswordPage extends StatelessWidget {
+  ForgotPasswordPage({super.key});
 
   final emailController = TextEditingController();
 
