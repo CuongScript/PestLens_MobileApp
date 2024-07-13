@@ -5,9 +5,8 @@ import 'package:pest_lens_app/components/my_text_form_field.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
-import 'package:pest_lens_app/locale_handler.dart';
-import 'package:pest_lens_app/pages/authen/login_page.dart';
 import 'package:pest_lens_app/utils/textfield_validator.dart';
+import 'package:pest_lens_app/locale_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:pest_lens_app/utils/config.dart';
@@ -55,15 +54,10 @@ class SignUpPageState extends State<SignUpPage> {
               success
                   ? ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
                         Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginPage(
-                              onLocaleChange: LocaleHandler.setLocale,
-                            ),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LocaleHandler()));
                       },
                       child: Text(AppLocalizations.of(context)!.comeToLogin),
                     )
