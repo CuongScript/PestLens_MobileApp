@@ -1,45 +1,39 @@
+import 'package:pest_lens_app/models/role_enum.dart';
+
 class User {
+  int id;
   String username;
-  String email;
-  String firstName;
-  String lastName;
-  String profileImageUrl;
-  String farmName;
-  String phoneNumber;
+  List<Role> roles;
+  String accessToken;
+  String tokenType;
 
   User({
+    required this.id,
     required this.username,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.profileImageUrl,
-    required this.farmName,
-    required this.phoneNumber,
+    required this.roles,
+    required this.accessToken,
+    required this.tokenType,
   });
 
-  // Method to create a User object from a JSON object
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      id: json['id'],
       username: json['username'],
-      email: json['email'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      profileImageUrl: json['profileImageUrl'],
-      farmName: json['farmName'],
-      phoneNumber: json['phoneNumber'],
+      roles: (json['roles'] as List)
+          .map((role) => RoleExtension.fromString(role))
+          .toList(),
+      accessToken: json['accessToken'],
+      tokenType: json['tokenType'],
     );
   }
 
-  // Method to convert a User object to a JSON object
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'username': username,
-      'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
-      'profileImageUrl': profileImageUrl,
-      'farmName': farmName,
-      'phoneNumber': phoneNumber,
+      'roles': roles.map((role) => role.toJson()).toList(),
+      'accessToken': accessToken,
+      'tokenType': tokenType,
     };
   }
 }

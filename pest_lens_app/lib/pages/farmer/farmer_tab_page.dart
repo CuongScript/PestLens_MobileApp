@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_main_page.dart';
 import 'package:pest_lens_app/pages/farmer/insect_lookup_page.dart';
+import 'package:pest_lens_app/pages/user/setting_page.dart';
 
-class TabPage extends StatefulWidget {
-  const TabPage({super.key});
+class FarmerTabPage extends StatefulWidget {
+  const FarmerTabPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _TabPageState();
+    return _FarmerTabPageState();
   }
 }
 
-class _TabPageState extends State<TabPage> {
+class _FarmerTabPageState extends State<FarmerTabPage> {
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -31,6 +32,9 @@ class _TabPageState extends State<TabPage> {
         child: InsectLookupPage(),
       );
       activePageTitle = 'Upload';
+    } else if (_selectedPageIndex == 2) {
+      activePage = const Center(child: SettingsPage());
+      activePageTitle = 'Settings';
     }
 
     return Scaffold(
@@ -52,6 +56,12 @@ class _TabPageState extends State<TabPage> {
             ),
             label: '',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.settings,
+            ),
+            label: '',
+          )
         ],
       ),
     );

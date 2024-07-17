@@ -32,5 +32,8 @@
   "unknownError": "An unknown error occurred.",
   "comeToLogin": "Come to Login",
   "signupAgain": "Sign Up Again",
+  "invalidCredentials": "Unable to login, please check you username and password.",
+  "errorForgotPassword": "The inputed email is not registered. Please try again.",
+  "invalidForgetPasswordVerificationCode": "the code is invalided. Please try again.",
   "ok": "OK"
 }

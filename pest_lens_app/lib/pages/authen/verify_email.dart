@@ -19,8 +19,30 @@ class VerifyEmailState extends State<VerifyEmail> {
 
   void verify() {
     String code = _codeControllers.map((controller) => controller.text).join();
-    int codeInt = int.parse(code);
-    // Add your verification logic here using codeInt
+    int codeInt;
+    try {
+      codeInt = int.parse(code);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.invalidForgetPasswordVerificationCode),
+          
+        ),
+      );
+      return;
+    }
+
+    // Replace the following line with your verification logic
+    if (codeInt == 1234) {
+      // Example check, replace with actual verification logic
+      Navigator.pushNamed(context, '/reset-password');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.invalidForgetPasswordVerificationCode),
+        ),
+      );
+    }
   }
 
   @override
@@ -127,10 +149,7 @@ class VerifyEmailState extends State<VerifyEmail> {
               ),
               const SizedBox(height: 27),
               MySubmitButton(
-                onTap: () {
-                  verify;
-                  Navigator.pushNamed(context, '/reset-password');
-                },
+                onTap: verify,
                 buttonText: AppLocalizations.of(context)!.verify,
               ),
             ],

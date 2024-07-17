@@ -5,27 +5,85 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/round_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pest_lens_app/models/role_enum.dart';
+import 'package:pest_lens_app/models/user.dart';
+import 'package:pest_lens_app/pages/admin/admin_main_page.dart';
 import 'package:pest_lens_app/pages/authen/forgot_password_page.dart';
 import 'package:pest_lens_app/pages/authen/sign_up_page.dart';
+import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:pest_lens_app/utils/config.dart';
+import 'package:pest_lens_app/utils/user_preferences.dart';
 
-//Call package below for language pack
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-//Sample call
-// Text(AppLocalizations.of(context)!.key),
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key, required this.onLocaleChange});
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key, required this.onLocaleChange});
-
-  //Locale change
+  // Locale change
   final Function(Locale) onLocaleChange;
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   // Text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
   // Sign user in method
-  void signUserIn() {}
+  void signUserIn() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final invalidCredentialsText =
+        AppLocalizations.of(context)!.invalidCredentials;
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request('POST', Uri.parse('${Config.apiUrl}/login'));
+    request.body = json.encode({
+      "username": usernameController.text,
+      "password": passwordController.text
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseData = await response.stream.bytesToString();
+      var jsonResponse = json.decode(responseData);
+
+      User user = User.fromJson(jsonResponse);
+
+      // Save user information
+      await UserPreferences.saveUser(user);
+
+      // Check if the widget is still mounted before navigating
+      if (!mounted) return;
+
+      // Navigate based on role
+      if (user.roles.contains(Role.ROLE_ADMIN)) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminMainPage()),
+        );
+      } else if (user.roles.contains(Role.ROLE_USER)) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const FarmerTabPage()),
+        );
+      }
+    } else {
+      // Clear the input fields
+      usernameController.clear();
+      passwordController.clear();
+
+      // Show an error message to the user
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(invalidCredentialsText),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +96,8 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
+                  const SizedBox(height: 50),
+
                   // Logo
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 90.0),
@@ -49,16 +106,12 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(
-                    height: 39.05,
-                  ),
+                  const SizedBox(height: 39.05),
 
                   // App name
                   const Text("InsectInsight", style: CustomTextStyles.appName),
 
-                  const SizedBox(
-                    height: 56,
-                  ),
+                  const SizedBox(height: 56),
 
                   // Username textfield
                   MyTextField(
@@ -71,9 +124,7 @@ class LoginPage extends StatelessWidget {
                     labelText: AppLocalizations.of(context)!.logInEmail,
                   ),
 
-                  const SizedBox(
-                    height: 13,
-                  ),
+                  const SizedBox(height: 13),
 
                   // Password textfield
                   MyTextField(
@@ -86,9 +137,7 @@ class LoginPage extends StatelessWidget {
                     labelText: AppLocalizations.of(context)!.logInPass,
                   ),
 
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
 
                   // Forgot password
                   Padding(
@@ -114,9 +163,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30),
 
                   // Sign in button
                   MySubmitButton(
@@ -124,44 +171,44 @@ class LoginPage extends StatelessWidget {
                     buttonText: AppLocalizations.of(context)!.signIn,
                   ),
 
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
 
                   // Sign up button
                   MySubmitButton(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignUpPage()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
+                      );
                     },
                     buttonText: AppLocalizations.of(context)!.signUp,
                   ),
 
-                  const SizedBox(
-                    height: 50,
-                  ),
+                  const SizedBox(height: 50),
 
                   // Viet+Eng icon button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //Vietnam icon
+                      // Vietnam icon
                       GestureDetector(
-                        onTap: () => onLocaleChange(const Locale('vi')),
+                        onTap: () => widget.onLocaleChange(const Locale('vi')),
                         child: const RoundTile(
-                            imagePath: 'lib/assets/images/Flag_of_Vietnam.png'),
+                          imagePath: 'lib/assets/images/Flag_of_Vietnam.png',
+                        ),
                       ),
 
                       const SizedBox(width: 25),
 
-                      //English icon
+                      // English icon
                       GestureDetector(
-                        onTap: () => onLocaleChange(const Locale('en')),
+                        onTap: () => widget.onLocaleChange(const Locale('en')),
                         child: const RoundTile(
-                            imagePath:
-                                'lib/assets/images/Flag_of_the_United_Kingdom.png'),
+                          imagePath:
+                              'lib/assets/images/Flag_of_the_United_Kingdom.png',
+                        ),
                       ),
                     ],
                   ),
