@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pest_lens_app/locale_handler.dart';
+
+import 'package:pest_lens_app/pages/authen/login_page.dart';
 import 'package:pest_lens_app/utils/user_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -13,11 +14,11 @@ class _SettingsPageState extends State<SettingsPage> {
   void _logout(BuildContext context) async {
     await UserPreferences.clearUser();
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const LocaleHandler()),
+      MaterialPageRoute(builder: (context) => const LoginPage()),
       (Route<dynamic> route) => false,
     );
   }

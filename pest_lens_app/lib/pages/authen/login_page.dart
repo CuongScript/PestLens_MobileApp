@@ -18,10 +18,7 @@ import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/utils/user_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.onLocaleChange});
-
-  // Locale change
-  final Function(Locale) onLocaleChange;
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -150,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
+                                builder: (context) =>
+                                    const ForgotPasswordPage(),
                               ),
                             );
                           },
@@ -194,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       // Vietnam icon
                       GestureDetector(
-                        onTap: () => widget.onLocaleChange(const Locale('vi')),
+                        onTap: () => {},
                         child: const RoundTile(
                           imagePath: 'lib/assets/images/Flag_of_Vietnam.png',
                         ),
@@ -204,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       // English icon
                       GestureDetector(
-                        onTap: () => widget.onLocaleChange(const Locale('en')),
+                        onTap: () => {},
                         child: const RoundTile(
                           imagePath:
                               'lib/assets/images/Flag_of_the_United_Kingdom.png',

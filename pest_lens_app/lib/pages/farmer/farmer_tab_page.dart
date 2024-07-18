@@ -25,22 +25,15 @@ class _FarmerTabPageState extends State<FarmerTabPage> {
   Widget build(BuildContext context) {
     Widget activePage = const FarmerMainPage();
 
-    var activePageTitle = 'Farmer';
-
     if (_selectedPageIndex == 1) {
       activePage = const Center(
         child: InsectLookupPage(),
       );
-      activePageTitle = 'Upload';
     } else if (_selectedPageIndex == 2) {
       activePage = const Center(child: SettingsPage());
-      activePageTitle = 'Settings';
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(activePageTitle),
-      ),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
