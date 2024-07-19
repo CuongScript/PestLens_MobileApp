@@ -83,36 +83,39 @@ class _MyLineChartState extends State<MyLineChart> {
     List<FlSpot> spots = processInsectData(dummyInsectCountList);
     double maxY = getMaxInsectCount(spots);
 
-    return Center(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+      ),
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  'Historical Chart Number Of Insects',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Historical Number of Insects',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 30),
-                IconButton(
-                  onPressed: () {
-                    // Open the setting for the chart
-                  },
-                  icon: const Icon(Icons.more_vert),
-                )
-              ],
+                  IconButton(
+                    onPressed: () {
+                      // Open the setting for the chart
+                    },
+                    icon: const Icon(Icons.more_vert),
+                  )
+                ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
@@ -151,7 +154,7 @@ LineChartData mainData(List<FlSpot> spots, double maxY, DateTime baseDate) {
     titlesData: FlTitlesData(
       show: true,
       rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false, reservedSize: 40)),
+          sideTitles: SideTitles(showTitles: false, reservedSize: 50)),
       topTitles: const AxisTitles(
         sideTitles: SideTitles(showTitles: false),
       ),

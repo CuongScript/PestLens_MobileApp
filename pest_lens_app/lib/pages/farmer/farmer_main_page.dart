@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/components/my_bar_chart.dart';
 import 'package:pest_lens_app/components/my_line_chart.dart';
 import 'package:pest_lens_app/components/weather_info_section.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
@@ -51,12 +52,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
               controller: _pageController,
               children: const [
                 MyLineChart(),
-                Center(
-                  child: Text(
-                    "No Data",
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
+                MyBarChart(),
               ],
             ),
           ],

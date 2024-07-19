@@ -49,7 +49,6 @@ dependencies:
   http: ^1.2.1
   shared_preferences: ^2.2.3
   expandable_page_view: ^1.0.17
-  
 
 dev_dependencies:
   flutter_test:
@@ -76,7 +75,6 @@ flutter_launcher_icons:
 
   launcher_name:
     default: "Animated Splash Screen."
-  
 
 # The following section is specific to Flutter packages.
 flutter:
