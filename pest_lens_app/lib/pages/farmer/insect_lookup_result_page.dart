@@ -31,7 +31,7 @@ class _InsectLookupResultPageState extends State<InsectLookupResultPage> {
           // Upper half: Image display
           Expanded(
             flex: 1,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Image.file(
                 widget.imageFile,

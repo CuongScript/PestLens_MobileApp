@@ -25,8 +25,8 @@ class VerifyEmailState extends State<VerifyEmail> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.invalidForgetPasswordVerificationCode),
-          
+          content: Text(AppLocalizations.of(context)!
+              .invalidForgetPasswordVerificationCode),
         ),
       );
       return;
@@ -39,7 +39,8 @@ class VerifyEmailState extends State<VerifyEmail> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.invalidForgetPasswordVerificationCode),
+          content: Text(AppLocalizations.of(context)!
+              .invalidForgetPasswordVerificationCode),
         ),
       );
     }
