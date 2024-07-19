@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/components/insect_listview.dart';
 import 'package:pest_lens_app/components/my_bar_chart.dart';
 import 'package:pest_lens_app/components/my_line_chart.dart';
 import 'package:pest_lens_app/components/weather_info_section.dart';
@@ -33,11 +34,10 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFFE3ECFE),
+        centerTitle: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             const WeatherInfoSection(
@@ -54,6 +54,43 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                 MyLineChart(),
                 MyBarChart(),
               ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '22/5-28/5/2024',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'Quantity',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: InsectListView(),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

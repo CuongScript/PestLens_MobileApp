@@ -15,7 +15,6 @@ class WeatherInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: const Color(0xFFE3ECFE),
         borderRadius: BorderRadius.circular(8.0),
@@ -23,9 +22,9 @@ class WeatherInfoSection extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Column(
+              Row(
                 children: [
                   const Icon(Icons.thermostat_outlined, size: 24),
                   const SizedBox(height: 4),
@@ -38,7 +37,8 @@ class WeatherInfoSection extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
+              const SizedBox(width: 16),
+              Row(
                 children: [
                   const Icon(Icons.air, size: 24),
                   const SizedBox(height: 4),
@@ -51,7 +51,8 @@ class WeatherInfoSection extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
+              const SizedBox(width: 16),
+              Row(
                 children: [
                   const Icon(Icons.water_drop_outlined, size: 24),
                   const SizedBox(height: 4),
@@ -66,7 +67,6 @@ class WeatherInfoSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );

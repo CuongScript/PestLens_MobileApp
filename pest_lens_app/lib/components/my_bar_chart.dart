@@ -64,7 +64,7 @@ class _MyBarChartState extends State<MyBarChart> {
                     onPressed: () {
                       // Open the setting for the chart
                     },
-                    icon: const Icon(Icons.more_vert),
+                    icon: const Icon(Icons.edit_calendar_sharp),
                   )
                 ],
               ),
