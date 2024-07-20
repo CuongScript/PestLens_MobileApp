@@ -4,6 +4,8 @@ import 'package:pest_lens_app/components/my_bar_chart.dart';
 import 'package:pest_lens_app/components/my_line_chart.dart';
 import 'package:pest_lens_app/components/weather_info_section.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:pest_lens_app/components/my_calendar_picker.dart';
+import 'package:pest_lens_app/components/my_camera_box.dart';
 
 class FarmerMainPage extends StatefulWidget {
   const FarmerMainPage({super.key});
@@ -16,11 +18,25 @@ class FarmerMainPage extends StatefulWidget {
 
 class _FarmerMainPageState extends State<FarmerMainPage> {
   final PageController _pageController = PageController();
+  DateTimeRange? _selectedDateRange;
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  void _showCalendarPicker() {
+    showDialog(
+      context: context,
+      builder: (context) => MyCalendarPicker(
+        onDateRangeSelected: (range) {
+          setState(() {
+            _selectedDateRange = range;
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -50,9 +66,12 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
             ),
             ExpandablePageView(
               controller: _pageController,
-              children: const [
-                MyLineChart(),
-                MyBarChart(),
+              children: [
+                MyLineChart(onCalendarButtonPressed: _showCalendarPicker),
+                MyBarChart(onCalendarButtonPressed: _showCalendarPicker),
+                const MyCameraBox(
+                    url:
+                        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
               ],
             ),
             const SizedBox(

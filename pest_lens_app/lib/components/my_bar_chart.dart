@@ -4,7 +4,9 @@ import "package:pest_lens_app/models/insect_count_model.dart";
 import "package:pest_lens_app/dummy/insect_dummy_data.dart";
 
 class MyBarChart extends StatefulWidget {
-  const MyBarChart({super.key});
+  final VoidCallback onCalendarButtonPressed;
+
+  const MyBarChart({super.key, required this.onCalendarButtonPressed});
 
   @override
   State<MyBarChart> createState() => _MyBarChartState();
@@ -61,9 +63,7 @@ class _MyBarChartState extends State<MyBarChart> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      // Open the setting for the chart
-                    },
+                    onPressed: widget.onCalendarButtonPressed,
                     icon: const Icon(Icons.edit_calendar_sharp),
                   )
                 ],

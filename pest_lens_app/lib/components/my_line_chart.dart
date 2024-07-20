@@ -5,7 +5,9 @@ import 'package:pest_lens_app/dummy/insect_dummy_data.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
 
 class MyLineChart extends StatefulWidget {
-  const MyLineChart({super.key});
+  final VoidCallback onCalendarButtonPressed;
+
+  const MyLineChart({super.key, required this.onCalendarButtonPressed});
 
   List<FlSpot> processInsectData(List<InsectCountModel> insectCountList) {
     Map<int, double> dailyCounts = {};
@@ -35,8 +37,9 @@ class MyLineChart extends StatefulWidget {
 
 class _MyLineChartState extends State<MyLineChart> {
   DateTime baseDate = DateTime.now();
+
   List<FlSpot> processInsectData(List<InsectCountModel> insectCountList) {
-// Group the counts by date
+    // Group the counts by date
     Map<DateTime, int> totalCountsByDate = {};
 
     for (var insect in insectCountList) {
@@ -109,9 +112,7 @@ class _MyLineChartState extends State<MyLineChart> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      // Open the setting for the chart
-                    },
+                    onPressed: widget.onCalendarButtonPressed,
                     icon: const Icon(Icons.edit_calendar_sharp),
                   )
                 ],
@@ -217,8 +218,7 @@ Widget bottomTitleWidgets(double value, TitleMeta meta, DateTime baseDate) {
   );
 
   DateTime date = baseDate.add(Duration(days: value.toInt()));
-  ;
-  String formattedDate = DateFormat('dd/mM').format(date);
+  String formattedDate = DateFormat('dd/MM').format(date);
 
   return SideTitleWidget(
     axisSide: meta.axisSide,

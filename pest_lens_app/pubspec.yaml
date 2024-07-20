@@ -49,6 +49,9 @@ dependencies:
   http: ^1.2.1
   shared_preferences: ^2.2.3
   expandable_page_view: ^1.0.17
+  syncfusion_flutter_datepicker: ^26.1.42
+  video_player: ^2.9.1
+  chewie: ^1.8.1
 
 dev_dependencies:
   flutter_test:

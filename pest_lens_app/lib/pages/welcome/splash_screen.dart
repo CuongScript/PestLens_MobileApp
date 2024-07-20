@@ -72,7 +72,7 @@ class SplashScreen extends StatelessWidget {
             nextScreen:
                 snapshot.data!, // Set the next screen based on the check
             splashIconSize: 250,
-            duration: 3500,
+            duration: 100,
             splashTransition: SplashTransition.fadeTransition,
             pageTransitionType: PageTransitionType.leftToRight,
             backgroundColor: primaryBackgroundColor,
