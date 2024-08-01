@@ -39,6 +39,15 @@ class CustomTextStyles {
     color: Colors.black,
   );
 
+  static const TextStyle labelTextErrorField = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    color: Colors.red,
+  );
+
   static TextStyle forgotPass = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 14,
@@ -58,6 +67,15 @@ class CustomTextStyles {
     letterSpacing: 0.14,
   );
 
+  static const TextStyle emailVerifyText = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    color: Colors.black,
+    letterSpacing: 0.14,
+  );
 
   // Add more text styles as needed
 }

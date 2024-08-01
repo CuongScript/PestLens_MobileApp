@@ -50,7 +50,7 @@ class InsectTile extends StatelessWidget {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 1,
               blurRadius: 5,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -70,7 +70,7 @@ class InsectTile extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(
                   insect.name,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),

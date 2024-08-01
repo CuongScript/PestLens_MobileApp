@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
+import 'package:pest_lens_app/components/language_selection_dropdown.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
-import 'package:pest_lens_app/components/round_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/models/user.dart';
@@ -87,6 +87,12 @@ class _LoginPageState extends State<LoginPage> {
     return ConnectivityWrapper(
       child: Scaffold(
         backgroundColor: primaryBackgroundColor,
+        appBar: AppBar(
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [LanguageSelectionDropdown()],
+          ),
+        ),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Center(
@@ -114,27 +120,29 @@ class _LoginPageState extends State<LoginPage> {
                   MyTextField(
                     controller: usernameController,
                     obscureText: false,
-                    prefixIcon: const Icon(Icons.email, color: Colors.black),
+                    prefixIcon:
+                        const Icon(Icons.email_outlined, color: Colors.black),
                     hintText: AppLocalizations.of(context)!.logInEmail,
                     showRevealButton: false,
                     textInputAction: TextInputAction.next,
                     labelText: AppLocalizations.of(context)!.logInEmail,
                   ),
 
-                  const SizedBox(height: 13),
+                  const SizedBox(height: 20),
 
                   // Password textfield
                   MyTextField(
                     controller: passwordController,
                     obscureText: true,
-                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                    prefixIcon:
+                        const Icon(Icons.lock_outline, color: Colors.black),
                     hintText: AppLocalizations.of(context)!.logInPass,
                     showRevealButton: true,
                     textInputAction: TextInputAction.done,
                     labelText: AppLocalizations.of(context)!.logInPass,
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
 
                   // Forgot password
                   Padding(
@@ -142,71 +150,48 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const ForgotPasswordPage(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.logInForgotPass,
-                            style: CustomTextStyles.forgotPass,
-                          ),
-                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordPage(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              AppLocalizations.of(context)!.logInForgotPass,
+                              style: CustomTextStyles.forgotPass,
+                            ))
                       ],
                     ),
                   ),
 
                   const SizedBox(height: 30),
 
-                  // Sign in button
-                  MySubmitButton(
-                    onTap: signUserIn,
-                    buttonText: AppLocalizations.of(context)!.signIn,
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Sign up button
-                  MySubmitButton(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpPage(),
-                        ),
-                      );
-                    },
-                    buttonText: AppLocalizations.of(context)!.signUp,
-                  ),
-
-                  const SizedBox(height: 50),
-
-                  // Viet+Eng icon button
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Vietnam icon
-                      GestureDetector(
-                        onTap: () => {},
-                        child: const RoundTile(
-                          imagePath: 'lib/assets/images/Flag_of_Vietnam.png',
-                        ),
+                      //sign up
+                      MySubmitButton(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SignUpPage(),
+                            ),
+                          );
+                        },
+                        buttonText: AppLocalizations.of(context)!.signUp,
+                        isFilled: false,
                       ),
 
-                      const SizedBox(width: 25),
-
-                      // English icon
-                      GestureDetector(
-                        onTap: () => {},
-                        child: const RoundTile(
-                          imagePath:
-                              'lib/assets/images/Flag_of_the_United_Kingdom.png',
-                        ),
+                      // Sign in button
+                      MySubmitButton(
+                        onTap: signUserIn,
+                        buttonText: AppLocalizations.of(context)!.signIn,
+                        isFilled: true,
                       ),
                     ],
                   ),

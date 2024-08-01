@@ -135,7 +135,8 @@ class SignUpPageState extends State<SignUpPage> {
                       fieldKey: usernameFieldKey,
                       controller: usernameController,
                       obscureText: false,
-                      prefixIcon: const Icon(Icons.person, color: Colors.black),
+                      prefixIcon:
+                          const Icon(Icons.person_outline, color: Colors.black),
                       hintText: AppLocalizations.of(newContext)!.username,
                       showRevealButton: false,
                       textInputAction: TextInputAction.next,
@@ -151,7 +152,8 @@ class SignUpPageState extends State<SignUpPage> {
                       fieldKey: emailFieldKey,
                       controller: emailController,
                       obscureText: false,
-                      prefixIcon: const Icon(Icons.email, color: Colors.black),
+                      prefixIcon:
+                          const Icon(Icons.email_outlined, color: Colors.black),
                       hintText: AppLocalizations.of(newContext)!.logInEmail,
                       showRevealButton: false,
                       textInputAction: TextInputAction.next,
@@ -167,7 +169,8 @@ class SignUpPageState extends State<SignUpPage> {
                       fieldKey: passwordFieldKey,
                       controller: passwordController,
                       obscureText: true,
-                      prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                      prefixIcon:
+                          const Icon(Icons.lock_outline, color: Colors.black),
                       hintText: AppLocalizations.of(newContext)!.logInPass,
                       showRevealButton: true,
                       textInputAction: TextInputAction.next,
@@ -183,7 +186,8 @@ class SignUpPageState extends State<SignUpPage> {
                       fieldKey: rePasswordFieldKey,
                       controller: rePasswordController,
                       obscureText: true,
-                      prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                      prefixIcon:
+                          const Icon(Icons.lock_outline, color: Colors.black),
                       hintText: AppLocalizations.of(newContext)!.reEnterPass,
                       showRevealButton: true,
                       textInputAction: TextInputAction.done,
@@ -219,9 +223,13 @@ class SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 19),
-                    MySubmitButton(
-                      onTap: _signUserUp,
-                      buttonText: AppLocalizations.of(newContext)!.signUp,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 45),
+                      child: MySubmitButton(
+                        onTap: _signUserUp,
+                        buttonText: AppLocalizations.of(newContext)!.signUp,
+                        isFilled: true,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Center(

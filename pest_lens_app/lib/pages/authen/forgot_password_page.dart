@@ -6,7 +6,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
-import 'package:pest_lens_app/pages/authen/verify_email.dart';
+import 'package:pest_lens_app/pages/authen/verify_email_page.dart';
 import 'package:pest_lens_app/utils/config.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -20,34 +20,36 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final emailController = TextEditingController();
 
   Future<void> sendResetPasswordRequest(BuildContext context) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final errorForgotPassword =
-        AppLocalizations.of(context)!.errorForgotPassword;
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('${Config.apiUrl}/api/users/reset-password'),
-    );
-    request.fields.addAll({
-      'username': emailController.text,
-    });
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
+    // final messenger = ScaffoldMessenger.of(context);
+    // final errorForgotPassword =
+    //     AppLocalizations.of(context)!.errorForgotPassword;
+    // var request = http.MultipartRequest(
+    //   'POST',
+    //   Uri.parse('${Config.apiUrl}/api/users/reset-password'),
+    // );
+    // request.fields.addAll({
+    //   'username': emailController.text,
+    // });
 
-    http.StreamedResponse response = await request.send();
+    // http.StreamedResponse response = await request.send();
 
-    if (response.statusCode == 200) {
-      if (!context.mounted) {
-        return;
-      }
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const VerifyEmail()));
-    } else {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            errorForgotPassword,
-          ),
-        ),
-      );
-    }
+    // if (response.statusCode == 200) {
+    //   if (!context.mounted) {
+    //     return;
+    //   }
+    //   Navigator.push(context,
+    //       MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
+    // } else {
+    //   messenger.showSnackBar(
+    //     SnackBar(
+    //       content: Text(
+    //         errorForgotPassword,
+    //       ),
+    //     ),
+    //   );
+    // }
   }
 
   @override
@@ -88,16 +90,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               MyTextField(
                 controller: emailController,
                 obscureText: false,
-                prefixIcon: const Icon(Icons.email, color: Colors.black),
+                prefixIcon:
+                    const Icon(Icons.email_outlined, color: Colors.black),
                 hintText: AppLocalizations.of(context)!.logInEmail,
                 showRevealButton: false,
                 textInputAction: TextInputAction.next,
                 labelText: AppLocalizations.of(context)!.logInEmail,
               ),
               const SizedBox(height: 33),
-              MySubmitButton(
-                onTap: () => sendResetPasswordRequest(context),
-                buttonText: AppLocalizations.of(context)!.sendCode,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 45),
+                child: MySubmitButton(
+                  onTap: () => sendResetPasswordRequest(context),
+                  buttonText: AppLocalizations.of(context)!.sendCode,
+                  isFilled: true,
+                ),
               ),
             ],
           ),

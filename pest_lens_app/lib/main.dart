@@ -25,11 +25,11 @@ class MyApp extends StatelessWidget {
       ],
       home: const SplashScreen(),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFE3ECFE)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF2F6FF)),
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFE3ECFE),
+        scaffoldBackgroundColor: const Color(0xFFF2F6FF),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFE3ECFE),
+          backgroundColor: Color(0xFFF2F6FF),
           titleTextStyle: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -39,12 +39,12 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF3599EE),
+            backgroundColor: const Color(0xFF0064C3),
             foregroundColor: Colors.white,
             textStyle: CustomTextStyles.submitButton,
-            padding: const EdgeInsets.all(17),
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
         ),

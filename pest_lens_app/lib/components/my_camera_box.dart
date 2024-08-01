@@ -96,7 +96,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
                 ? VideoProgressIndicator(
                     _videoPlayerController,
                     allowScrubbing: true,
-                    colors: VideoProgressColors(
+                    colors: const VideoProgressColors(
                       backgroundColor: Colors.grey,
                       playedColor: Colors.blue,
                       bufferedColor: Colors.lightBlue,
