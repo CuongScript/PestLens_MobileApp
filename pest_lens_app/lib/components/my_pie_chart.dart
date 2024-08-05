@@ -83,15 +83,18 @@ class PieChartWidget extends ConsumerWidget {
 
   List<charts.PieChartSectionData> _createSampleData(
       List<DashboardItem> data, int touchedIndex) {
-    return List.generate(data.length, (i) {
+    // Filter out items with count 0
+    final nonZeroData = data.where((item) => item.count > 0).toList();
+
+    return List.generate(nonZeroData.length, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 18.0 : 16.0;
       final radius = isTouched ? 70.0 : 60.0;
-      final color = data[i].color;
+      final item = nonZeroData[i];
       return charts.PieChartSectionData(
-        color: color,
-        value: data[i].count.toDouble(),
-        title: '${data[i].count}',
+        color: item.color,
+        value: item.count.toDouble(),
+        title: '${item.count}',
         radius: radius,
         titleStyle: TextStyle(
           fontSize: fontSize,

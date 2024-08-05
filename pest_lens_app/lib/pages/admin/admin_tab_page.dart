@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/admin/admin_main_page.dart';
 import 'package:pest_lens_app/pages/admin/manage_user_account_page.dart';
+import 'package:pest_lens_app/pages/user/setting_page.dart';
 
 class AdminTabPage extends StatefulWidget {
   const AdminTabPage({super.key});
@@ -17,8 +18,7 @@ class _AdminTabPageState extends State<AdminTabPage> {
     ManageUserAccountPage(),
     Text('Notifications Page',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Settings Page',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    SettingsPage(),
   ];
 
   void _onItemTapped(int index) {

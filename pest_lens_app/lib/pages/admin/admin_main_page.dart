@@ -4,6 +4,7 @@ import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/dashboard_grid.dart';
 import 'package:pest_lens_app/components/my_pie_chart.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:pest_lens_app/provider/dashboard_touch_provider.dart';
 import 'package:pest_lens_app/provider/dashboard_uq_provider.dart';
 
 class AdminMainPage extends ConsumerStatefulWidget {
@@ -24,7 +25,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   @override
   Widget build(BuildContext context) {
     final dashboardData = ref.watch(dashboardUQProvider);
-
+    final touchedIndex = ref.watch(dashBoardTouchedIndexProvider);
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(

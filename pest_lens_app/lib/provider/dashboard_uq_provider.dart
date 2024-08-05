@@ -23,7 +23,7 @@ class DashboardUQNotifier
         if (user['accountStatus'] == 'ACTIVE') activeUsers++;
         if (user['newUser'] == true) newUsers++;
         if (user['accountStatus'] == 'PENDING') pendingUsers++;
-        if (user['inactiveUser'] == true) inactiveUsers++;
+        if (user['accountStatus'] == 'DEACTIVATED') inactiveUsers++;
       }
 
       state = AsyncValue.data([

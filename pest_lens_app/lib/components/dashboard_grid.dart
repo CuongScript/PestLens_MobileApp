@@ -12,9 +12,8 @@ class DashboardGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: GridView.builder(
-        physics:
-            const NeverScrollableScrollPhysics(), // Prevent GridView from scrolling
-        shrinkWrap: true, // Use only the space it needs
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
         itemCount: items.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -23,9 +22,20 @@ class DashboardGrid extends StatelessWidget {
           childAspectRatio: 1.2,
         ),
         itemBuilder: (context, index) {
-          return DashboardCard(item: items[index], index: index);
+          final item = items[index];
+          // If count is 0, set index to a negative number
+          final adjustedIndex = _getAdjustedIndex(index, item.count);
+          return DashboardCard(
+            item: item,
+            index: adjustedIndex,
+          );
         },
       ),
     );
+  }
+
+  int _getAdjustedIndex(int index, int count) {
+    if (count == 0) return -2;
+    return index > 0 ? index - 1 : index;
   }
 }
