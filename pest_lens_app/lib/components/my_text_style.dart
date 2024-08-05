@@ -76,6 +76,9 @@ class CustomTextStyles {
     color: Colors.black,
     letterSpacing: 0.14,
   );
-
-  // Add more text styles as needed
+  static const TextStyle subtitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Colors.black87,
+  );
 }

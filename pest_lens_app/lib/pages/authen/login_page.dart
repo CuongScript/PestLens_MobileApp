@@ -7,7 +7,7 @@ import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/models/user.dart';
-import 'package:pest_lens_app/pages/admin/admin_main_page.dart';
+import 'package:pest_lens_app/pages/admin/admin_tab_page.dart';
 import 'package:pest_lens_app/pages/authen/forgot_password_page.dart';
 import 'package:pest_lens_app/pages/authen/sign_up_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
       if (user.roles.contains(Role.ROLE_ADMIN)) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const AdminMainPage()),
+          MaterialPageRoute(builder: (context) => const AdminTabPage()),
         );
       } else if (user.roles.contains(Role.ROLE_USER)) {
         Navigator.pushReplacement(

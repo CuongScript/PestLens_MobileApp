@@ -1,7 +1,7 @@
 import 'package:pest_lens_app/models/role_enum.dart';
 
 class User {
-  int id;
+  String id;
   String username;
   List<Role> roles;
   String accessToken;

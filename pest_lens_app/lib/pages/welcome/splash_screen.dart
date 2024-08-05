@@ -6,7 +6,7 @@ import 'package:pest_lens_app/assets/colors.dart';
 
 import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/models/user.dart';
-import 'package:pest_lens_app/pages/admin/admin_main_page.dart';
+import 'package:pest_lens_app/pages/admin/admin_tab_page.dart';
 import 'package:pest_lens_app/pages/authen/login_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/utils/user_preferences.dart';
@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
 
     if (user != null) {
       if (user.roles.contains(Role.ROLE_ADMIN)) {
-        return const AdminMainPage();
+        return const AdminTabPage();
       } else if (user.roles.contains(Role.ROLE_USER)) {
         return const FarmerTabPage();
       }

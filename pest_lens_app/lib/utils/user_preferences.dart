@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserPreferences {
   static Future<void> saveUser(User user) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('id', user.id);
+    prefs.setString('id', user.id);
     prefs.setString('username', user.username);
     prefs.setStringList(
         'roles', user.roles.map((role) => role.toJson()).toList());
@@ -15,7 +15,7 @@ class UserPreferences {
 
   static Future<User?> getUser() async {
     final prefs = await SharedPreferences.getInstance();
-    int? id = prefs.getInt('id');
+    String? id = prefs.getString('id');
     String? username = prefs.getString('username');
     List<String>? roles = prefs.getStringList('roles');
     String? accessToken = prefs.getString('accessToken');

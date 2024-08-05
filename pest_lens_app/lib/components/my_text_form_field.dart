@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 
 class MyTextFormField extends StatefulWidget {
@@ -57,11 +56,12 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
   }
 
   void _validate() {
-    if (!_userHasInteracted) {
-      return;
-    }
+    // if (!_userHasInteracted) {
+    //   return;
+    // }
 
     final text = widget.controller.text;
+    
     final currentError = widget.validator?.call(text);
     if (currentError != _errorText) {
       setState(() {
