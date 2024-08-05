@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_search_bar.dart';
 import 'package:pest_lens_app/components/my_user_account_filter_button.dart';
-import 'package:pest_lens_app/dummy/user_dummy_data.dart';
 import 'package:pest_lens_app/components/user_brief_info_row.dart';
+import 'package:pest_lens_app/provider/list_all_users_provider.dart';
 
-class ManageUserAccountPage extends StatefulWidget {
+class ManageUserAccountPage extends ConsumerStatefulWidget {
   const ManageUserAccountPage({super.key});
 
   @override
-  _ManageUserAccountPageState createState() => _ManageUserAccountPageState();
+  ConsumerState<ManageUserAccountPage> createState() =>
+      _ManageUserAccountPageState();
 }
 
-class _ManageUserAccountPageState extends State<ManageUserAccountPage> {
+class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   final List<String> _selectedFilters = [];
 
   void _handleFilterChanged(List<String> filters) {
@@ -31,6 +33,8 @@ class _ManageUserAccountPageState extends State<ManageUserAccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final usersAsync = ref.watch(allUsersProvider);
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
@@ -74,18 +78,22 @@ class _ManageUserAccountPageState extends State<ManageUserAccountPage> {
                           deleteIcon: const Icon(Icons.close),
                           onDeleted: () => _removeFilter(filter),
                         ))
-                    .toList(), // display filter list
+                    .toList(),
               ),
             ),
             const SizedBox(height: 16),
             const Divider(),
             Expanded(
-              child: ListView.builder(
-                itemCount: dummyUsers.length,
-                itemBuilder: (context, index) {
-                  final user = dummyUsers[index];
-                  return UserBriefInfoRow(user: user);
-                },
+              child: usersAsync.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+                data: (users) => ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    return UserBriefInfoRow(user: user);
+                  },
+                ),
               ),
             ),
           ],
