@@ -5,7 +5,9 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_search_bar.dart';
 import 'package:pest_lens_app/components/my_user_account_filter_button.dart';
 import 'package:pest_lens_app/components/user_brief_info_row.dart';
+import 'package:pest_lens_app/provider/filtered_users_provider.dart';
 import 'package:pest_lens_app/provider/list_all_users_provider.dart';
+import 'package:pest_lens_app/models/user_full_info_model.dart';
 
 class ManageUserAccountPage extends ConsumerStatefulWidget {
   const ManageUserAccountPage({super.key});
@@ -17,23 +19,53 @@ class ManageUserAccountPage extends ConsumerStatefulWidget {
 
 class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   final List<String> _selectedFilters = [];
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(allUsersProvider.notifier).fetchAllUsers();
+    });
+  }
 
   void _handleFilterChanged(List<String> filters) {
     setState(() {
       _selectedFilters.clear();
-      _selectedFilters.addAll(filters); // Add new filters
+      _selectedFilters.addAll(filters);
     });
+    _applyFilters();
   }
 
   void _removeFilter(String filter) {
     setState(() {
       _selectedFilters.remove(filter);
     });
+    _applyFilters();
+  }
+
+  void _handleSearch(String value) {
+    setState(() {
+      _searchQuery = value;
+    });
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    ref
+        .read(filteredUsersProvider.notifier)
+        .filterUsers(_searchQuery, _selectedFilters);
   }
 
   @override
   Widget build(BuildContext context) {
-    final usersAsync = ref.watch(allUsersProvider);
+    final filteredUsersAsync = ref.watch(filteredUsersProvider);
+
+    // Update filtered users when all users change
+    ref.listen<AsyncValue<List<UserFullInfoModel>>>(allUsersProvider,
+        (_, next) {
+      ref.read(filteredUsersProvider.notifier).updateAllUsers(next);
+    });
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
@@ -53,10 +85,7 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
                 children: [
                   Expanded(
                     child: MySearchBar(
-                      onChanged: (value) {
-                        // Handle search logic here
-                        print("Search text: $value");
-                      },
+                      onChanged: _handleSearch,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -84,16 +113,21 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
             const SizedBox(height: 16),
             const Divider(),
             Expanded(
-              child: usersAsync.when(
+              child: filteredUsersAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => Center(child: Text('Error: $error')),
-                data: (users) => ListView.builder(
-                  itemCount: users.length,
-                  itemBuilder: (context, index) {
-                    final user = users[index];
-                    return UserBriefInfoRow(user: user);
-                  },
-                ),
+                data: (users) {
+                  if (users.isEmpty) {
+                    return const Center(child: Text('No users found'));
+                  }
+                  return ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      final user = users[index];
+                      return UserBriefInfoRow(user: user);
+                    },
+                  );
+                },
               ),
             ),
           ],
