@@ -12,6 +12,7 @@ class MyTextFormField extends StatefulWidget {
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
   final GlobalKey<FormFieldState>? fieldKey;
+  final bool readOnly; // New parameter
 
   const MyTextFormField({
     super.key,
@@ -25,6 +26,7 @@ class MyTextFormField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.fieldKey,
+    this.readOnly = false, // Default to false
   });
 
   @override
@@ -56,12 +58,8 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
   }
 
   void _validate() {
-    // if (!_userHasInteracted) {
-    //   return;
-    // }
-
     final text = widget.controller.text;
-    
+
     final currentError = widget.validator?.call(text);
     if (currentError != _errorText) {
       setState(() {
@@ -95,6 +93,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
               controller: widget.controller,
               obscureText: _obscureText,
               textInputAction: widget.textInputAction,
+              readOnly: widget.readOnly, // Apply readOnly property
               decoration: InputDecoration(
                 prefixIcon: widget.prefixIcon,
                 hintText: widget.hintText,
@@ -103,15 +102,18 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
                 labelStyle: _errorText != null
                     ? CustomTextStyles.labelTextErrorField
                     : CustomTextStyles.labelTextField,
-                errorText: null, // turn off the default error text
+                errorText: null,
                 errorStyle: const TextStyle(
                   color: Colors.transparent,
                   fontSize: 0,
                 ),
-
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(color: Colors.white),
+                  borderSide: BorderSide(
+                    color:
+                        widget.readOnly ? Colors.grey.shade900 : Colors.white,
+                    width: widget.readOnly ? 2.0 : 1.0,
+                  ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -145,7 +147,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
                 widget.onChanged?.call(text);
               },
             ),
-            if (widget.showRevealButton)
+            if (widget.showRevealButton && !widget.readOnly)
               Positioned(
                 right: 5,
                 child: IconButton(

@@ -5,10 +5,10 @@ class MyUserAccountFilterButton extends StatefulWidget {
   final ValueChanged<List<String>> onFilterChanged;
 
   const MyUserAccountFilterButton({
-    Key? key,
+    super.key,
     required this.selectedFilters,
     required this.onFilterChanged,
-  }) : super(key: key);
+  });
 
   @override
   _MyUserAccountFilterButtonState createState() =>

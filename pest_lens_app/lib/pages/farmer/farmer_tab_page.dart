@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_main_page.dart';
 import 'package:pest_lens_app/pages/farmer/insect_lookup_page.dart';
-import 'package:pest_lens_app/pages/user/setting_page.dart';
+import 'package:pest_lens_app/pages/common/setting_page.dart';
 
 class FarmerTabPage extends StatefulWidget {
   const FarmerTabPage({super.key});

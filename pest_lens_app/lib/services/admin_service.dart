@@ -4,7 +4,8 @@ import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/utils/user_preferences.dart';
 
 class AdminService {
-  static const String baseUrl = '${Config.apiUrl}/api/users';
+  static const String baseUserUrl = '${Config.apiUrl}/api/users';
+  static const String baseAdminUrl = '${Config.apiUrl}/api/admin';
 
   Future<List<Map<String, dynamic>>> fetchUsers() async {
     final user = await UserPreferences.getUser();
@@ -14,7 +15,7 @@ class AdminService {
     }
 
     final response = await http.get(
-      Uri.parse(baseUrl),
+      Uri.parse(baseUserUrl),
       headers: {
         'Authorization': '${user.tokenType} ${user.accessToken}',
       },
@@ -43,7 +44,7 @@ class AdminService {
       throw Exception('User not authenticated');
     }
 
-    final url = Uri.parse('$baseUrl/admin/$action/$username');
+    final url = Uri.parse('$baseAdminUrl/$action/$username');
     final response = await http.post(
       url,
       headers: {

@@ -6,7 +6,12 @@ import 'package:pest_lens_app/models/role_enum.dart';
 
 class UserBriefInfoRow extends StatelessWidget {
   final UserFullInfoModel user;
-  const UserBriefInfoRow({super.key, required this.user});
+  final VoidCallback onTap;
+  const UserBriefInfoRow({
+    super.key,
+    required this.user,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,44 +55,47 @@ class UserBriefInfoRow extends StatelessWidget {
         );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 24,
-            backgroundImage:
-                user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
-            child: user.avatarUrl == null
-                ? Image.asset(
-                    'lib/assets/images/placeholder_profile_image.png',
-                    fit: BoxFit.cover,
-                    width: 48,
-                    height: 48,
-                  )
-                : null,
-          ),
-          title: Text(user.username, style: CustomTextStyles.subtitle),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(roleDisplayName),
-              Text(user.accountStatus.toString().split('.').last,
-                  style: statusTextStyle),
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 4,
+                offset: Offset(0, 2),
+              ),
             ],
           ),
-          trailing: const Icon(Icons.chevron_right),
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 24,
+              backgroundImage:
+                  user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
+              child: user.avatarUrl == null
+                  ? Image.asset(
+                      'lib/assets/images/placeholder_profile_image.png',
+                      fit: BoxFit.cover,
+                      width: 48,
+                      height: 48,
+                    )
+                  : null,
+            ),
+            title: Text(user.username, style: CustomTextStyles.subtitle),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(roleDisplayName),
+                Text(user.accountStatus.toString().split('.').last,
+                    style: statusTextStyle),
+              ],
+            ),
+            trailing: const Icon(Icons.chevron_right),
+          ),
         ),
       ),
     );

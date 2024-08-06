@@ -7,11 +7,13 @@ import 'package:pest_lens_app/components/user_brief_info_row.dart';
 class MySlidable extends StatelessWidget {
   final UserFullInfoModel user;
   final Function(UserFullInfoModel, bool) onStatusChange;
+  final VoidCallback onTap;
 
   const MySlidable({
     super.key,
     required this.user,
     required this.onStatusChange,
+    required this.onTap,
   });
 
   Future<bool?> _showConfirmationDialog(
@@ -58,9 +60,7 @@ class MySlidable extends StatelessWidget {
           label: 'Activate',
         ),
       );
-    }
-
-    if (user.accountStatus == AccountStatusEnum.PENDING) {
+    } else if (user.accountStatus == AccountStatusEnum.PENDING) {
       actions.add(
         SlidableAction(
           onPressed: (context) async {
@@ -92,7 +92,7 @@ class MySlidable extends StatelessWidget {
     }
 
     // Add Deactivate button for ACTIVE users
-    if (user.accountStatus == AccountStatusEnum.ACTIVE) {
+    else if (user.accountStatus == AccountStatusEnum.ACTIVE) {
       actions.add(
         SlidableAction(
           onPressed: (context) async {
@@ -115,7 +115,7 @@ class MySlidable extends StatelessWidget {
         motion: const ScrollMotion(),
         children: actions,
       ),
-      child: UserBriefInfoRow(user: user),
+      child: UserBriefInfoRow(user: user, onTap: onTap),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/admin/admin_main_page.dart';
 import 'package:pest_lens_app/pages/admin/manage_user_account_page.dart';
-import 'package:pest_lens_app/pages/user/setting_page.dart';
+import 'package:pest_lens_app/pages/common/setting_page.dart';
 
 class AdminTabPage extends StatefulWidget {
   const AdminTabPage({super.key});
