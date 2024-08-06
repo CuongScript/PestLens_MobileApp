@@ -27,4 +27,34 @@ class AdminService {
       throw Exception('Failed to load users');
     }
   }
+
+  Future<bool> activateUser(String username) async {
+    return _changeUserStatus(username, 'activate');
+  }
+
+  Future<bool> deactivateUser(String username) async {
+    return _changeUserStatus(username, 'deactivate');
+  }
+
+  Future<bool> _changeUserStatus(String username, String action) async {
+    final user = await UserPreferences.getUser();
+
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+
+    final url = Uri.parse('$baseUrl/admin/$action/$username');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': '${user.tokenType} ${user.accessToken}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to $action user');
+    }
+  }
 }

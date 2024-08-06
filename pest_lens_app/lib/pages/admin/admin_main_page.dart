@@ -25,7 +25,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   @override
   Widget build(BuildContext context) {
     final dashboardData = ref.watch(dashboardUQProvider);
-    final touchedIndex = ref.watch(dashBoardTouchedIndexProvider);
+    ref.watch(dashBoardTouchedIndexProvider);
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(

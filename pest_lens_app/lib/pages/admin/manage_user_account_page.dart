@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/assets/colors.dart';
+import 'package:pest_lens_app/components/my_slidable.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_search_bar.dart';
 import 'package:pest_lens_app/components/my_user_account_filter_button.dart';
-import 'package:pest_lens_app/components/user_brief_info_row.dart';
 import 'package:pest_lens_app/provider/filtered_users_provider.dart';
 import 'package:pest_lens_app/provider/list_all_users_provider.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
+import 'package:pest_lens_app/services/admin_service.dart';
 
 class ManageUserAccountPage extends ConsumerStatefulWidget {
   const ManageUserAccountPage({super.key});
@@ -20,6 +21,7 @@ class ManageUserAccountPage extends ConsumerStatefulWidget {
 class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   final List<String> _selectedFilters = [];
   String _searchQuery = '';
+  final AdminService _adminService = AdminService();
 
   @override
   void initState() {
@@ -55,6 +57,32 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
     ref
         .read(filteredUsersProvider.notifier)
         .filterUsers(_searchQuery, _selectedFilters);
+  }
+
+  Future<void> _handleUserStatusChange(
+      UserFullInfoModel user, bool activate) async {
+    try {
+      bool success;
+      if (activate) {
+        success = await _adminService.activateUser(user.username);
+      } else {
+        success = await _adminService.deactivateUser(user.username);
+      }
+
+      if (success) {
+        // Refresh the user list
+        await ref.read(allUsersProvider.notifier).fetchAllUsers();
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User status updated successfully')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update user status: $e')),
+      );
+    }
   }
 
   @override
@@ -124,7 +152,10 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
                     itemCount: users.length,
                     itemBuilder: (context, index) {
                       final user = users[index];
-                      return UserBriefInfoRow(user: user);
+                      return MySlidable(
+                        user: user,
+                        onStatusChange: _handleUserStatusChange,
+                      );
                     },
                   );
                 },
