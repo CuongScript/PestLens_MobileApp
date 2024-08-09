@@ -91,15 +91,16 @@ class _FarmerTabPageState extends State<FarmerTabPage> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withOpacity(0.1),
               spreadRadius: 2,
               blurRadius: 8,
-              offset: const Offset(0, -4),
+              offset: const Offset(0, -2),
             ),
           ],
         ),
         child: BottomAppBar(
           shape: const CircularNotchedRectangle(),
+          color: Colors.white,
           notchMargin: 12,
           child: SizedBox(
             height: 80,

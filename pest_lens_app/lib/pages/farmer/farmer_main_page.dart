@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/insect_listview.dart';
 import 'package:pest_lens_app/components/my_bar_chart.dart';
 import 'package:pest_lens_app/components/my_line_chart.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/weather_info_section.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:pest_lens_app/components/my_calendar_picker.dart';
@@ -43,14 +45,9 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'FARM NAME',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: false,
+        backgroundColor: primaryBackgroundColor,
+        title: const Text('PH Farm', style: CustomTextStyles.pageTitle),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -88,7 +85,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                         Text(
                           '22/5-28/5/2024', // change to correct date range
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: Color(0xFF0064c3),
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -96,7 +93,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                         Text(
                           'Quantity',
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: Color(0xFF0064c3),
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),

@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/components/insect_listview.dart';
+import 'package:pest_lens_app/components/my_back_button.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:pest_lens_app/components/upload_image_display.dart';
 import 'dart:io';
-import 'package:pest_lens_app/dummy/insect_dummy_data.dart';
+
+import 'package:pest_lens_app/models/insect_model.dart';
 
 class InsectLookupResultPage extends StatefulWidget {
-  const InsectLookupResultPage({super.key, required this.imageFile});
-
   final File imageFile;
+  final List<Insect> insects;
+
+  const InsectLookupResultPage({
+    super.key,
+    required this.imageFile,
+    required this.insects,
+  });
 
   @override
-  State<StatefulWidget> createState() {
-    return _InsectLookupResultPageState();
-  }
+  State<StatefulWidget> createState() => _InsectLookupResultPageState();
 }
 
 class _InsectLookupResultPageState extends State<InsectLookupResultPage> {
@@ -18,54 +26,26 @@ class _InsectLookupResultPageState extends State<InsectLookupResultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insect Detection Result'),
+        title: const Text('AI Count Result', style: CustomTextStyles.pageTitle),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          icon: const MyBackButton(),
+          onPressed: () => Navigator.of(context).pop(),
         ),
+        leadingWidth: 45,
       ),
       body: Column(
         children: [
-          // Upper half: Image display
           Expanded(
             flex: 1,
-            child: SizedBox(
-              width: double.infinity,
-              child: Image.file(
-                widget.imageFile,
-                fit: BoxFit.cover,
-              ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: UploadImageDisplay(imageFile: widget.imageFile),
             ),
           ),
           // Lower half: List of insects
           Expanded(
             flex: 1,
-            child: ListView.builder(
-              itemCount: insectDetections.length,
-              itemBuilder: (context, index) {
-                final insect = insectDetections[index];
-                return Card(
-                  color: Colors.lightBlue.shade100,
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 8.0),
-                  child: ListTile(
-                    leading: const Icon(Icons.bug_report, color: Colors.black),
-                    title: Text(insect['name']!,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    trailing: Text(
-                      insect['count']!,
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+            child: InsectListView(insects: widget.insects),
           ),
         ],
       ),

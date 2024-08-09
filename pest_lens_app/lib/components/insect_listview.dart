@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/models/insect_model.dart';
 
 class InsectListView extends StatelessWidget {
-  final List<Insect> insects = [
+  final List<Insect> hardcodedInsects = [
     Insect(name: 'Brown Planthopper', color: Colors.brown, quantity: 196),
     Insect(name: 'Stem Borers', color: Colors.orange, quantity: 274),
     Insect(name: 'Leaf Rollers', color: Colors.green, quantity: 242),
@@ -10,73 +11,66 @@ class InsectListView extends StatelessWidget {
     Insect(name: 'Leaf Rollers', color: Colors.green, quantity: 242),
   ];
 
-  InsectListView({super.key});
+  final List<Insect>? insects;
+
+  InsectListView({super.key, this.insects});
 
   @override
   Widget build(BuildContext context) {
+    final displayInsects = insects ?? hardcodedInsects;
+
     return ListView.builder(
-      itemCount: insects.length,
+      itemCount: displayInsects.length,
       itemBuilder: (context, index) {
-        return InsectTile(insect: insects[index]);
+        return InsectTile(insect: displayInsects[index]);
       },
     );
   }
 }
 
-class Insect {
-  final String name;
-  final Color color;
-  final int quantity;
-
-  Insect({required this.name, required this.color, required this.quantity});
-}
-
 class InsectTile extends StatelessWidget {
   final Insect insect;
 
-  const InsectTile({super.key, required this.insect});
+  const InsectTile({Key? key, required this.insect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
+    return Card(
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: Colors.white,
+      shadowColor: Colors.grey.withOpacity(0.3),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: insect.color,
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: insect.color,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.bug_report, color: Colors.white),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                insect.name,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 10),
-                Text(
-                  insect.name,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
+              ),
             ),
             Text(
               insect.quantity.toString(),
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: insect.color,
+              ),
             ),
           ],
         ),
