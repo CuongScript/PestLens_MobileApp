@@ -12,10 +12,7 @@ import 'package:pest_lens_app/pages/authen/forgot_password_page.dart';
 import 'package:pest_lens_app/pages/authen/sign_up_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:pest_lens_app/utils/config.dart';
-import 'package:pest_lens_app/utils/user_preferences.dart';
+import 'package:pest_lens_app/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,34 +22,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // Text editing controllers
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
-  // Sign user in method
   void signUserIn() async {
     final messenger = ScaffoldMessenger.of(context);
     final invalidCredentialsText =
         AppLocalizations.of(context)!.invalidCredentials;
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse('${Config.apiUrl}/login'));
-    request.body = json.encode({
-      "username": usernameController.text,
-      "password": passwordController.text
-    });
-    request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
+    User? user = await _authService.signUserIn(
+      usernameController.text,
+      passwordController.text,
+    );
 
-    if (response.statusCode == 200) {
-      var responseData = await response.stream.bytesToString();
-      var jsonResponse = json.decode(responseData);
-
-      User user = User.fromJson(jsonResponse);
-
-      // Save user information
-      await UserPreferences.saveUser(user);
-
+    if (user != null) {
       // Check if the widget is still mounted before navigating
       if (!mounted) return;
 

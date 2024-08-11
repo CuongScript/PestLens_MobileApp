@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761576439452",
+    "project_id": "pestapp-201a5",
+    "storage_bucket": "pestapp-201a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761576439452:android:7a8b03a55008165bdbb759",
+        "android_client_info": {
+          "package_name": "com.phuonghai.pestapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxivaEYbYf_P4OWtDzq2ir12uNa9GonHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

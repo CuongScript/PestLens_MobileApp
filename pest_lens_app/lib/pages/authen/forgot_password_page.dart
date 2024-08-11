@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_back_button.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
@@ -7,7 +7,7 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/pages/authen/verify_email_page.dart';
-import 'package:pest_lens_app/utils/config.dart';
+
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
