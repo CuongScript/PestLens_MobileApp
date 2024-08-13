@@ -182,7 +182,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Camera not Avaiable',
+                          const Text('Camera not Available',
                               style: CustomTextStyles.cameraErrorMessage),
                           const SizedBox(height: 24),
                           ElevatedButton(

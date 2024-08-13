@@ -54,11 +54,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const WeatherInfoSection(
-              windSpeed: 20,
-              humidity: 40,
-              temperature: 30,
-            ),
+            const WeatherInfoSection(),
             const SizedBox(
               height: 16,
             ),
@@ -72,9 +68,9 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                   title: "Camera Feed 1",
                 ),
                 const MyCameraBox(
-                  url: "http://tramquantrac.shop:10001/video_feed",
+                  url: Config.camera2APIUrl,
                   title: "Camera Feed 2",
-                  token: "Noodle7532Giraffe",
+                  token: Config.camera2Token,
                 ),
               ],
             ),

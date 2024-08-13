@@ -9,6 +9,26 @@ import 'package:path/path.dart' as path;
 
 class FarmerService {
   static const String baseUrl = Config.mlAPIUrl;
+  static const String weatherApiKey = '86434e436aee923e46e510440cd0305d';
+  static const String weatherApiUrl =
+      'https://api.openweathermap.org/data/2.5/weather';
+
+  Future<Map<String, dynamic>> fetchWeatherForNinhThuan() async {
+    final response = await http.get(Uri.parse(
+        '$weatherApiUrl?id=1559971&units=metric&appid=$weatherApiKey')); // Ninh Thuan Id
+
+    if (response.statusCode == 200) {
+      final weatherData = json.decode(response.body);
+      print(response.body);
+      return {
+        'temperature': weatherData['main']['temp'],
+        'windSpeed': weatherData['wind']['speed'],
+        'humidity': weatherData['main']['humidity'],
+      };
+    } else {
+      throw Exception('Failed to load weather data ${response.body}');
+    }
+  }
 
   Future<Map<String, dynamic>> detectInsects(File imageFile) async {
     var uri = Uri.parse('$baseUrl/detect');
