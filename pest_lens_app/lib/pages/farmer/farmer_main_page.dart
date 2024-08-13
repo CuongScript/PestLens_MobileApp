@@ -56,7 +56,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
           children: [
             const WeatherInfoSection(),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             ExpandablePageView(
               controller: _pageController,

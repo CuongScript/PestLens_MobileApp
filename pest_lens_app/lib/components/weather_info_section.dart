@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/assets/colors.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/services/famer_service.dart';
 
 class WeatherInfoSection extends StatefulWidget {
-  const WeatherInfoSection({Key? key}) : super(key: key);
+  const WeatherInfoSection({super.key});
 
   @override
   _WeatherInfoSectionState createState() => _WeatherInfoSectionState();
@@ -41,8 +43,16 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFE3ECFE),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(0, 4),
+            blurRadius: 6.0,
+            spreadRadius: 0.0,
+          ),
+        ],
       ),
       child: _buildContent(),
     );
@@ -54,7 +64,7 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
     } else if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: Text(
             _errorMessage!,
             style: const TextStyle(
@@ -67,16 +77,16 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
       );
     } else {
       return Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(4.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildWeatherItem(Icons.thermostat_outlined,
+            _buildWeatherItem(Icons.thermostat_rounded,
                 '${_weatherData!['temperature'].toStringAsFixed(1)}°C'),
-            _buildWeatherItem(Icons.air,
+            _buildWeatherItem(Icons.air_rounded,
                 '${_weatherData!['windSpeed'].toStringAsFixed(1)} km/h'),
             _buildWeatherItem(
-                Icons.water_drop_outlined, '${_weatherData!['humidity']}%'),
+                Icons.water_drop_rounded, '${_weatherData!['humidity']}%'),
           ],
         ),
       );
@@ -84,17 +94,16 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
   }
 
   Widget _buildWeatherItem(IconData icon, String text) {
-    return Column(
+    return Row(
       children: [
-        Icon(icon, size: 24),
-        const SizedBox(height: 4),
-        Text(
-          text,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+        Icon(
+          icon,
+          size: 30,
+          color: fontTitleColor,
+          weight: 100,
         ),
+        const SizedBox(height: 4),
+        Text(text, style: CustomTextStyles.subtitle),
       ],
     );
   }
