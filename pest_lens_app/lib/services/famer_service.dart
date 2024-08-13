@@ -60,18 +60,17 @@ class FarmerService {
 
     // Define color mapping
     final colorMap = {
-      'leafRoller': Colors.green,
-      'plantHoppers': Colors.brown,
-      'riceGallMidge': Colors.orange,
-      'stemBorer': Colors.purple,
-      'thrips': Colors.red,
+      'Leaf Rollers': Colors.green,
+      'Brown Plant Hopper': Colors.brown,
+      'Rice Asian Gall Midge': Colors.orange,
+      'Stem Borers': Colors.purple,
+      'Thrips': Colors.red,
       'unidentified': Colors.grey,
     };
 
     return insectCounts.entries.map((entry) {
-      String name = entry.key.replaceAll('total_', '');
-      name =
-          name[0].toUpperCase() + name.substring(1); // Capitalize first letter
+      String name = entry.key.toLowerCase();
+
       return Insect(
         name: name,
         color: colorMap[name.toLowerCase()] ??

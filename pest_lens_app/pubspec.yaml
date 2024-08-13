@@ -58,6 +58,8 @@ dependencies:
   package_info_plus: ^8.0.2
   firebase_messaging: ^15.0.4
   flutter_local_notifications: ^17.2.2
+  better_player: ^0.0.84
+  webview_flutter: ^4.8.0
 
 dev_dependencies:
   flutter_test:

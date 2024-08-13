@@ -1,39 +1,118 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pest_lens_app/pages/farmer/camera_full_screen_page.dart';
-import 'package:video_player/video_player.dart';
 
 class MyCameraBox extends StatefulWidget {
   final String url;
+  final String title;
+  final String? token;
 
-  const MyCameraBox({super.key, required this.url});
+  const MyCameraBox({
+    Key? key,
+    required this.url,
+    required this.title,
+    this.token,
+  }) : super(key: key);
 
   @override
   _MyCameraBoxState createState() => _MyCameraBoxState();
 }
 
 class _MyCameraBoxState extends State<MyCameraBox> {
-  late VideoPlayerController _videoPlayerController;
-  bool _isInitialized = false;
+  late WebViewController _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
+  String _errorMessage = '';
+  Timer? _loadingTimer;
 
   @override
   void initState() {
     super.initState();
-    _videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(widget.url))
-          ..initialize().then((_) {
-            setState(() {
-              _isInitialized = true;
-              _videoPlayerController.play();
-            });
-          }).catchError((error) {
-            print('Error initializing video player: $error');
-          });
+    _initializeWebView();
   }
 
-  @override
-  void dispose() {
-    _videoPlayerController.dispose();
-    super.dispose();
+  void _initializeWebView() {
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color.fromARGB(0, 0, 0, 0))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            _startLoadingTimer();
+            _safeSetState(() {
+              _isLoading = true;
+              _hasError = false;
+            });
+          },
+          onPageFinished: (String url) {
+            _cancelLoadingTimer();
+            _safeSetState(() {
+              _isLoading = false;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {
+            _cancelLoadingTimer();
+            _safeSetState(() {
+              _hasError = true;
+              _isLoading = false;
+              _errorMessage = '${error.errorCode}: ${error.description}';
+            });
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith(widget.url)) {
+              return NavigationDecision.navigate;
+            }
+            return NavigationDecision.prevent;
+          },
+        ),
+      );
+
+    _loadUrl();
+  }
+
+  void _loadUrl() {
+    if (widget.token != null) {
+      _controller.loadRequest(
+        Uri.parse(widget.url),
+        headers: {'Authorization': 'Bearer ${widget.token}'},
+      );
+    } else {
+      _controller.loadRequest(Uri.parse(widget.url));
+    }
+  }
+
+  void _startLoadingTimer() {
+    _loadingTimer = Timer(const Duration(seconds: 5), () {
+      _safeSetState(() {
+        if (_isLoading) {
+          _hasError = true;
+          _isLoading = false;
+          _errorMessage = 'Loading timed out after 5 seconds';
+        }
+      });
+    });
+  }
+
+  void _cancelLoadingTimer() {
+    _loadingTimer?.cancel();
+    _loadingTimer = null;
+  }
+
+  void _safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
+    }
+  }
+
+  void _retry() {
+    _safeSetState(() {
+      _isLoading = true;
+      _hasError = false;
+      _errorMessage = '';
+    });
+    _loadUrl();
   }
 
   void _goFullScreen() {
@@ -41,10 +120,17 @@ class _MyCameraBoxState extends State<MyCameraBox> {
       context,
       MaterialPageRoute(
         builder: (context) => CameraFullScreenPage(
-          controller: _videoPlayerController,
+          url: widget.url,
+          token: widget.token,
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cancelLoadingTimer();
+    super.dispose();
   }
 
   @override
@@ -55,77 +141,62 @@ class _MyCameraBoxState extends State<MyCameraBox> {
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.fullscreen),
+                  onPressed: _goFullScreen,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Stack(
                 children: [
-                  const Text(
-                    'Live Camera Feed',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  if (!_hasError) WebViewWidget(controller: _controller),
+                  if (_isLoading)
+                    const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.fullscreen),
-                    onPressed: _goFullScreen,
-                  ),
+                  if (_hasError)
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Camera not Avaiable',
+                              style: CustomTextStyles.cameraErrorMessage),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: _retry,
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
-              child: _isInitialized
-                  ? AspectRatio(
-                      aspectRatio: _videoPlayerController.value.aspectRatio,
-                      child: VideoPlayer(_videoPlayerController),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-            ),
-            _isInitialized
-                ? VideoProgressIndicator(
-                    _videoPlayerController,
-                    allowScrubbing: true,
-                    colors: const VideoProgressColors(
-                      backgroundColor: Colors.grey,
-                      playedColor: Colors.blue,
-                      bufferedColor: Colors.lightBlue,
-                    ),
-                  )
-                : Container(),
-            _isInitialized
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          _videoPlayerController.value.isPlaying
-                              ? Icons.pause
-                              : Icons.play_arrow,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _videoPlayerController.value.isPlaying
-                                ? _videoPlayerController.pause()
-                                : _videoPlayerController.play();
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                : Container(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

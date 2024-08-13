@@ -20,6 +20,15 @@ class CustomTextStyles {
     color: fontTitleColor,
   );
 
+  static const TextStyle cameraErrorMessage = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    color: Colors.red,
+  );
+
   static const TextStyle hintTextField = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 15,

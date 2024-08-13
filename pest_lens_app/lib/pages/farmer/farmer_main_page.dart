@@ -8,6 +8,7 @@ import 'package:pest_lens_app/components/weather_info_section.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:pest_lens_app/components/my_calendar_picker.dart';
 import 'package:pest_lens_app/components/my_camera_box.dart';
+import 'package:pest_lens_app/utils/config.dart';
 
 class FarmerMainPage extends StatefulWidget {
   const FarmerMainPage({super.key});
@@ -67,8 +68,14 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                 MyLineChart(onCalendarButtonPressed: _showCalendarPicker),
                 MyBarChart(onCalendarButtonPressed: _showCalendarPicker),
                 const MyCameraBox(
-                    url:
-                        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
+                  url: Config.camera1APIUrl,
+                  title: "Camera Feed 1",
+                ),
+                const MyCameraBox(
+                  url: "http://tramquantrac.shop:10001/video_feed",
+                  title: "Camera Feed 2",
+                  token: "Noodle7532Giraffe",
+                ),
               ],
             ),
             const SizedBox(

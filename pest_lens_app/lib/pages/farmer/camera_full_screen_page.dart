@@ -1,20 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class CameraFullScreenPage extends StatelessWidget {
-  final VideoPlayerController controller;
+class CameraFullScreenPage extends StatefulWidget {
+  final String url;
+  final String? token;
 
-  const CameraFullScreenPage({super.key, required this.controller});
+  const CameraFullScreenPage({Key? key, required this.url, this.token})
+      : super(key: key);
+
+  @override
+  _CameraFullScreenPageState createState() => _CameraFullScreenPageState();
+}
+
+class _CameraFullScreenPageState extends State<CameraFullScreenPage> {
+  late WebViewController _controller;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+        ),
+      );
+
+    if (widget.token != null) {
+      _controller.setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith(widget.url)) {
+              return NavigationDecision.navigate;
+            }
+            return NavigationDecision.prevent;
+          },
+        ),
+      );
+      _controller.loadRequest(
+        Uri.parse(widget.url),
+        headers: {'Authorization': 'Bearer ${widget.token}'},
+      );
+    } else {
+      _controller.loadRequest(Uri.parse(widget.url));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
-        child: AspectRatio(
-          aspectRatio: controller.value.aspectRatio,
-          child: VideoPlayer(controller),
-        ),
+      body: Stack(
+        children: [
+          WebViewWidget(controller: _controller),
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
