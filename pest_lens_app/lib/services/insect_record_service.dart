@@ -105,4 +105,27 @@ class InsectRecordService {
 
     return result;
   }
+
+  List<Map<String, dynamic>> calculateInsectTotalByType(
+      List<InsectCountModel> data, DateTime startDate, DateTime endDate) {
+    Map<String, int> totalCounts = {};
+
+    for (var insect in data) {
+      if (insect.date.isAfter(startDate) && insect.date.isBefore(endDate)) {
+        totalCounts[insect.englishName] =
+            (totalCounts[insect.englishName] ?? 0) + insect.count;
+      }
+    }
+
+    List<Map<String, dynamic>> result = [];
+    totalCounts.forEach((insectName, count) {
+      result.add({
+        'insectType': insectName,
+        'count': count,
+      });
+    });
+
+    return result
+      ..sort((a, b) => (b['count'] as int).compareTo(a['count'] as int));
+  }
 }

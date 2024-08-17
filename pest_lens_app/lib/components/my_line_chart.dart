@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
@@ -25,18 +24,16 @@ class MyLineChart extends StatefulWidget {
 
 class _MyLineChartState extends State<MyLineChart> {
   final InsectRecordService _insectRecordService = InsectRecordService();
-  List<String> insectTypes = [
-    'Unidentified',
-    'Brown Plant Hopper',
-    'Stem Borers',
-    'Leaf Rollers',
-    'Rice Asian Gall Midge',
-    'Thrips',
-  ];
+
+  List<String> _getInsectTypes() {
+    return widget.insectData
+        .map((insect) => insect.englishName)
+        .toSet()
+        .toList();
+  }
 
   List<CartesianSeries<Map<String, dynamic>, dynamic>> _getSeriesData() {
     if (widget.insectData.isEmpty) {
-      // Return an empty list if there's no data
       return [];
     }
 
@@ -45,6 +42,8 @@ class _MyLineChartState extends State<MyLineChart> {
     final aggregatedData = isMultipleDays
         ? _insectRecordService.calculateInsectTotalsByDate(widget.insectData)
         : _insectRecordService.calculateInsectTotalsByHour(widget.insectData);
+
+    final insectTypes = _getInsectTypes();
 
     return insectTypes.map((insectType) {
       return LineSeries<Map<String, dynamic>, dynamic>(

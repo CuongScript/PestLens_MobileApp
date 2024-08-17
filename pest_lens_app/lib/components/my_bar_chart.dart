@@ -1,61 +1,89 @@
-import "package:fl_chart/fl_chart.dart";
-import "package:flutter/material.dart";
-import "package:pest_lens_app/models/insect_count_model.dart";
-import "package:pest_lens_app/dummy/insect_dummy_data.dart";
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:pest_lens_app/models/insect_count_model.dart';
+import 'package:pest_lens_app/services/insect_record_service.dart';
 
 class MyBarChart extends StatefulWidget {
   final VoidCallback onCalendarButtonPressed;
+  final List<InsectCountModel> insectData;
+  final DateTime startDate;
+  final DateTime endDate;
 
-  const MyBarChart({super.key, required this.onCalendarButtonPressed});
+  const MyBarChart({
+    Key? key,
+    required this.onCalendarButtonPressed,
+    required this.insectData,
+    required this.startDate,
+    required this.endDate,
+  }) : super(key: key);
 
   @override
-  State<MyBarChart> createState() => _MyBarChartState();
+  _MyBarChartState createState() => _MyBarChartState();
 }
 
 class _MyBarChartState extends State<MyBarChart> {
-  // Function to filter today's insect counts
-  List<InsectCountModel> filterTodayInsectCounts() {
-    final now = DateTime.now();
-    return dummyInsectCountList.where((insect) {
-      return insect.date.year == now.year &&
-          insect.date.month == now.month &&
-          insect.date.day == now.day;
-    }).toList();
+  final InsectRecordService _insectRecordService = InsectRecordService();
+  late List<Map<String, dynamic>> _insectTotals;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateInsectTotals();
   }
 
-  // Function to calculate the maximum count
-  int calculateMaxCount(List<InsectCountModel> insectCounts) {
-    return insectCounts.isEmpty
-        ? 0
-        : insectCounts
-            .map((insect) => insect.count)
-            .reduce((a, b) => a > b ? a : b);
+  @override
+  void didUpdateWidget(MyBarChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.insectData != widget.insectData ||
+        oldWidget.startDate != widget.startDate ||
+        oldWidget.endDate != widget.endDate) {
+      _updateInsectTotals();
+    }
+  }
+
+  void _updateInsectTotals() {
+    _insectTotals = _insectRecordService.calculateInsectTotalByType(
+      widget.insectData,
+      widget.startDate,
+      widget.endDate,
+    );
+  }
+
+  List<ColumnSeries<Map<String, dynamic>, String>> _getSeriesData() {
+    return _insectTotals.map((insect) {
+      return ColumnSeries<Map<String, dynamic>, String>(
+        dataSource: [insect],
+        xValueMapper: (Map<String, dynamic> data, _) =>
+            data['insectType'] as String,
+        yValueMapper: (Map<String, dynamic> data, _) => data['count'] as int,
+        name: insect['insectType'] as String,
+        color:
+            _insectRecordService.getInsectColor(insect['insectType'] as String),
+        dataLabelSettings: const DataLabelSettings(isVisible: true),
+        width: 1.0,
+      );
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<InsectCountModel> todayInsectCounts = filterTodayInsectCounts();
-    int maxCount = calculateMaxCount(todayInsectCounts);
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-      ),
-      child: Center(
+    return SizedBox(
+      height: 360,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    'Agregation Number Of Insects',
+                    'Aggregation Number of Insects',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -65,117 +93,44 @@ class _MyBarChartState extends State<MyBarChart> {
                   IconButton(
                     onPressed: widget.onCalendarButtonPressed,
                     icon: const Icon(Icons.edit_calendar_sharp),
-                  )
+                  ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: BarChart(mainData(todayInsectCounts, maxCount)),
-              ),
+            Expanded(
+              child: _insectTotals.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No data available ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    )
+                  : SfCartesianChart(
+                      primaryXAxis: const CategoryAxis(
+                        isVisible: false, // Hide x-axis
+                      ),
+                      primaryYAxis: const NumericAxis(),
+                      series: _getSeriesData(),
+                      legend: const Legend(
+                        isVisible: true,
+                        position: LegendPosition.bottom,
+                        shouldAlwaysShowScrollbar: true,
+                        overflowMode: LegendItemOverflowMode.scroll,
+                        toggleSeriesVisibility: true,
+                        textStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      tooltipBehavior: TooltipBehavior(enable: true),
+                    ),
             ),
           ],
         ),
       ),
     );
   }
-}
-
-// Function to generate BarChartData
-BarChartData mainData(List<InsectCountModel> todayInsectCounts, int maxCount) {
-  List<Color> barColors = [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.yellow,
-    Colors.purple,
-    Colors.orange,
-    Colors.cyan,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.lime,
-    Colors.indigo,
-    // Add more colors if needed
-  ];
-
-  List<BarChartGroupData> barGroups =
-      todayInsectCounts.asMap().entries.map((entry) {
-    int index = entry.key;
-    InsectCountModel insect = entry.value;
-    return BarChartGroupData(
-      x: index,
-      barsSpace: 0,
-      barRods: [
-        BarChartRodData(
-          toY: insect.count.toDouble(),
-          borderRadius: BorderRadius.zero,
-          width: 50,
-          color: barColors[
-              index % barColors.length], // Use different color for each bar
-        ),
-      ],
-    );
-  }).toList();
-
-  return BarChartData(
-    alignment: BarChartAlignment.center,
-    barTouchData: BarTouchData(
-      enabled: false,
-    ),
-    titlesData: FlTitlesData(
-      show: true,
-      topTitles: const AxisTitles(
-        sideTitles: SideTitles(showTitles: false),
-      ),
-      rightTitles: const AxisTitles(
-        sideTitles: SideTitles(showTitles: false),
-      ),
-      leftTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 40,
-          getTitlesWidget: leftTitlesWidget,
-          interval: maxCount / 5, // Adjust interval dynamically
-        ),
-      ),
-      bottomTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: false,
-          reservedSize: 30,
-          getTitlesWidget: (value, meta) =>
-              bottomTitleWidgets(value, meta, todayInsectCounts),
-        ),
-      ),
-    ),
-    barGroups: barGroups,
-  );
-}
-
-Widget bottomTitleWidgets(
-    double value, TitleMeta meta, List<InsectCountModel> todayInsectCounts) {
-  const style = TextStyle(
-    color: Color(0xff68737d),
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-  );
-  String title = todayInsectCounts[value.toInt()].englishName;
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    child: Text(title, style: style),
-  );
-}
-
-Widget leftTitlesWidget(double value, TitleMeta meta) {
-  const style = TextStyle(
-    color: Color.fromARGB(255, 0, 0, 0),
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-  );
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    child: Text(value.toInt().toString(), style: style),
-  );
 }

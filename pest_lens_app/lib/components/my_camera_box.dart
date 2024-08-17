@@ -84,7 +84,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
   }
 
   void _startLoadingTimer() {
-    _loadingTimer = Timer(const Duration(seconds: 5), () {
+    _loadingTimer = Timer(const Duration(seconds: 10), () {
       _safeSetState(() {
         if (_isLoading) {
           _hasError = true;

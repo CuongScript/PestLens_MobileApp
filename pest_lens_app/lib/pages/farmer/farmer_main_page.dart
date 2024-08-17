@@ -142,7 +142,12 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                     startDate: _startDate,
                     endDate: _endDate,
                     onCalendarButtonPressed: _showCalendarPicker),
-                MyBarChart(onCalendarButtonPressed: _showCalendarPicker),
+                MyBarChart(
+                  insectData: _insectData,
+                  startDate: _startDate,
+                  endDate: _endDate,
+                  onCalendarButtonPressed: _showCalendarPicker,
+                ),
                 const MyCameraBox(
                   url: Config.camera1APIUrl,
                   title: "Camera Feed 1",
