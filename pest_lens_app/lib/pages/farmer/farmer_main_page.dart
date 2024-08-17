@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/insect_listview.dart';
 import 'package:pest_lens_app/components/my_bar_chart.dart';
@@ -114,6 +115,9 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final dateFormat = DateFormat('dd/MM/yyyy');
+    final difference = _endDate.difference(_startDate).inDays;
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: primaryBackgroundColor,
@@ -171,7 +175,9 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${_startDate.day}/${_startDate.month}/${_startDate.year}-${_endDate.day}/${_endDate.month}/${_endDate.year}',
+                          difference == 0
+                              ? dateFormat.format(_startDate)
+                              : '${dateFormat.format(_startDate)} - ${dateFormat.format(_endDate)}',
                           style: const TextStyle(
                             color: Color(0xFF0064c3),
                             fontWeight: FontWeight.bold,

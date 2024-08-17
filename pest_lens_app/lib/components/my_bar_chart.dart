@@ -78,7 +78,7 @@ class _MyBarChartState extends State<MyBarChart> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
+              padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
