@@ -1,98 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/widgets.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
-import 'package:pest_lens_app/dummy/insect_dummy_data.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
+import 'package:pest_lens_app/services/insect_record_service.dart';
 
 class MyLineChart extends StatefulWidget {
   final VoidCallback onCalendarButtonPressed;
+  final List<InsectCountModel> insectData;
+  final DateTime startDate;
+  final DateTime endDate;
 
-  const MyLineChart({super.key, required this.onCalendarButtonPressed});
-
-  List<FlSpot> processInsectData(List<InsectCountModel> insectCountList) {
-    Map<int, double> dailyCounts = {};
-
-    for (var insect in insectCountList) {
-      int dayDifference = DateTime.now().difference(insect.date).inDays;
-      if (dailyCounts.containsKey(dayDifference)) {
-        dailyCounts[dayDifference] = dailyCounts[dayDifference]! + insect.count;
-      } else {
-        dailyCounts[dayDifference] = insect.count.toDouble();
-      }
-    }
-
-    List<FlSpot> spots = [];
-    dailyCounts.forEach((day, count) {
-      spots.add(FlSpot(day.toDouble(), count));
-    });
-
-    return spots;
-  }
+  const MyLineChart({
+    super.key,
+    required this.onCalendarButtonPressed,
+    required this.insectData,
+    required this.startDate,
+    required this.endDate,
+  });
 
   @override
-  State<StatefulWidget> createState() {
-    return _MyLineChartState();
-  }
+  State<StatefulWidget> createState() => _MyLineChartState();
 }
 
 class _MyLineChartState extends State<MyLineChart> {
-  DateTime baseDate = DateTime.now();
+  final InsectRecordService _insectRecordService = InsectRecordService();
+  List<String> insectTypes = [
+    'Unidentified',
+    'Brown Plant Hopper',
+    'Stem Borers',
+    'Leaf Rollers',
+    'Rice Asian Gall Midge',
+    'Thrips',
+  ];
 
-  List<FlSpot> processInsectData(List<InsectCountModel> insectCountList) {
-    // Group the counts by date
-    Map<DateTime, int> totalCountsByDate = {};
-
-    for (var insect in insectCountList) {
-      // Round the date to the nearest day (ignoring time part)
-      DateTime date =
-          DateTime(insect.date.year, insect.date.month, insect.date.day);
-
-      if (totalCountsByDate.containsKey(date)) {
-        totalCountsByDate[date] = totalCountsByDate[date]! + insect.count;
-      } else {
-        totalCountsByDate[date] = insect.count;
-      }
+  List<CartesianSeries<Map<String, dynamic>, dynamic>> _getSeriesData() {
+    if (widget.insectData.isEmpty) {
+      // Return an empty list if there's no data
+      return [];
     }
 
-    // Convert the totals to a list of FlSpot
-    List<FlSpot> spots = [];
+    final isMultipleDays =
+        widget.endDate.difference(widget.startDate).inDays > 0;
+    final aggregatedData = isMultipleDays
+        ? _insectRecordService.calculateInsectTotalsByDate(widget.insectData)
+        : _insectRecordService.calculateInsectTotalsByHour(widget.insectData);
 
-    // Sort the dates to ensure the graph is plotted correctly over time
-    List<DateTime> sortedDates = totalCountsByDate.keys.toList()..sort();
-
-    // Calculate the base date to make sure dates are represented as consecutive integers
-    baseDate = sortedDates.first;
-
-    for (var date in sortedDates) {
-      double xValue = date.difference(baseDate).inDays.toDouble();
-      spots.add(FlSpot(xValue, totalCountsByDate[date]!.toDouble()));
-    }
-
-    return spots;
-  }
-
-  double getMaxInsectCount(List<FlSpot> spotList) {
-    double maxCount = 0;
-    for (var spot in spotList) {
-      if (spot.y > maxCount) {
-        maxCount = spot.y;
-      }
-    }
-    return maxCount;
+    return insectTypes.map((insectType) {
+      return LineSeries<Map<String, dynamic>, dynamic>(
+        name: insectType,
+        dataSource: aggregatedData,
+        xValueMapper: (Map<String, dynamic> data, _) =>
+            isMultipleDays ? data['date'] : data['hour'],
+        yValueMapper: (Map<String, dynamic> data, _) => data[insectType] ?? 0,
+        color: _insectRecordService.getInsectColor(insectType),
+        width: 4,
+      );
+    }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<FlSpot> spots = processInsectData(dummyInsectCountList);
-    double maxY = getMaxInsectCount(spots);
+    final isMultipleDays =
+        widget.endDate.difference(widget.startDate).inDays > 0;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-      ),
-      child: Center(
+    return SizedBox(
+      height: 360,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(15)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -118,125 +95,51 @@ class _MyLineChartState extends State<MyLineChart> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: LineChart(mainData(spots, maxY, baseDate)),
-              ),
+            Expanded(
+              child: widget.insectData.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'No data available',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
+                      child: SfCartesianChart(
+                        primaryXAxis: isMultipleDays
+                            ? DateTimeAxis(
+                                dateFormat: DateFormat('dd/MM'),
+                                intervalType: DateTimeIntervalType.days,
+                                interval: 1,
+                              )
+                            : const NumericAxis(
+                                minimum: 0,
+                                maximum: 24,
+                                interval: 4,
+                              ),
+                        series: _getSeriesData(),
+                        tooltipBehavior: TooltipBehavior(enable: true),
+                        legend: const Legend(
+                          isVisible: true,
+                          position: LegendPosition.bottom,
+                          shouldAlwaysShowScrollbar: true,
+                          overflowMode: LegendItemOverflowMode.scroll,
+                          toggleSeriesVisibility: true,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
             ),
           ],
         ),
       ),
     );
   }
-}
-
-LineChartData mainData(List<FlSpot> spots, double maxY, DateTime baseDate) {
-  return LineChartData(
-    gridData: FlGridData(
-      show: true,
-      drawVerticalLine: true,
-      horizontalInterval: maxY / 5,
-      verticalInterval: 1,
-      getDrawingHorizontalLine: (value) {
-        return const FlLine(
-          color: Color(0xff37434d),
-          strokeWidth: 1,
-        );
-      },
-      getDrawingVerticalLine: (value) {
-        return const FlLine(
-          color: Color(0xff37434d),
-          strokeWidth: 1,
-        );
-      },
-    ),
-    titlesData: FlTitlesData(
-      show: true,
-      rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false, reservedSize: 50)),
-      topTitles: const AxisTitles(
-        sideTitles: SideTitles(showTitles: false),
-      ),
-      bottomTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 30,
-          interval: 1,
-          getTitlesWidget: (value, media) =>
-              bottomTitleWidgets(value, media, baseDate),
-        ),
-      ),
-      leftTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          interval: maxY / 5,
-          getTitlesWidget: leftTitleWidgets,
-          reservedSize: 40,
-        ),
-      ),
-    ),
-    borderData: FlBorderData(
-      show: true,
-      border: Border.all(color: const Color(0xff37434d)),
-    ),
-    minX: 0,
-    maxX: spots.length.toDouble() - 1,
-    minY: 0,
-    maxY: maxY,
-    lineBarsData: [
-      LineChartBarData(
-        spots: spots,
-        isCurved: true,
-        gradient: const LinearGradient(
-          colors: [Color(0xff23b6e6), Color(0xff02d39a)],
-        ),
-        barWidth: 5,
-        isStrokeCapRound: true,
-        dotData: const FlDotData(
-          show: false,
-        ),
-        belowBarData: BarAreaData(
-          show: true,
-          gradient: LinearGradient(
-            colors: [const Color(0xff23b6e6), const Color(0xff02d39a)]
-                .map((color) => color.withOpacity(0.3))
-                .toList(),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget bottomTitleWidgets(double value, TitleMeta meta, DateTime baseDate) {
-  const style = TextStyle(
-    color: Color(0xff68737d),
-    fontWeight: FontWeight.bold,
-    fontSize: 12, // Adjusted font size for better readability
-  );
-
-  DateTime date = baseDate.add(Duration(days: value.toInt()));
-  String formattedDate = DateFormat('dd/MM').format(date);
-
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    child: Text(formattedDate, style: style),
-  );
-}
-
-Widget leftTitleWidgets(double value, TitleMeta meta) {
-  const style = TextStyle(
-    color: Color.fromARGB(255, 0, 0, 0),
-    fontWeight: FontWeight.bold,
-    fontSize: 12, // Adjust font size for better readability
-  );
-
-  int labelValue = value.toInt();
-
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    child: Text(labelValue.toString(), style: style),
-  );
 }

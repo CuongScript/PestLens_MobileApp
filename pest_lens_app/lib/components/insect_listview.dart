@@ -31,7 +31,7 @@ class InsectListView extends StatelessWidget {
 class InsectTile extends StatelessWidget {
   final Insect insect;
 
-  const InsectTile({Key? key, required this.insect}) : super(key: key);
+  const InsectTile({super.key, required this.insect});
 
   @override
   Widget build(BuildContext context) {

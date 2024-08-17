@@ -60,6 +60,7 @@ dependencies:
   flutter_local_notifications: ^17.2.2
   better_player: ^0.0.84
   webview_flutter: ^4.8.0
+  syncfusion_flutter_charts: ^26.2.9
 
 dev_dependencies:
   flutter_test:
