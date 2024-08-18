@@ -31,7 +31,7 @@ class FarmerService {
   }
 
   Future<Map<String, dynamic>> detectInsects(File imageFile) async {
-    var uri = Uri.parse('$baseUrl/detect');
+    var uri = Uri.parse('$baseUrl/phone_detect');
     var request = http.MultipartRequest('POST', uri);
 
     // Determine the content type based on the file extension
