@@ -6,11 +6,11 @@ class InsectCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const InsectCard({
-    Key? key,
+    super.key,
     required this.imagePath,
     required this.insectName,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

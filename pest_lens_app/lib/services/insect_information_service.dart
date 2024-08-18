@@ -22,20 +22,55 @@ class InsectInformationService {
           .where((insect) => insect.englishName.toLowerCase() != "unidentified")
           .toList();
 
-      // Fetch images for each insect
-      for (var insect in insects) {
-        try {
-          List<String> imageUrls = await fetchInsectImages(insect.englishName);
-          insect.imageUrls = imageUrls;
-        } catch (e) {
-          print('Error fetching images for ${insect.englishName}: $e');
-          // If image fetch fails, just leave the imageUrls empty
-        }
-      }
+      // Fetch images for all insects concurrently
+      await Future.wait(
+        insects.map((insect) => _fetchAndSetImages(insect)),
+      );
 
       return insects;
     } else {
       throw Exception('Failed to load insects');
+    }
+  }
+
+  Future<void> _fetchAndSetImages(InsectInformationModel insect) async {
+    try {
+      List<String> imageUrls = await fetchInsectImages(insect.englishName);
+      insect.imageUrls = imageUrls;
+    } catch (e) {
+      print('Error fetching images for ${insect.englishName}: $e');
+    }
+  }
+
+  Future<InsectInformationModel> fetchInsectDetails(String insectName) async {
+    final user = await UserPreferences.getUser();
+    final encodedName = Uri.encodeComponent(insectName);
+    final url = '$_baseUrl/name/$encodedName';
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': '${user!.tokenType} ${user.accessToken}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final insectJson = jsonDecode(response.body);
+      InsectInformationModel insect =
+          InsectInformationModel.fromJson(insectJson);
+
+      // Fetch images for the insect
+      try {
+        List<String> imageUrls = await fetchInsectImages(insect.englishName);
+        insect.imageUrls = imageUrls;
+      } catch (e) {
+        print('Error fetching images for ${insect.englishName}: $e');
+        // If image fetch fails, just leave the imageUrls empty
+      }
+
+      return insect;
+    } else {
+      throw Exception('Failed to load insect details: ${response.statusCode}');
     }
   }
 

@@ -1,29 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:pest_lens_app/services/insect_information_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/models/insect_information_model.dart';
 import 'package:pest_lens_app/components/insect_card.dart';
 import 'package:pest_lens_app/components/my_search_bar.dart';
-import 'package:pest_lens_app/utils/insect_information_preferences.dart';
-import 'package:http/http.dart' as http;
+import 'package:pest_lens_app/components/my_filter_button.dart';
+import 'package:pest_lens_app/pages/farmer/insect_profile_page.dart';
+import 'package:pest_lens_app/provider/filtered_insects_provider.dart';
+import 'package:pest_lens_app/services/insect_information_service.dart';
 
-class InsectInformationPage extends StatefulWidget {
-  const InsectInformationPage({super.key});
+class InsectInformationPage extends ConsumerStatefulWidget {
+  const InsectInformationPage({Key? key}) : super(key: key);
 
   @override
   _InsectInformationPageState createState() => _InsectInformationPageState();
 }
 
-class _InsectInformationPageState extends State<InsectInformationPage> {
+class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
   final InsectInformationService _service = InsectInformationService();
-  List<InsectInformationModel> _insects = [];
-  List<InsectInformationModel> _filteredInsects = [];
-  bool _isLoading = false;
   String _searchQuery = '';
+  List<String> _selectedFilters = [];
+
+  final Map<String, List<String>> _filterGroups = {
+    'Support Status': [
+      'Currently Supported',
+      'Future Supported',
+    ],
+  };
 
   @override
   void initState() {
     super.initState();
-    _loadInsects();
+    // The initial fetch is handled by the allInsectsProvider
   }
 
   void _showErrorSnackBar(String message) {
@@ -36,106 +44,63 @@ class _InsectInformationPageState extends State<InsectInformationPage> {
     );
   }
 
-  Future<void> _loadInsects() async {
+  void _handleFilterChanged(List<String> filters) {
     setState(() {
-      _isLoading = true;
+      _selectedFilters = filters;
     });
-
-    try {
-      bool shouldFetch =
-          await InsectInformationPreferences.shouldFetchInsects();
-
-      if (shouldFetch) {
-        await _fetchAndCacheInsects();
-      } else {
-        final cachedInsects = await InsectInformationPreferences.getInsects();
-        if (cachedInsects != null && cachedInsects.isNotEmpty) {
-          setState(() {
-            _insects = cachedInsects;
-            _filteredInsects = cachedInsects;
-          });
-        } else {
-          await _fetchAndCacheInsects();
-        }
-      }
-    } catch (e) {
-      print('Error loading insects: $e');
-      _showErrorSnackBar('Failed to load insects. Please try again later.');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    _applyFilters();
   }
 
-  Future<void> _fetchAndCacheInsects() async {
-    try {
-      final insects = await _service.fetchInsectInformation();
-      await InsectInformationPreferences.saveInsects(insects);
-      setState(() {
-        _insects = insects;
-        _filteredInsects = insects;
-      });
-    } catch (e) {
-      print('Error fetching and caching insects: $e');
-      _showErrorSnackBar(
-          'Failed to fetch insect data. Please check your internet connection and try again.');
-    }
-  }
-
-  void _filterInsects(String query) {
+  void _handleSearch(String query) {
     setState(() {
       _searchQuery = query;
-      _filteredInsects = _insects
-          .where((insect) =>
-              insect.englishName.toLowerCase().contains(query.toLowerCase()) ||
-              insect.vietnameseName.toLowerCase().contains(query.toLowerCase()))
-          .toList();
     });
+    _applyFilters();
   }
 
-  Future<List<String>> _getInsectImages(InsectInformationModel insect) async {
-    List<String>? cachedImages =
-        await InsectInformationPreferences.getInsectImages(insect.englishName);
-    if (cachedImages != null && cachedImages.isNotEmpty) {
-      return cachedImages;
-    }
+  void _applyFilters() {
+    ref
+        .read(filteredInsectsProvider.notifier)
+        .filterInsects(_searchQuery, _selectedFilters);
+  }
 
+  void _removeFilter(String filter) {
+    setState(() {
+      _selectedFilters.remove(filter);
+    });
+    _applyFilters();
+  }
+
+  Future<String> _getInsectImage(InsectInformationModel insect) async {
     try {
-      List<String> fetchedImages =
-          await _service.fetchInsectImages(insect.englishName);
-      // Filter out invalid URLs
-      fetchedImages =
-          fetchedImages.where((url) => url.startsWith('http')).toList();
-      await InsectInformationPreferences.saveInsectImages(
-          insect.englishName, fetchedImages);
-      return fetchedImages;
-    } on http.ClientException catch (e) {
-      print('Network error fetching images for ${insect.englishName}: $e');
-      _showErrorSnackBar(
-          'Network error: Failed to load images for ${insect.englishName}');
-      return [];
+      final images = await _service.fetchInsectImages(insect.englishName);
+      return images.isNotEmpty ? images.first : '';
     } catch (e) {
-      print('Error fetching images for ${insect.englishName}: $e');
-      _showErrorSnackBar('Failed to load images for ${insect.englishName}');
-      return [];
+      print('Error fetching image for ${insect.englishName}: $e');
+      _showErrorSnackBar('Failed to load image for ${insect.englishName}');
+      return '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final AsyncValue<List<InsectInformationModel>> filteredInsects =
+        ref.watch(filteredInsectsProvider);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insect Information'),
+        title: const Text(
+          'Insect Information',
+          style: CustomTextStyles.pageTitle,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              _fetchAndCacheInsects().then((_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Insect data refreshed')),
-                );
-              });
+              ref.refresh(allInsectsProvider);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Insect data refreshed')),
+              );
             },
           ),
         ],
@@ -144,44 +109,75 @@ class _InsectInformationPageState extends State<InsectInformationPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: MySearchBar(
-              onChanged: _filterInsects,
-              hintText: 'Search insects',
+            child: Row(
+              children: [
+                Expanded(
+                  child: MySearchBar(
+                    onChanged: _handleSearch,
+                    hintText: 'Search insects',
+                  ),
+                ),
+                const SizedBox(width: 8),
+                MyFilterButton(
+                  selectedFilters: _selectedFilters,
+                  onFilterChanged: _handleFilterChanged,
+                  filterGroups: _filterGroups,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Wrap(
+              spacing: 8,
+              children: _selectedFilters
+                  .map((filter) => Chip(
+                        label: Text(filter),
+                        onDeleted: () => _removeFilter(filter),
+                      ))
+                  .toList(),
             ),
           ),
           Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : GridView.builder(
-                    padding: const EdgeInsets.all(8),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: _filteredInsects.length,
-                    itemBuilder: (context, index) {
-                      final insect = _filteredInsects[index];
-                      return FutureBuilder<List<String>>(
-                        future: _getInsectImages(insect),
-                        builder: (context, snapshot) {
-                          String imagePath = '';
-                          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                            imagePath = snapshot.data!.first;
-                          }
-                          return InsectCard(
-                            imagePath: imagePath,
-                            insectName: insect.englishName,
-                            onTap: () {
-                              // TODO: Navigate to insect detail page
-                            },
+            child: filteredInsects.when(
+              data: (insects) => GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: insects.length,
+                itemBuilder: (context, index) {
+                  final insect = insects[index];
+                  return FutureBuilder<String>(
+                    future: _getInsectImage(insect),
+                    builder: (context, snapshot) {
+                      String imagePath = snapshot.data ?? '';
+                      return InsectCard(
+                        imagePath: imagePath,
+                        insectName: insect.englishName,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => InsectProfilePage(
+                                  insectName: insect.englishName),
+                            ),
                           );
                         },
                       );
                     },
-                  ),
+                  );
+                },
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stackTrace) {
+                _showErrorSnackBar(
+                    'Failed to load insects. Please try again later.');
+                return const Center(child: Text('Error loading insects'));
+              },
+            ),
           ),
         ],
       ),

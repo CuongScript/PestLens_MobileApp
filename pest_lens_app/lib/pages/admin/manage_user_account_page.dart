@@ -4,7 +4,7 @@ import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_slidable.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_search_bar.dart';
-import 'package:pest_lens_app/components/my_user_account_filter_button.dart';
+import 'package:pest_lens_app/components/my_filter_button.dart';
 import 'package:pest_lens_app/pages/common/user_profile_detail_page.dart';
 import 'package:pest_lens_app/provider/filtered_users_provider.dart';
 import 'package:pest_lens_app/provider/list_all_users_provider.dart';
@@ -24,6 +24,19 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   String _searchQuery = '';
   final AdminService _adminService = AdminService();
 
+  final Map<String, List<String>> _filterGroups = {
+    'User Status': [
+      'Active Users',
+      'New Users',
+      'Pending Users',
+      'Deactivated Users',
+    ],
+    'User Role': [
+      'Farmer Users',
+      'Admin Users',
+    ],
+  };
+
   @override
   void initState() {
     super.initState();
@@ -33,9 +46,10 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   }
 
   void _handleFilterChanged(List<String> filters) {
+    List<String> _tempFilters = List.from(_selectedFilters);
     setState(() {
       _selectedFilters.clear();
-      _selectedFilters.addAll(filters);
+      _selectedFilters.addAll(_tempFilters);
     });
     _applyFilters();
   }
@@ -118,9 +132,10 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  MyUserAccountFilterButton(
-                    selectedFilters: List.from(_selectedFilters),
+                  MyFilterButton(
+                    selectedFilters: _selectedFilters,
                     onFilterChanged: _handleFilterChanged,
+                    filterGroups: _filterGroups,
                   ),
                 ],
               ),
