@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class MySearchBar extends StatefulWidget {
   final ValueChanged<String>? onChanged;
+  final String hintText;
 
-  const MySearchBar({Key? key, this.onChanged}) : super(key: key);
+  const MySearchBar({
+    super.key,
+    this.onChanged,
+    this.hintText = 'Search',
+  });
 
   @override
   _MySearchBarState createState() => _MySearchBarState();
@@ -38,7 +43,7 @@ class _MySearchBarState extends State<MySearchBar> {
                   },
                 )
               : null,
-          hintText: 'Search user accounts',
+          hintText: widget.hintText,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,

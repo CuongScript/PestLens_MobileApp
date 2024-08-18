@@ -10,11 +10,11 @@ class MyCameraBox extends StatefulWidget {
   final String? token;
 
   const MyCameraBox({
-    Key? key,
+    super.key,
     required this.url,
     required this.title,
     this.token,
-  }) : super(key: key);
+  });
 
   @override
   _MyCameraBoxState createState() => _MyCameraBoxState();

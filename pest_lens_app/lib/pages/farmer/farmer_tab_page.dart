@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/pages/common/notification_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_main_page.dart';
+import 'package:pest_lens_app/pages/farmer/insect_information_page.dart';
 import 'package:pest_lens_app/pages/farmer/insect_lookup_page.dart';
 import 'package:pest_lens_app/pages/common/setting_page.dart';
 
@@ -16,12 +17,7 @@ class _FarmerTabPageState extends State<FarmerTabPage> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     FarmerMainPage(),
-    Text(
-      "Insect Information Page",
-      style: TextStyle(
-        fontSize: 40,
-      ),
-    ),
+    InsectInformationPage(),
     InsectLookupPage(),
     NotificationPage(),
     SettingsPage(),

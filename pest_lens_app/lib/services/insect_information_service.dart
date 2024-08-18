@@ -19,6 +19,7 @@ class InsectInformationService {
       final List<dynamic> insectsJson = jsonDecode(response.body);
       List<InsectInformationModel> insects = insectsJson
           .map((json) => InsectInformationModel.fromJson(json))
+          .where((insect) => insect.englishName.toLowerCase() != "unidentified")
           .toList();
 
       // Fetch images for each insect
@@ -39,18 +40,24 @@ class InsectInformationService {
   }
 
   Future<List<String>> fetchInsectImages(String insectName) async {
-    final response = await http.get(
-      Uri.parse('$_googleSearchApiUrl?q=$insectName&num=10'),
-      headers: {
-        'X-API-KEY': Config.googleSearchAPIKey,
-        'Content-Type': 'application/json'
-      },
-    );
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return List<String>.from(data['images'].map((img) => img['imageUrl']));
-    } else {
-      throw Exception('Failed to load images for $insectName');
+    try {
+      final response = await http.get(
+        Uri.parse('$_googleSearchApiUrl?q=$insectName&num=10'),
+        headers: {
+          'X-API-KEY': Config.googleSearchAPIKey,
+          'Content-Type': 'application/json'
+        },
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<String>.from(data['images'].map((img) => img['imageUrl']));
+      } else {
+        print('Failed to load images for $insectName: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching images for $insectName: $e');
+      return [];
     }
   }
 }

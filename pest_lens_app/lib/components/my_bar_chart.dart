@@ -10,12 +10,12 @@ class MyBarChart extends StatefulWidget {
   final DateTime endDate;
 
   const MyBarChart({
-    Key? key,
+    super.key,
     required this.onCalendarButtonPressed,
     required this.insectData,
     required this.startDate,
     required this.endDate,
-  }) : super(key: key);
+  });
 
   @override
   _MyBarChartState createState() => _MyBarChartState();

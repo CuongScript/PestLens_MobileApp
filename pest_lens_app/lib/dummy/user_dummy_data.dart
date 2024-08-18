@@ -13,9 +13,9 @@ final List<UserFullInfoModel> dummyUsers = [
     phoneNumber: '0987678987',
     avatarUrl:
         'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    createdAt: DateTime.now().subtract(Duration(days: 0)),
-    lastLogin: DateTime.now().subtract(Duration(days: 0)),
-    activatedAt: DateTime.now().subtract(Duration(days: 0)),
+    createdAt: DateTime.now().subtract(const Duration(days: 0)),
+    lastLogin: DateTime.now().subtract(const Duration(days: 0)),
+    activatedAt: DateTime.now().subtract(const Duration(days: 0)),
     roles: [Role.ROLE_ADMIN],
     accountStatus: AccountStatusEnum.ACTIVE,
     inactiveUser: false,
@@ -30,7 +30,7 @@ final List<UserFullInfoModel> dummyUsers = [
     phoneNumber: '0987678987',
     avatarUrl:
         'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    createdAt: DateTime.now().subtract(Duration(days: 30)),
+    createdAt: DateTime.now().subtract(const Duration(days: 30)),
     lastLogin: null,
     activatedAt: null,
     roles: [Role.ROLE_USER],
@@ -47,7 +47,7 @@ final List<UserFullInfoModel> dummyUsers = [
     phoneNumber: '0987678987',
     avatarUrl:
         'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    createdAt: DateTime.now().subtract(Duration(days: 570)),
+    createdAt: DateTime.now().subtract(const Duration(days: 570)),
     lastLogin: null,
     activatedAt: null,
     roles: [Role.ROLE_USER],

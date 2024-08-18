@@ -4,7 +4,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/services/famer_service.dart';
 
 class WeatherInfoSection extends StatefulWidget {
-  const WeatherInfoSection({super.key});
+  const WeatherInfoSection({Key? key}) : super(key: key);
 
   @override
   _WeatherInfoSectionState createState() => _WeatherInfoSectionState();
@@ -15,27 +15,39 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
   Map<String, dynamic>? _weatherData;
   bool _isLoading = true;
   String? _errorMessage;
+  bool _mounted = false;
 
   @override
   void initState() {
     super.initState();
+    _mounted = true;
     _fetchWeatherData();
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
   }
 
   Future<void> _fetchWeatherData() async {
     try {
       final weatherData = await _farmerService.fetchWeatherForNinhThuan();
-      setState(() {
-        _weatherData = weatherData;
-        _isLoading = false;
-        _errorMessage = null;
-      });
+      if (_mounted) {
+        setState(() {
+          _weatherData = weatherData;
+          _isLoading = false;
+          _errorMessage = null;
+        });
+      }
     } catch (e) {
       print('Error fetching weather data: $e');
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Weather information is not available';
-      });
+      if (_mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Weather information is not available';
+        });
+      }
     }
   }
 

@@ -34,8 +34,8 @@ class AuthService {
 
   Future<bool> registerDeviceId(
       String username, String tokenType, String accessToken) async {
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-    String? deviceId = await _firebaseMessaging.getToken();
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    String? deviceId = await firebaseMessaging.getToken();
     if (deviceId != null) {
       // Encode the username and deviceId
       String encodedUsername = Uri.encodeQueryComponent(username);

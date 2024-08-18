@@ -5,8 +5,7 @@ class CameraFullScreenPage extends StatefulWidget {
   final String url;
   final String? token;
 
-  const CameraFullScreenPage({Key? key, required this.url, this.token})
-      : super(key: key);
+  const CameraFullScreenPage({super.key, required this.url, this.token});
 
   @override
   _CameraFullScreenPageState createState() => _CameraFullScreenPageState();

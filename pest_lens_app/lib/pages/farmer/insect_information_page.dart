@@ -146,6 +146,7 @@ class _InsectInformationPageState extends State<InsectInformationPage> {
             padding: const EdgeInsets.all(8.0),
             child: MySearchBar(
               onChanged: _filterInsects,
+              hintText: 'Search insects',
             ),
           ),
           Expanded(
