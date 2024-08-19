@@ -108,22 +108,20 @@ class UserProfileDetailPage extends StatelessWidget {
       isFilled: true,
       filledColor: Colors.red,
     );
+
     if (user.accountStatus == AccountStatusEnum.PENDING) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           activatedButton,
+          const SizedBox(height: 10), // Add some spacing between buttons
           deactivatedButton,
         ],
       );
     } else if (user.accountStatus == AccountStatusEnum.INACTIVE) {
-      return Center(
-        child: activatedButton,
-      );
+      return activatedButton;
     } else if (user.accountStatus == AccountStatusEnum.ACTIVE) {
-      return Center(
-        child: deactivatedButton,
-      );
+      return deactivatedButton;
     } else {
       return Container();
     }

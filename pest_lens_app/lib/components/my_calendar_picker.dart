@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class MyCalendarPicker extends StatefulWidget {
@@ -103,10 +104,10 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                 selectedRange?.start,
                 selectedRange?.end,
               ),
-              selectionColor: Colors.blue,
-              startRangeSelectionColor: Colors.blue,
-              endRangeSelectionColor: Colors.blue,
-              rangeSelectionColor: Colors.blue.withOpacity(0.1),
+              selectionColor: fontTitleColor,
+              startRangeSelectionColor: fontTitleColor,
+              endRangeSelectionColor: fontTitleColor,
+              rangeSelectionColor: fontTitleColor.withOpacity(0.1),
               backgroundColor: Colors.white,
               monthCellStyle: const DateRangePickerMonthCellStyle(
                 textStyle: TextStyle(fontSize: 18),

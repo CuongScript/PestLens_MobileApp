@@ -30,7 +30,6 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Initialize the NotificationService
     ref.read(notificationServiceProvider).init();
 
     return MaterialApp(

@@ -16,13 +16,20 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
   @override
   void initState() {
     super.initState();
-    // Subscribe to FCM topics 
+    // Subscribe to FCM topics and load notifications
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notificationService = ref.read(notificationServiceProvider);
       notificationService.subscribeToTopic('USER_CREATED');
-      // notificationService.subscribeToTopic('CAMERA_STATUS');
       notificationService.subscribeToTopic('PEST_COUNT');
+
+      // Load notifications when the page mounts
+      ref.read(notificationProvider.notifier).loadNotifications();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -38,6 +45,27 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
       ),
       body: notifications.when(
         data: (notificationList) {
+          if (notificationList.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.notifications_off, size: 64, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'No notifications',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'You\'re all caught up!',
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              ),
+            );
+          }
+
           final todayNotifications =
               notificationList.where((n) => n.isToday()).toList();
           final olderNotifications =

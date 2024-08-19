@@ -7,7 +7,7 @@ class UserFullInfoModel {
   final String email;
   final String firstName;
   final String lastName;
-  final String phoneNumber;
+  final String? phoneNumber;
   final String? avatarUrl;
   final DateTime? createdAt;
   final DateTime? lastLogin;

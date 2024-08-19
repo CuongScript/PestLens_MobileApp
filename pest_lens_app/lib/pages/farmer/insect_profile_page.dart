@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/assets/colors.dart';
+import 'package:pest_lens_app/components/my_back_button.dart';
+import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/models/insect_information_model.dart';
 import 'package:pest_lens_app/services/insect_information_service.dart';
 import 'package:pest_lens_app/components/insect_image_showcase.dart';
@@ -38,13 +40,26 @@ class _InsectProfilePageState extends ConsumerState<InsectProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insect Profile'),
+        title: const Text(
+          'Insect Profile',
+          style: CustomTextStyles.pageTitle2,
+        ),
         backgroundColor: primaryBackgroundColor,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: IconButton(
+            icon: const MyBackButton(),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, size: 30, color: fontTitleColor),
+            iconSize: 40,
             onPressed: _refreshProfile,
-          ),
+          )
         ],
       ),
       body: FutureBuilder<InsectInformationModel>(
