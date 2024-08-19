@@ -65,19 +65,29 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
               IconButton(
                 icon: const Icon(Icons.refresh),
                 onPressed: () {
-                  DateTime sd =
-                      DateTime.now().subtract(const Duration(days: 3));
-                  DateTime ed = DateTime(DateTime.now().year,
-                      DateTime.now().month, DateTime.now().day, 23, 59, 59);
+                  DateTime sd = DateTime.now()
+                      .subtract(const Duration(days: 3))
+                      .copyWith(
+                          hour: 0,
+                          minute: 0,
+                          second: 0,
+                          millisecond: 0,
+                          microsecond: 0);
+                  DateTime ed = DateTime.now().copyWith(
+                      hour: 23,
+                      minute: 59,
+                      second: 59,
+                      millisecond: 999,
+                      microsecond: 999);
+
+                  selectedRange = DateTimeRange(
+                    start: sd,
+                    end: ed,
+                  );
 
                   setState(() {
                     _datePickerController.selectedRange =
                         PickerDateRange(sd, ed);
-
-                    selectedRange = DateTimeRange(
-                      start: sd,
-                      end: ed,
-                    );
                   });
                 },
                 tooltip: 'Set to Current Date',

@@ -30,7 +30,9 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
   final InsectRecordService _insectRecordService = InsectRecordService();
   List<InsectCountModel> _insectData = [];
   List<Insect> _processedInsectData = [];
-  DateTime _startDate = DateTime.now().subtract(const Duration(days: 3));
+  DateTime _startDate = DateTime.now()
+      .subtract(const Duration(days: 3))
+      .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
   DateTime _endDate = DateTime(DateTime.now().year, DateTime.now().month,
       DateTime.now().day, 23, 59, 59);
   Timer? _dataUpdateTimer;
