@@ -45,7 +45,35 @@ class _MyLineChartState extends State<MyLineChart> {
 
     final insectTypes = _getInsectTypes();
 
-    return insectTypes.map((insectType) {
+    // Add missing dates with zero count
+    if (isMultipleDays) {
+      final allDates = List.generate(
+        widget.endDate.difference(widget.startDate).inDays + 1,
+        (index) => widget.startDate.add(Duration(days: index)),
+      );
+
+      final Map<DateTime, Map<String, dynamic>> dataMap = {
+        for (var data in aggregatedData)
+          (data['date'] as DateTime): Map<String, dynamic>.from(data)
+      };
+
+      for (final date in allDates) {
+        if (!dataMap.containsKey(date)) {
+          final Map<String, dynamic> emptyData = {'date': date};
+          for (final insectType in insectTypes) {
+            emptyData[insectType] = 0;
+          }
+          aggregatedData.add(emptyData);
+        }
+      }
+
+      // Sort the aggregatedData again after adding missing dates
+      aggregatedData.sort(
+          (a, b) => (a['date'] as DateTime).compareTo(b['date'] as DateTime));
+    }
+
+    List<CartesianSeries<Map<String, dynamic>, dynamic>> finalList =
+        insectTypes.map((insectType) {
       return LineSeries<Map<String, dynamic>, dynamic>(
         name: insectType,
         dataSource: aggregatedData,
@@ -56,6 +84,8 @@ class _MyLineChartState extends State<MyLineChart> {
         width: 4,
       );
     }).toList();
+
+    return finalList;
   }
 
   @override

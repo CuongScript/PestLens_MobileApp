@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class InsectImageShowcase extends StatefulWidget {
   final List<String> imageUrls;
@@ -78,10 +79,10 @@ class _InsectImageShowcaseState extends State<InsectImageShowcase> {
                 },
                 itemBuilder: (context, index) {
                   int imageIndex = _validIndices[index];
-                  return Image.network(
-                    widget.imageUrls[imageIndex],
+                  return CachedNetworkImage(
+                    imageUrl: widget.imageUrls[imageIndex],
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
+                    errorWidget: (context, url, error) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         _markImageAsInvalid(imageIndex);
                       });
@@ -92,9 +93,12 @@ class _InsectImageShowcaseState extends State<InsectImageShowcase> {
                         ),
                       );
                     },
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return const Center(child: CircularProgressIndicator());
+                    progressIndicatorBuilder: (context, url, downloadProgress) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: downloadProgress.progress,
+                        ),
+                      );
                     },
                   );
                 },
@@ -153,10 +157,10 @@ class _InsectImageShowcaseState extends State<InsectImageShowcase> {
                     ),
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Image.network(
-                    widget.imageUrls[imageIndex],
+                  child: CachedNetworkImage(
+                    imageUrl: widget.imageUrls[imageIndex],
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
+                    errorWidget: (context, url, error) {
                       return Container(
                         color: Colors.grey[300],
                         child: const Icon(Icons.error, color: Colors.red),

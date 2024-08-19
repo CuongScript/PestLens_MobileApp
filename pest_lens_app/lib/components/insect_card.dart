@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class InsectCard extends StatelessWidget {
   final String imagePath;
@@ -24,7 +25,7 @@ class InsectCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            _buildImage(),
+            _buildCachedImage(),
             Positioned(
               bottom: 0,
               left: 0,
@@ -55,28 +56,17 @@ class InsectCard extends StatelessWidget {
     );
   }
 
-  Widget _buildImage() {
-    return Image.network(
-      imagePath,
+  Widget _buildCachedImage() {
+    return CachedNetworkImage(
+      imageUrl: imagePath,
       fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        // Return a placeholder or default image when there's an error
-        return Container(
-          color: Colors.grey[300],
-          child: Icon(Icons.bug_report, size: 50, color: Colors.grey[600]),
-        );
-      },
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : null,
-          ),
-        );
-      },
+      placeholder: (context, url) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      errorWidget: (context, url, error) => Container(
+        color: Colors.grey[300],
+        child: Icon(Icons.bug_report, size: 50, color: Colors.grey[600]),
+      ),
     );
   }
 }

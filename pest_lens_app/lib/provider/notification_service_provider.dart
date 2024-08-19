@@ -21,7 +21,7 @@ class NotificationNotifier
 
   Future<void> _loadNotifications() async {
     // TODO: Implement actual loading logic, possibly from local storage or an API
-    // For now, we'll use dummy data
+
     state = AsyncValue.data([
       Notification(
           id: '1',

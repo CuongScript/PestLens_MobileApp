@@ -107,7 +107,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
       _startDate = DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day);
       _endDate = DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 23, 59, 59);
+          DateTime.now().day, 23, 59, 00);
       _isDefaultMode = true;
     });
     _fetchInsectData();
