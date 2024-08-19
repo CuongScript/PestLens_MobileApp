@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pest_lens_app/utils/config.dart';
-import 'package:pest_lens_app/utils/user_preferences.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
 
 class AdminService {
   static const String baseUserUrl = '${Config.apiUrl}/api/users';

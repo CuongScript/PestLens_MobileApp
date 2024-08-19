@@ -31,7 +31,6 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
   @override
   void initState() {
     super.initState();
-    // The initial fetch is handled by the allInsectsProvider
   }
 
   void _showErrorSnackBar(String message) {

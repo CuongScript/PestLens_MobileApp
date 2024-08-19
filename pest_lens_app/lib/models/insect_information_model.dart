@@ -34,6 +34,7 @@ class InsectInformationModel {
       behaviour: json['behaviour'],
       impact: json['impact'],
       insectType: json['insectType'],
+      imageUrls: (json['imageUrls'] as List<dynamic>?)?.cast<String>() ?? [],
     );
   }
 
@@ -50,5 +51,31 @@ class InsectInformationModel {
       'insectType': insectType,
       'imageUrls': imageUrls,
     };
+  }
+
+  InsectInformationModel copyWith({
+    int? id,
+    String? englishName,
+    String? vietnameseName,
+    String? scientificName,
+    String? size,
+    String? habit,
+    String? behaviour,
+    String? impact,
+    String? insectType,
+    List<String>? imageUrls,
+  }) {
+    return InsectInformationModel(
+      id: id ?? this.id,
+      englishName: englishName ?? this.englishName,
+      vietnameseName: vietnameseName ?? this.vietnameseName,
+      scientificName: scientificName ?? this.scientificName,
+      size: size ?? this.size,
+      habit: habit ?? this.habit,
+      behaviour: behaviour ?? this.behaviour,
+      impact: impact ?? this.impact,
+      insectType: insectType ?? this.insectType,
+      imageUrls: imageUrls ?? this.imageUrls,
+    );
   }
 }

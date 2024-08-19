@@ -2,13 +2,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/models/insect_information_model.dart';
-import 'package:pest_lens_app/utils/user_preferences.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
+import 'package:pest_lens_app/preferences/insect_information_preferences.dart';
 
 class InsectInformationService {
   static const String _baseUrl = '${Config.apiUrl}/api/pests';
   static const String _googleSearchApiUrl = Config.googleSearchAPiUrl;
 
   Future<List<InsectInformationModel>> fetchInsectInformation() async {
+    if (await InsectInformationPreferences.shouldFetchInsects()) {
+      return _fetchFromApiAndCache();
+    } else {
+      final cachedInsects = await InsectInformationPreferences.getInsects();
+      return cachedInsects ?? [];
+    }
+  }
+
+  Future<List<InsectInformationModel>> _fetchFromApiAndCache() async {
     final user = await UserPreferences.getUser();
 
     final response = await http.get(Uri.parse(_baseUrl), headers: {
@@ -27,6 +37,9 @@ class InsectInformationService {
         insects.map((insect) => _fetchAndSetImages(insect)),
       );
 
+      // Cache the fetched insects
+      await InsectInformationPreferences.saveInsects(insects);
+
       return insects;
     } else {
       throw Exception('Failed to load insects');
@@ -43,6 +56,14 @@ class InsectInformationService {
   }
 
   Future<InsectInformationModel> fetchInsectDetails(String insectName) async {
+    // Try to get from preferences first
+    final cachedInsect =
+        await InsectInformationPreferences.getInsect(insectName);
+    if (cachedInsect != null) {
+      return cachedInsect;
+    }
+
+    // If not in preferences, fetch from API
     final user = await UserPreferences.getUser();
     final encodedName = Uri.encodeComponent(insectName);
     final url = '$_baseUrl/name/$encodedName';
@@ -65,8 +86,18 @@ class InsectInformationService {
         insect.imageUrls = imageUrls;
       } catch (e) {
         print('Error fetching images for ${insect.englishName}: $e');
-        // If image fetch fails, just leave the imageUrls empty
       }
+
+      // Update the cached insects with this new information
+      final cachedInsects =
+          await InsectInformationPreferences.getInsects() ?? [];
+      final updatedInsects = cachedInsects
+          .map((cached) => cached.englishName == insectName ? insect : cached)
+          .toList();
+      if (!updatedInsects.any((i) => i.englishName == insectName)) {
+        updatedInsects.add(insect);
+      }
+      await InsectInformationPreferences.saveInsects(updatedInsects);
 
       return insect;
     } else {
@@ -75,6 +106,14 @@ class InsectInformationService {
   }
 
   Future<List<String>> fetchInsectImages(String insectName) async {
+    // Try to get from preferences first
+    final cachedInsect =
+        await InsectInformationPreferences.getInsect(insectName);
+    if (cachedInsect != null && cachedInsect.imageUrls.isNotEmpty) {
+      return cachedInsect.imageUrls;
+    }
+
+    // If not in preferences or no images, fetch from API
     try {
       final response = await http.get(
         Uri.parse('$_googleSearchApiUrl?q=$insectName&num=10'),
@@ -85,7 +124,22 @@ class InsectInformationService {
       );
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        return List<String>.from(data['images'].map((img) => img['imageUrl']));
+        final images =
+            List<String>.from(data['images'].map((img) => img['imageUrl']));
+
+        // Update the cached insect with these new images
+        if (cachedInsect != null) {
+          final cachedInsects =
+              await InsectInformationPreferences.getInsects() ?? [];
+          final updatedInsects = cachedInsects
+              .map((cached) => cached.englishName == insectName
+                  ? cached.copyWith(imageUrls: images)
+                  : cached)
+              .toList();
+          await InsectInformationPreferences.saveInsects(updatedInsects);
+        }
+
+        return images;
       } else {
         print('Failed to load images for $insectName: ${response.statusCode}');
         return [];

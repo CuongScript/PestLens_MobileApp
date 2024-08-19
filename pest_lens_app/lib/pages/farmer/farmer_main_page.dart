@@ -15,6 +15,7 @@ import 'package:pest_lens_app/models/insect_count_model.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
 import 'package:pest_lens_app/services/insect_record_service.dart';
 import 'package:pest_lens_app/utils/config.dart';
+import 'package:pest_lens_app/utils/constants.dart';
 
 class FarmerMainPage extends StatefulWidget {
   const FarmerMainPage({super.key});
@@ -30,11 +31,8 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
   final InsectRecordService _insectRecordService = InsectRecordService();
   List<InsectCountModel> _insectData = [];
   List<Insect> _processedInsectData = [];
-  DateTime _startDate = DateTime.now()
-      .subtract(const Duration(days: 3))
-      .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
-  DateTime _endDate = DateTime(DateTime.now().year, DateTime.now().month,
-      DateTime.now().day, 23, 59, 59);
+  DateTime _startDate = defaultStartDate;
+  DateTime _endDate = defaultEndDate;
   Timer? _dataUpdateTimer;
   bool _isDefaultMode = true;
 

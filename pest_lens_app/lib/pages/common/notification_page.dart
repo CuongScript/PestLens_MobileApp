@@ -16,11 +16,11 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
   @override
   void initState() {
     super.initState();
-    // Subscribe to FCM topics when the page is initialized
+    // Subscribe to FCM topics 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notificationService = ref.read(notificationServiceProvider);
       notificationService.subscribeToTopic('USER_CREATED');
-      notificationService.subscribeToTopic('CAMERA_STATUS');
+      // notificationService.subscribeToTopic('CAMERA_STATUS');
       notificationService.subscribeToTopic('PEST_COUNT');
     });
   }

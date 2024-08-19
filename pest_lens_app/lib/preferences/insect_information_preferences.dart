@@ -18,12 +18,13 @@ class InsectInformationPreferences {
   static Future<List<InsectInformationModel>?> getInsects() async {
     final prefs = await SharedPreferences.getInstance();
     final insectJsonList = prefs.getStringList(_insectDataKey);
-
     if (insectJsonList != null) {
-      return insectJsonList
+      List<InsectInformationModel> insectList = insectJsonList
           .map((insectJson) =>
               InsectInformationModel.fromJson(jsonDecode(insectJson)))
           .toList();
+
+      return insectList;
     }
     return null;
   }
@@ -44,17 +45,6 @@ class InsectInformationPreferences {
     await prefs.remove(_lastFetchTimeKey);
   }
 
-  static Future<void> saveInsectImages(
-      String insectName, List<String> imageUrls) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('${insectName}Images', imageUrls);
-  }
-
-  static Future<List<String>?> getInsectImages(String insectName) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList('${insectName}Images');
-  }
-
   static Future<bool> shouldFetchInsects() async {
     final lastFetchTime = await getLastFetchTime();
     if (lastFetchTime == null) return true;
@@ -63,6 +53,19 @@ class InsectInformationPreferences {
     final difference = currentTime.difference(lastFetchTime);
 
     // Fetch new data if it's been more than 24 hours since the last fetch
-    return difference.inHours > 24;
+    return difference.inHours > 100;
+  }
+
+  //get a specific insect's information
+  static Future<InsectInformationModel?> getInsect(String insectName) async {
+    final insects = await getInsects();
+    if (insects == null || insects.isEmpty) {
+      return null;
+    }
+    try {
+      return insects.firstWhere((insect) => insect.englishName == insectName);
+    } catch (e) {
+      return null;
+    }
   }
 }

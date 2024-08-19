@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/utils/config.dart';
-import 'package:pest_lens_app/utils/user_preferences.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
 
 class AuthService {
   Future<User?> signUserIn(String username, String password) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:pest_lens_app/pages/authen/login_page.dart';
-import 'package:pest_lens_app/utils/user_preferences.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

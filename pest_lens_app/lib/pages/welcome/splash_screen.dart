@@ -9,7 +9,7 @@ import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/pages/admin/admin_tab_page.dart';
 import 'package:pest_lens_app/pages/authen/login_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
-import 'package:pest_lens_app/utils/user_preferences.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

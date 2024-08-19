@@ -64,6 +64,7 @@ class InsectCard extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
       errorWidget: (context, url, error) => Container(
+
         color: Colors.grey[300],
         child: Icon(Icons.bug_report, size: 50, color: Colors.grey[600]),
       ),
