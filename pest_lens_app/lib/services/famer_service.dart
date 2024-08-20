@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
 import 'package:pest_lens_app/utils/config.dart';
 import 'package:http_parser/http_parser.dart';
@@ -94,7 +95,7 @@ class FarmerService {
       return Insect(
         name: name,
         color: colorMap[name.toLowerCase()] ??
-            Colors.blue, // Default to blue if not found
+            appNameColor, // Default to blue if not found
         quantity: entry.value as int,
       );
     }).toList();

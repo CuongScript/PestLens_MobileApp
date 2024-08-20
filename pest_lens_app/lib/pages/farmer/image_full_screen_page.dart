@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
 import 'dart:io';
+import 'package:pest_lens_app/services/s3_service.dart';
 
 class ImageFullScreenPage extends StatelessWidget {
-  final File imageFile;
+  final File? imageFile;
+  final String? objectKey;
 
-  const ImageFullScreenPage({super.key, required this.imageFile});
+  const ImageFullScreenPage({
+    Key? key,
+    this.imageFile,
+    this.objectKey,
+  })  : assert(imageFile != null || objectKey != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,18 +22,40 @@ class ImageFullScreenPage extends StatelessWidget {
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: Center(
-        child: InteractiveViewer(
-          panEnabled: true,
-          boundaryMargin: const EdgeInsets.all(80),
-          minScale: 0.5,
-          maxScale: 4,
-          child: Image.file(
-            imageFile,
-            fit: BoxFit.contain,
-          ),
-        ),
+      body: FutureBuilder<Uint8List?>(
+        future: _getImageData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData && snapshot.data != null) {
+            return Center(
+              child: InteractiveViewer(
+                panEnabled: true,
+                boundaryMargin: const EdgeInsets.all(80),
+                minScale: 0.5,
+                maxScale: 4,
+                child: Image.memory(
+                  snapshot.data!,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            );
+          } else {
+            return const Center(child: Text('No image data'));
+          }
+        },
       ),
     );
+  }
+
+  Future<Uint8List?> _getImageData() async {
+    if (imageFile != null) {
+      return await imageFile!.readAsBytes();
+    } else if (objectKey != null) {
+      return await S3Service().getImageData(objectKey!);
+    }
+    return null;
   }
 }

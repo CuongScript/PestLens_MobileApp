@@ -11,4 +11,6 @@ class Config {
   static const String camera2APIUrl =
       'http://tramquantrac.shop:10001/video_feed';
   static const String camera2Token = "Noodle7532Giraffe";
+  static const String s3Region = 'ap-southeast-2';
+  static const String s3Bucket = 'pestapp-pestphoto';
 }

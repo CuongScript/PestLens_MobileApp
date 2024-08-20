@@ -149,7 +149,7 @@ class SignUpPage extends ConsumerWidget {
                         validateField(rePasswordFieldKey);
                       },
                     ),
-                    const SizedBox(height: 19),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

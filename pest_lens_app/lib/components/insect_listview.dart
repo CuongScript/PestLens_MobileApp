@@ -2,27 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
 
 class InsectListView extends StatelessWidget {
-  final List<Insect> hardcodedInsects = [
-    Insect(name: 'Brown Planthopper', color: Colors.brown, quantity: 196),
-    Insect(name: 'Stem Borers', color: Colors.orange, quantity: 274),
-    Insect(name: 'Leaf Rollers', color: Colors.green, quantity: 242),
-    Insect(name: 'Brown Planthopper', color: Colors.brown, quantity: 196),
-    Insect(name: 'Stem Borers', color: Colors.orange, quantity: 274),
-    Insect(name: 'Leaf Rollers', color: Colors.green, quantity: 242),
-  ];
+  final List<Insect> insects;
 
-  final List<Insect>? insects;
-
-  InsectListView({super.key, this.insects});
+  const InsectListView({super.key, required this.insects});
 
   @override
   Widget build(BuildContext context) {
-    final displayInsects = insects ?? hardcodedInsects;
-
     return ListView.builder(
-      itemCount: displayInsects.length,
+      itemCount: insects.length,
       itemBuilder: (context, index) {
-        return InsectTile(insect: displayInsects[index]);
+        return InsectTile(insect: insects[index]);
       },
     );
   }

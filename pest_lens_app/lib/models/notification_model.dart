@@ -5,8 +5,19 @@ class Notification {
   final String title;
   final DateTime timestamp;
 
-  Notification(
-      {required this.id, required this.title, required this.timestamp});
+  Notification({
+    required this.id,
+    required this.title,
+    required this.timestamp,
+  });
+
+  factory Notification.fromJson(Map<String, dynamic> json) {
+    return Notification(
+      id: json['id'].toString(),
+      title: json['message'],
+      timestamp: DateTime.parse(json['sentAt']),
+    );
+  }
 
   bool isToday() {
     final now = DateTime.now();

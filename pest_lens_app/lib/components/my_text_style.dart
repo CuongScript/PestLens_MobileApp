@@ -20,6 +20,15 @@ class CustomTextStyles {
     color: fontTitleColor,
   );
 
+  static const TextStyle pageTitle2 = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 22,
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+    color: fontTitleColor,
+  );
+
   static const TextStyle cameraErrorMessage = TextStyle(
     fontFamily: 'Inter',
     fontSize: 20,

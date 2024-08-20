@@ -67,6 +67,7 @@ dependencies:
   http_parser: any
   path: any
   cached_network_image: ^3.4.0
+  aws_signature_v4: ^0.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

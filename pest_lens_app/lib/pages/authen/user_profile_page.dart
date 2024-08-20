@@ -113,7 +113,7 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 45),
+                const SizedBox(height: 20),
                 const Text(
                   "User Profile",
                   style: CustomTextStyles.appName,

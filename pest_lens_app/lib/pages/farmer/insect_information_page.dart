@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/models/insect_information_model.dart';
 import 'package:pest_lens_app/components/insect_card.dart';
@@ -94,7 +95,8 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh, size: 30, color: fontTitleColor),
+            iconSize: 40,
             onPressed: () {
               ref.refresh(allInsectsProvider);
               ScaffoldMessenger.of(context).showSnackBar(

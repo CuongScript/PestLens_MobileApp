@@ -17,3 +17,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ifconfig | grep inet
 copy ip in the config.dart util
+$ flutter run --dart-define=AWS_ACCESS_KEY_ID=... --dart-define=AWS_SECRET_ACCESS_KEY=...
