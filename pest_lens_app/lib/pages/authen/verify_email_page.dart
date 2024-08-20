@@ -7,8 +7,7 @@ import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/pages/authen/reset_password_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:pest_lens_app/utils/config.dart';
-import 'package:pest_lens_app/preferences/user_preferences.dart';
-import 'dart:convert';
+import 'dart:async'; // Import this for the Timer class
 
 
 
@@ -23,28 +22,26 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
   final List<TextEditingController> _codeControllers =
     List.generate(4, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
+  bool _isButtonEnabled = true;
+  String _buttonText = "Verify";
+  Timer? _timer;
+  int _remainingSeconds = 60;
 
   Future<void> verify() async {
+    if (!_isButtonEnabled) return;
     String code = _codeControllers.map((c) => c.text).join();
 
     // Ensure the code is a 4-digit number
-    if (code.length != 4) {
+    if (code.length != 4 || !code.split('').every((digit) => digit.contains(RegExp(r'[0-9]')))) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Please enter 4 digits."),
+          content: Text("Please enter 4 digits (0-9)"),
         ),
       );
       return;
     }
 
-    if (!code.split('').every((digit) => digit.contains(RegExp(r'[0-9]')))) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please enter only digits (0-9)."),
-        ),
-      );
-      return;
-    }
+    _startTimer(); 
 
     var response = await http.post(
       Uri.parse('${Config.apiUrl}/api/users/validate-token'),
@@ -73,6 +70,26 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
     }
   }
 
+  void _startTimer() {
+    _remainingSeconds = 60; // Reset the timer to 60 seconds
+    _timer?.cancel(); // Cancel any existing timer
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 0) {
+        setState(() {
+          _remainingSeconds--;
+          _buttonText = "Send code again in $_remainingSeconds s";
+          _isButtonEnabled = false;
+        });
+      } else {
+        _timer?.cancel();
+        setState(() {
+          _buttonText = "Verify";
+          _isButtonEnabled = true;
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
     for (var controller in _codeControllers) {
@@ -81,6 +98,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
     for (var node in _focusNodes) {
       node.dispose();
     }
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -195,24 +213,11 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 45),
                 child: MySubmitButton(
-                  onTap: verify,
-                  buttonText: AppLocalizations.of(context)!.verify,
+                  onTap: _isButtonEnabled ? verify : null,
+                  buttonText: _buttonText,
                   isFilled: true,
                 ),
               ),
-              const SizedBox(height: 20),
-              if (true) // TODO: add logic here
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text("Send code again in 60s")],
-                )
-              else
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Send code again",
-                  ),
-                )
             ],
           ),
         ),
