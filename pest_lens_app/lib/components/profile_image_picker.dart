@@ -1,15 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   final String? imageUrl;
   final bool isReadOnly;
+  final Function(File)? onImagePicked;
 
   const ProfileImagePicker({
     super.key,
     this.imageUrl,
     this.isReadOnly = false,
+    this.onImagePicked,
   });
 
   @override
@@ -18,6 +21,7 @@ class ProfileImagePicker extends StatefulWidget {
 
 class _ProfileImagePickerState extends State<ProfileImagePicker> {
   ImageProvider? _image;
+  File? _imageFile;
 
   @override
   void initState() {
@@ -42,8 +46,10 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 
     if (pickedFile != null) {
       setState(() {
-        _image = FileImage(File(pickedFile.path));
+        _imageFile = File(pickedFile.path);
+        _image = FileImage(_imageFile!);
       });
+      widget.onImagePicked?.call(_imageFile!);
     }
   }
 
@@ -63,7 +69,7 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
               height: 40,
               width: 40,
               decoration: const BoxDecoration(
-                color: Colors.blue,
+                color: appNameColor,
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.camera_alt, color: Colors.white),

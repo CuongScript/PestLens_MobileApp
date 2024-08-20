@@ -39,7 +39,7 @@ class CustomTextStyles {
   );
 
   static const TextStyle hintTextField = TextStyle(
-    fontFamily: 'Roboto',
+    fontFamily: 'Inter',
     fontSize: 15,
     fontStyle: FontStyle.normal,
     fontWeight: FontWeight.w400,
