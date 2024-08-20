@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/upload_image_display.dart';
@@ -49,27 +50,44 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
     try {
       var response = await _farmerService.detectInsects(_image!);
 
-      // Check if the widget is still mounted before proceeding
       if (!mounted) return;
 
-      List<Insect> insects =
-          _farmerService.parseInsects(response).cast<Insect>();
+      List<Insect> insects = _farmerService.parseInsects(response);
+      String objectKey = _farmerService.getOutputImagePath(response);
+      String timestamp = _farmerService.getTimestamp(response);
 
-      if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => InsectLookupResultPage(
-            imageFile: _image!,
+            objectKey: objectKey,
             insects: insects,
+            timestamp: timestamp,
           ),
         ),
       );
     } catch (e) {
-      // Check if the widget is still mounted before showing SnackBar
       if (!mounted) return;
+
+      String errorMessage;
+      if (e is Exception) {
+        errorMessage = e.toString().replaceAll("Exception: ", "");
+      } else {
+        errorMessage = 'An unexpected error occurred. Please try again.';
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to detect insects: $e')),
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            },
+          ),
+        ),
       );
     } finally {
       if (mounted) {
@@ -112,7 +130,7 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: primaryBackgroundColor,
         title: const Text('Insect Lookup', style: CustomTextStyles.pageTitle),
         elevation: 0,
       ),

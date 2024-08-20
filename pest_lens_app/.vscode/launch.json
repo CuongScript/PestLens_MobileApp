@@ -1,11 +1,14 @@
 {
   "version": "0.2.0",
   "configurations": [
-    
     {
-      "name": "pest_lens_app",
+      "name": "pest_lens_app_aws",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "args": [
+        "--dart-define=AWS_ACCESS_KEY_ID=AKIA47CRZX5XG36HJXNC",
+        "--dart-define=AWS_SECRET_ACCESS_KEY=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"
+      ]
     },
     {
       "name": "pest_lens_app (profile mode)",

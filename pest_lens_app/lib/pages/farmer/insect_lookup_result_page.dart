@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pest_lens_app/components/insect_listview.dart';
 import 'package:pest_lens_app/components/my_back_button.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/upload_image_display.dart';
-import 'dart:io';
-
 import 'package:pest_lens_app/models/insect_model.dart';
 
 class InsectLookupResultPage extends StatefulWidget {
-  final File imageFile;
+  final String objectKey;
   final List<Insect> insects;
+  final String timestamp;
 
   const InsectLookupResultPage({
     super.key,
-    required this.imageFile,
+    required this.objectKey,
     required this.insects,
+    required this.timestamp,
   });
 
   @override
@@ -22,6 +23,16 @@ class InsectLookupResultPage extends StatefulWidget {
 }
 
 class _InsectLookupResultPageState extends State<InsectLookupResultPage> {
+  String formatTimestamp(String timestamp) {
+    // Parse the timestamp string
+    DateTime dateTime = DateTime.parse(
+      '${timestamp.substring(0, 8)}T${timestamp.substring(9)}',
+    );
+
+    // Format the date and time
+    return DateFormat('MMMM d, yyyy \'at\' HH:mm:ss').format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +50,25 @@ class _InsectLookupResultPageState extends State<InsectLookupResultPage> {
             flex: 1,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: UploadImageDisplay(imageFile: widget.imageFile),
+              child: UploadImageDisplay(objectKey: widget.objectKey),
             ),
           ),
-          // Lower half: List of insects
           Expanded(
             flex: 1,
-            child: InsectListView(insects: widget.insects),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    formatTimestamp(widget.timestamp),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(
+                  child: InsectListView(insects: widget.insects),
+                ),
+              ],
+            ),
           ),
         ],
       ),
