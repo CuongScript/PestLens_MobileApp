@@ -28,7 +28,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Uri.parse('${Config.apiUrl}/api/users/reset-password'),  // Replace with your actual host URL
     );
     request.fields.addAll({
-      'username': emailController.text,  // Assuming the API expects 'email' field
+      'email': emailController.text,  // Assuming the API expects 'email' field
     });
 
     try {
@@ -44,7 +44,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         var responseBody = await response.stream.bytesToString();
         messenger.showSnackBar(
           SnackBar(
-            content: Text(errorForgotPassword + "\nDetails: $responseBody"),
+            content: Text(errorForgotPassword),
           ),
         );
       }

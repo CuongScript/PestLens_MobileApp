@@ -20,43 +20,9 @@ class VerifyEmailPage extends StatefulWidget {
 }
 
 class VerifyEmailPageState extends State<VerifyEmailPage> {
-  // final List<TextEditingController> _codeControllers =
-  //     List.generate(4, (_) => TextEditingController());
-  // final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
-
-  // void verify() {
-  //   String code = _codeControllers.map((controller) => controller.text).join();
-  //   int codeInt;
-  //   try {
-  //     codeInt = int.parse(code);
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(AppLocalizations.of(context)!
-  //             .invalidForgetPasswordVerificationCode),
-  //       ),
-  //     );
-  //     return;
-  //   }
-
-  //   // Replace the following line with  verification logic
-  //   if (codeInt == 1234) {
-  //     // Example check, replace with actual verification logic
-
-  //     Navigator.push(context,
-  //         MaterialPageRoute(builder: (context) => ResetPasswordPage()));
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text(AppLocalizations.of(context)!
-  //             .invalidForgetPasswordVerificationCode),
-  //       ),
-  //     );
-  //   }
   final List<TextEditingController> _codeControllers =
     List.generate(4, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
-
 
   Future<void> verify() async {
     String code = _codeControllers.map((c) => c.text).join();
@@ -65,19 +31,16 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
     if (code.length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Invalid 1"),
+          content: Text("Please enter 4 digits."),
         ),
       );
       return;
     }
 
-    // Fetch user credentials from preferences
-    final user = await UserPreferences.getUser();
-
-    if (user == null) {
+    if (!code.split('').every((digit) => digit.contains(RegExp(r'[0-9]')))) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("User not authen 1"),
+          content: Text("Please enter only digits (0-9)."),
         ),
       );
       return;
@@ -85,18 +48,26 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
 
     var response = await http.post(
       Uri.parse('${Config.apiUrl}/api/users/validate-token'),
-      headers: {
-        'Authorization': '${user.tokenType} ${user.accessToken}',
-      },
       body: {'token': code},
     );
 
-    if (response.statusCode == 200) {
+    // Parse the response body to a variable
+    String responseBody = response.body;
+
+    // Check the response body content to determine the outcome
+    if (response.statusCode == 200 && responseBody.toString().contains("Token validated")) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordPage()));
-    } else {
+    } else if (responseBody.contains("Token expired")) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.invalidForgetPasswordVerificationCode),
+        const SnackBar(
+          content: Text("Token expired or invalid."),
+        ),
+      );
+    } else {
+      // Handle any other unexpected responses
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Unexpect token result"),
         ),
       );
     }
