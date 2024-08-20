@@ -5,6 +5,12 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/pages/authen/reset_password_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:pest_lens_app/utils/config.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
+import 'dart:convert';
+
+
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({super.key});
@@ -14,36 +20,83 @@ class VerifyEmailPage extends StatefulWidget {
 }
 
 class VerifyEmailPageState extends State<VerifyEmailPage> {
+  // final List<TextEditingController> _codeControllers =
+  //     List.generate(4, (_) => TextEditingController());
+  // final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
+
+  // void verify() {
+  //   String code = _codeControllers.map((controller) => controller.text).join();
+  //   int codeInt;
+  //   try {
+  //     codeInt = int.parse(code);
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(AppLocalizations.of(context)!
+  //             .invalidForgetPasswordVerificationCode),
+  //       ),
+  //     );
+  //     return;
+  //   }
+
+  //   // Replace the following line with  verification logic
+  //   if (codeInt == 1234) {
+  //     // Example check, replace with actual verification logic
+
+  //     Navigator.push(context,
+  //         MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(AppLocalizations.of(context)!
+  //             .invalidForgetPasswordVerificationCode),
+  //       ),
+  //     );
+  //   }
   final List<TextEditingController> _codeControllers =
-      List.generate(4, (_) => TextEditingController());
+    List.generate(4, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
 
-  void verify() {
-    String code = _codeControllers.map((controller) => controller.text).join();
-    int codeInt;
-    try {
-      codeInt = int.parse(code);
-    } catch (e) {
+
+  Future<void> verify() async {
+    String code = _codeControllers.map((c) => c.text).join();
+
+    // Ensure the code is a 4-digit number
+    if (code.length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .invalidForgetPasswordVerificationCode),
+        const SnackBar(
+          content: Text("Invalid 1"),
         ),
       );
       return;
     }
 
-    // Replace the following line with  verification logic
-    if (codeInt == 1234) {
-      // Example check, replace with actual verification logic
+    // Fetch user credentials from preferences
+    final user = await UserPreferences.getUser();
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("User not authen 1"),
+        ),
+      );
+      return;
+    }
+
+    var response = await http.post(
+      Uri.parse('${Config.apiUrl}/api/users/validate-token'),
+      headers: {
+        'Authorization': '${user.tokenType} ${user.accessToken}',
+      },
+      body: {'token': code},
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordPage()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!
-              .invalidForgetPasswordVerificationCode),
+          content: Text(AppLocalizations.of(context)!.invalidForgetPasswordVerificationCode),
         ),
       );
     }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   final String? imageUrl;
@@ -36,6 +37,11 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 
   void _pickImage() async {
     if (widget.isReadOnly) return;
+    // Check and request permission
+    var status = await Permission.photos.status;
+    if (!status.isGranted) {
+      status = await Permission.photos.request();
+    }
 
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);

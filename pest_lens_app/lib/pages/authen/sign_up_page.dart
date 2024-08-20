@@ -149,27 +149,6 @@ class SignUpPage extends ConsumerWidget {
                         validateField(rePasswordFieldKey);
                       },
                     ),
-                    const SizedBox(height: 12),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Checkbox(
-                            value: isChecked,
-                            onChanged: (bool? value) {
-                              isChecked = value ?? false;
-                            },
-                          ),
-                          const Expanded(
-                            child: Text(
-                              "Terms and Policies", // Replace with actual string if using localization
-                              style: CustomTextStyles.labelTextField,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     const SizedBox(height: 19),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

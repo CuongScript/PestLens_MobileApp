@@ -7,7 +7,8 @@ import 'package:pest_lens_app/components/my_text_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/pages/authen/verify_email_page.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:pest_lens_app/utils/config.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -20,36 +21,41 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final emailController = TextEditingController();
 
   Future<void> sendResetPasswordRequest(BuildContext context) async {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
-    // final messenger = ScaffoldMessenger.of(context);
-    // final errorForgotPassword =
-    //     AppLocalizations.of(context)!.errorForgotPassword;
-    // var request = http.MultipartRequest(
-    //   'POST',
-    //   Uri.parse('${Config.apiUrl}/api/users/reset-password'),
-    // );
-    // request.fields.addAll({
-    //   'username': emailController.text,
-    // });
+    final messenger = ScaffoldMessenger.of(context);
+    final errorForgotPassword = AppLocalizations.of(context)!.errorForgotPassword;
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('${Config.apiUrl}/api/users/reset-password'),  // Replace with your actual host URL
+    );
+    request.fields.addAll({
+      'username': emailController.text,  // Assuming the API expects 'email' field
+    });
 
-    // http.StreamedResponse response = await request.send();
+    try {
+      http.StreamedResponse response = await request.send();
 
-    // if (response.statusCode == 200) {
-    //   if (!context.mounted) {
-    //     return;
-    //   }
-    //   Navigator.push(context,
-    //       MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
-    // } else {
-    //   messenger.showSnackBar(
-    //     SnackBar(
-    //       content: Text(
-    //         errorForgotPassword,
-    //       ),
-    //     ),
-    //   );
-    // }
+      if (response.statusCode == 200) {
+        // Assuming the response status 200 means the email was sent successfully
+        if (!context.mounted) return;
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
+      } else {
+        // Handling all other status codes as failures
+        var responseBody = await response.stream.bytesToString();
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(errorForgotPassword + "\nDetails: $responseBody"),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handling any kind of exception during the request
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('$errorForgotPassword \nException: $e'),
+        ),
+      );
+    }
   }
 
   @override
