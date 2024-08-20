@@ -53,7 +53,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
 
     // Check the response body content to determine the outcome
     if (response.statusCode == 200 && responseBody.toString().contains("Token validated")) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordPage(token: code)));
     } else if (responseBody.contains("Token expired")) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
