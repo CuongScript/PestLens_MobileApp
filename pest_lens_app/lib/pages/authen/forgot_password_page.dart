@@ -22,13 +22,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Future<void> sendResetPasswordRequest(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
-    final errorForgotPassword = AppLocalizations.of(context)!.errorForgotPassword;
+    final errorForgotPassword =
+        AppLocalizations.of(context)!.errorForgotPassword;
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('${Config.apiUrl}/api/users/reset-password'),  // Replace with your actual host URL
+      Uri.parse(
+          '${Config.apiUrl}/api/users/reset-password'), // Replace with your actual host URL
     );
     request.fields.addAll({
-      'email': emailController.text,  // Assuming the API expects 'email' field
+      'email': emailController.text, // Assuming the API expects 'email' field
     });
 
     try {
@@ -37,8 +39,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       if (response.statusCode == 200) {
         // Assuming the response status 200 means the email was sent successfully
         if (!context.mounted) return;
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const VerifyEmailPage()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VerifyEmailPage(
+                      email: emailController.text,
+                    )));
       } else {
         // Handling all other status codes as failures
         var responseBody = await response.stream.bytesToString();
