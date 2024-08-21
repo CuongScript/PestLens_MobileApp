@@ -307,11 +307,11 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
 
   Future<void> sendResetPasswordRequest(BuildContext context) async {
     final response = await http.post(
-      Uri.parse('${Config.apiUrl}/api/users/reset-password'),
-      body: {'email': widget.email}
-    );
+        Uri.parse('${Config.apiUrl}/api/users/reset-password'),
+        body: {'email': widget.email});
     if (response.statusCode != 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.errorForgotPassword)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(AppLocalizations.of(context)!.errorForgotPassword)));
     }
   }
 
@@ -337,9 +337,15 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
-        leading: IconButton(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: IconButton(
             icon: const MyBackButton(),
-            onPressed: () => Navigator.pop(context)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -358,8 +364,11 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
                   children: List.generate(
                       4, (index) => buildCodeInput(context, index))),
               SizedBox(height: 33),
-              MySubmitButton(
-                  onTap: verify, buttonText: "Verify", isFilled: true),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 45),
+                child: MySubmitButton(
+                    onTap: verify, buttonText: "Verify", isFilled: true),
+              ),
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: _canResendCode
