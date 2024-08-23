@@ -9,7 +9,7 @@ import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/pages/admin/admin_tab_page.dart';
 import 'package:pest_lens_app/pages/authen/forgot_password_page.dart';
-import 'package:pest_lens_app/pages/authen/sign_up_page.dart';
+import 'package:pest_lens_app/pages/authen/signup_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
 import 'package:pest_lens_app/services/auth_service.dart';

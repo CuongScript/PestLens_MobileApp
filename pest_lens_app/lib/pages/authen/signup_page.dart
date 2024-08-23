@@ -6,7 +6,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/models/farmer_register_model.dart';
 import 'package:pest_lens_app/provider/user_register_model_provider.dart';
-import 'package:pest_lens_app/pages/authen/user_profile_page.dart';
+import 'package:pest_lens_app/pages/authen/signup_profile_page.dart';
 import 'package:pest_lens_app/utils/textfield_validator.dart';
 
 import 'package:pest_lens_app/components/signup_popup_dialog.dart';
@@ -44,7 +44,7 @@ class SignUpPage extends ConsumerWidget {
 
         // Navigate to the UserProfilePage
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const UserProfilePage()));
+            MaterialPageRoute(builder: (context) => const SignupProfilePage()));
       } else {
         showSignupPopup(context, false);
       }

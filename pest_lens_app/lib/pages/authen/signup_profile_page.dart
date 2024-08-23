@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/assets/colors.dart';
@@ -8,19 +9,18 @@ import 'package:pest_lens_app/components/my_text_form_field.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/profile_image_picker.dart';
 import 'package:pest_lens_app/provider/user_register_model_provider.dart';
-import 'package:pest_lens_app/utils/config.dart';
+import 'package:pest_lens_app/services/auth_service.dart';
 import 'package:pest_lens_app/utils/textfield_validator.dart';
 import 'package:pest_lens_app/components/signup_popup_dialog.dart';
-import 'package:http/http.dart' as http;
 
-class UserProfilePage extends ConsumerStatefulWidget {
-  const UserProfilePage({super.key});
+class SignupProfilePage extends ConsumerStatefulWidget {
+  const SignupProfilePage({super.key});
 
   @override
   UserProfilePageState createState() => UserProfilePageState();
 }
 
-class UserProfilePageState extends ConsumerState<UserProfilePage> {
+class UserProfilePageState extends ConsumerState<SignupProfilePage> {
   final formKey = GlobalKey<FormState>();
   final firstNameFieldKey = GlobalKey<FormFieldState>();
   final lastNameFieldKey = GlobalKey<FormFieldState>();
@@ -28,6 +28,9 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
+
+  final AuthService _authService = AuthService();
+  File? _profileImage;
 
   void validateField(GlobalKey<FormFieldState> key) {
     final field = key.currentState;
@@ -43,49 +46,43 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
     super.dispose();
   }
 
+  void _handleImagePicked(File image) {
+    setState(() {
+      _profileImage = image;
+    });
+  }
+
   Future<void> signUserUp() async {
     if (formKey.currentState?.validate() ?? false) {
-      // Update the provider with the latest data
-      ref.read(userRegisterModelProvider.notifier).updateModel(
-            ref.read(userRegisterModelProvider).copyWith(
-                  firstName: firstNameController.text,
-                  lastName: lastNameController.text,
-                  phoneNumber: phoneNumberController.text,
-                ),
-          );
-
       final userModel = ref.read(userRegisterModelProvider);
+      final userData = userModel
+          .copyWith(
+            firstName: firstNameController.text,
+            lastName: lastNameController.text,
+            phoneNumber: phoneNumberController.text,
+          )
+          .toJson();
 
-      // Serialize the updated user model to JSON
-      final jsonData = json.encode(userModel.toJson());
+      final result = await _authService.signUserUp(userData, _profileImage);
 
-      // Prepare the headers for the HTTP request
-      var headers = {'Content-Type': 'application/json'};
-
-      try {
-        // Send the HTTP POST request
-        final response = await http.post(
-          Uri.parse('${Config.apiUrl}/signup'),
-          headers: headers,
-          body: jsonData,
-        );
-
-        // Ensure the widget is still mounted before showing popup
-        if (!mounted) return;
-
-        // Check the response status
-        if (response.statusCode == 200) {
+      if (mounted) {
+        if (result['success']) {
+          showSignupPopup(context, true, message: result['message']);
           ref.read(userRegisterModelProvider.notifier).reset();
-          showSignupPopup(context, true);
         } else {
-          showSignupPopup(context, false);
+          if (result['imageUploadFailed'] == true) {
+            showImageUploadWarning(
+              context,
+              () {
+                showSignupPopup(context, true,
+                    message:
+                        'Signup successful, but profile image upload failed.');
+              },
+            );
+          } else {
+            showSignupPopup(context, false, message: result['message']);
+          }
         }
-      } catch (e) {
-        // Ensure the widget is still mounted before showing popup
-        if (!mounted) return;
-
-        // Handle any errors that occur during the request
-        showSignupPopup(context, false);
       }
     }
   }
@@ -119,7 +116,9 @@ class UserProfilePageState extends ConsumerState<UserProfilePage> {
                   style: CustomTextStyles.appName,
                 ),
                 const SizedBox(height: 28),
-                const ProfileImagePicker(),
+                ProfileImagePicker(
+                  onImagePicked: _handleImagePicked,
+                ),
                 const SizedBox(height: 28),
                 MyTextFormField(
                   fieldKey: firstNameFieldKey,

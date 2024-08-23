@@ -1,10 +1,8 @@
-// popup_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/pages/authen/login_page.dart';
 
-// This function shows a success or failure dialog
-void showSignupPopup(BuildContext context, bool success) {
+void showSignupPopup(BuildContext context, bool success, {String? message}) {
   showDialog(
     context: context,
     builder: (BuildContext dialogContext) {
@@ -19,16 +17,22 @@ void showSignupPopup(BuildContext context, bool success) {
             ),
             const SizedBox(height: 20),
             Text(
-              success
-                  ? "Signup Success"
-                  : "Signup Failed", // Use localization if needed
+              success ? "Signup Success" : "Signup Failed",
+              style: CustomTextStyles.labelTextField,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              message ??
+                  (success
+                      ? "Your account has been created successfully."
+                      : "There was an error creating your account. Please try again."),
+              textAlign: TextAlign.center,
               style: CustomTextStyles.labelTextField,
             ),
             const SizedBox(height: 20),
             success
                 ? ElevatedButton(
                     onPressed: () {
-                      // Use the main context to navigate
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (context) => const LoginPage(),
@@ -36,18 +40,46 @@ void showSignupPopup(BuildContext context, bool success) {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    child: const Text(
-                        "Come to Login"), // Use localization if needed
+                    child: const Text("Proceed to Login"),
                   )
                 : ElevatedButton(
                     onPressed: () {
                       Navigator.pop(dialogContext);
                     },
-                    child: const Text(
-                        "Signup Again"), // Use localization if needed
+                    child: const Text("Try Again"),
                   ),
           ],
         ),
+      );
+    },
+  );
+}
+
+void showImageUploadWarning(BuildContext context, VoidCallback onContinue) {
+  showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) {
+      return AlertDialog(
+        title: const Text('Warning'),
+        content: const Text(
+          'Profile image upload failed, but the signup process can continue. '
+          'You can try uploading your profile image later.',
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Continue Signup'),
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              onContinue();
+            },
+          ),
+        ],
       );
     },
   );
