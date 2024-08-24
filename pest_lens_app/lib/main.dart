@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:pest_lens_app/provider/language_provider.dart';
 import 'package:pest_lens_app/provider/notification_service_provider.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -32,7 +33,10 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(notificationServiceProvider).init();
 
+    Locale currentLocale = ref.watch(localeProvider);
+
     return MaterialApp(
+      locale: currentLocale,
       debugShowCheckedModeBanner: false,
       supportedLocales: L10n.all,
       localizationsDelegates: const [
