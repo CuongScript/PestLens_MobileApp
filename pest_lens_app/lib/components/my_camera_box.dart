@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pest_lens_app/pages/farmer/camera_full_screen_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyCameraBox extends StatefulWidget {
   final String url;
@@ -89,7 +90,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
         if (_isLoading) {
           _hasError = true;
           _isLoading = false;
-          _errorMessage = 'Loading timed out after 5 seconds';
+          _errorMessage = AppLocalizations.of(context)!.loadTimeOut;
         }
       });
     });
@@ -182,12 +183,12 @@ class _MyCameraBoxState extends State<MyCameraBox> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Camera not Available',
+                          Text(AppLocalizations.of(context)!.cameraNotAvail,
                               style: CustomTextStyles.cameraErrorMessage),
                           const SizedBox(height: 24),
                           ElevatedButton(
                             onPressed: _retry,
-                            child: const Text('Retry'),
+                            child: Text(AppLocalizations.of(context)!.retry),
                           ),
                         ],
                       ),

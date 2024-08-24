@@ -4,6 +4,7 @@ import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/notification_card.dart';
 import 'package:pest_lens_app/provider/notification_service_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationPage extends ConsumerStatefulWidget {
   const NotificationPage({super.key});
@@ -40,26 +41,28 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
-        title: const Text('Notifications', style: CustomTextStyles.pageTitle),
+        title: Text(AppLocalizations.of(context)!.notification,
+            style: CustomTextStyles.pageTitle),
         elevation: 0,
       ),
       body: notifications.when(
         data: (notificationList) {
           if (notificationList.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.notifications_off, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
+                  const Icon(Icons.notifications_off,
+                      size: 64, color: Colors.grey),
+                  const SizedBox(height: 16),
                   Text(
-                    'No notifications',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    AppLocalizations.of(context)!.noNotify,
+                    style: const TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'You\'re all caught up!',
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                    AppLocalizations.of(context)!.caughtUpNotify,
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ],
               ),
@@ -74,11 +77,12 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
           return ListView(
             children: [
               if (todayNotifications.isNotEmpty) ...[
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                   child: Text(
-                    'Today',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    AppLocalizations.of(context)!.today,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 ...todayNotifications.map((notification) => NotificationCard(
@@ -88,11 +92,12 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
                     )),
               ],
               if (olderNotifications.isNotEmpty) ...[
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
                   child: Text(
-                    'Last 7 Days',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    AppLocalizations.of(context)!.last7Day,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 ...olderNotifications.map((notification) => NotificationCard(
@@ -105,7 +110,7 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) => Center(child: Text('${AppLocalizations.of(context)!.error}: $error')),
       ),
     );
   }

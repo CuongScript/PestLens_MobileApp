@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pest_lens_app/assets/colors.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/pages/admin/admin_tab_page.dart';
@@ -44,10 +44,10 @@ class SplashScreen extends StatelessWidget {
             ),
           );
         } else if (snapshot.hasError) {
-          return const Scaffold(
+          return Scaffold(
             backgroundColor: primaryBackgroundColor,
             body: Center(
-              child: Text('An error occurred!'),
+              child: Text(AppLocalizations.of(context)!.errorOccurred),
             ),
           );
         } else {

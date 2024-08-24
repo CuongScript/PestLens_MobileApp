@@ -3,6 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
 import 'package:pest_lens_app/services/insect_record_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyLineChart extends StatefulWidget {
   final VoidCallback onCalendarButtonPressed;
@@ -109,9 +110,9 @@ class _MyLineChartState extends State<MyLineChart> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Historical Number of Insects',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.histNumb,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -126,10 +127,10 @@ class _MyLineChartState extends State<MyLineChart> {
             ),
             Expanded(
               child: widget.insectData.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
-                        'No data available',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.noData,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,

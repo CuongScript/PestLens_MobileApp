@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/pages/authen/login_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // This function shows a success or failure dialog for password reset
 void showResetPasswordPopup(BuildContext context, bool success) {
   showDialog(
     context: context,
-    barrierDismissible: false,  // Prevent dialog from closing on tap outside
+    barrierDismissible: false, // Prevent dialog from closing on tap outside
     builder: (BuildContext dialogContext) {
       return AlertDialog(
         content: Column(
@@ -19,7 +20,9 @@ void showResetPasswordPopup(BuildContext context, bool success) {
             ),
             const SizedBox(height: 20),
             Text(
-              success ? "Password Reset Successfully" : "Password Reset Failed",
+              success
+                  ? AppLocalizations.of(context)!.passResetSuccess
+                  : AppLocalizations.of(context)!.passResetFail,
               textAlign: TextAlign.center,
               style: CustomTextStyles.labelTextField,
             ),
@@ -37,11 +40,14 @@ void showResetPasswordPopup(BuildContext context, bool success) {
                   Navigator.pop(dialogContext);
                 }
               },
-              child: Text(success ? "Go to Login" : "Try Again"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: success ? Colors.green : Colors.red, // Button color
+                backgroundColor:
+                    success ? Colors.green : Colors.red, // Button color
                 foregroundColor: Colors.white, // Text color
               ),
+              child: Text(success
+                  ? AppLocalizations.of(context)!.goToLogin
+                  : AppLocalizations.of(context)!.tryAgain),
             ),
           ],
         ),

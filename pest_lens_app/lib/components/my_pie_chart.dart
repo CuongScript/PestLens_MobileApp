@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/models/dashboard_item.dart';
 import 'package:pest_lens_app/provider/dashboard_touch_provider.dart';
 import 'package:pest_lens_app/provider/dashboard_uq_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PieChartWidget extends ConsumerWidget {
   const PieChartWidget({super.key});
@@ -37,7 +38,7 @@ class PieChartWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Users Account Distribution',
+              AppLocalizations.of(context)!.userAccDistri,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const Divider(),
@@ -59,7 +60,7 @@ class PieChartWidget extends ConsumerWidget {
                     ),
                     Center(
                       child: Text(
-                        'Total\n${data.fold<int>(0, (sum, item) => sum + item.count)}',
+                        '${AppLocalizations.of(context)!.total}\n${data.fold<int>(0, (sum, item) => sum + item.count)}',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 20,
@@ -71,7 +72,7 @@ class PieChartWidget extends ConsumerWidget {
                   ],
                 ),
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('Error: $error')),
+                error: (error, stack) => Center(child: Text('${AppLocalizations.of(context)!.error}: $error')),
               ),
             ),
             const SizedBox(height: 30),

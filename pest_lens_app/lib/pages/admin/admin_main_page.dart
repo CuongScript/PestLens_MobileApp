@@ -6,6 +6,7 @@ import 'package:pest_lens_app/components/my_pie_chart.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/provider/dashboard_touch_provider.dart';
 import 'package:pest_lens_app/provider/dashboard_uq_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminMainPage extends ConsumerStatefulWidget {
   const AdminMainPage({super.key});
@@ -30,7 +31,8 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
-        title: const Text('Dashboard', style: CustomTextStyles.pageTitle),
+        title: Text(AppLocalizations.of(context)!.dashboard,
+            style: CustomTextStyles.pageTitle),
         elevation: 0,
       ),
       body: SafeArea(
@@ -48,7 +50,8 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
             ),
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: $error')),
+          error: (error, stack) => Center(
+              child: Text('${AppLocalizations.of(context)!.error}: $error')),
         ),
       ),
     );

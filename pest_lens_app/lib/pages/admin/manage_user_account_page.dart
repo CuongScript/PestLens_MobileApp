@@ -10,6 +10,7 @@ import 'package:pest_lens_app/provider/filtered_users_provider.dart';
 import 'package:pest_lens_app/provider/list_all_users_provider.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:pest_lens_app/services/admin_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ManageUserAccountPage extends ConsumerStatefulWidget {
   const ManageUserAccountPage({super.key});
@@ -89,13 +90,17 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
         await ref.read(allUsersProvider.notifier).fetchAllUsers();
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User status updated successfully')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.userStatusUpdatedSuccess)),
         );
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update user status: $e')),
+        SnackBar(
+            content: Text(
+                '${AppLocalizations.of(context)!.userStatusUpdatedFail}: $e')),
       );
     }
   }
@@ -114,7 +119,8 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
-        title: const Text('User Accounts', style: CustomTextStyles.pageTitle),
+        title: Text(AppLocalizations.of(context)!.userAccount,
+            style: CustomTextStyles.pageTitle),
         elevation: 0,
       ),
       body: SafeArea(
@@ -159,10 +165,13 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
             Expanded(
               child: filteredUsersAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('Error: $error')),
+                error: (error, stack) => Center(
+                    child:
+                        Text('${AppLocalizations.of(context)!.error}: $error')),
                 data: (users) {
                   if (users.isEmpty) {
-                    return const Center(child: Text('No users found'));
+                    return Center(
+                        child: Text(AppLocalizations.of(context)!.noUserFound));
                   }
                   return ListView.builder(
                     itemCount: users.length,

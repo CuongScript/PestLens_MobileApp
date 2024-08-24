@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsectImageShowcase extends StatefulWidget {
   final List<String> imageUrls;
@@ -56,8 +58,8 @@ class _InsectImageShowcaseState extends State<InsectImageShowcase> {
       return Container(
         height: 200,
         color: Colors.grey[300],
-        child: const Center(
-          child: Text('No images available'),
+        child: Center(
+          child: Text(AppLocalizations.of(context)!.noImg),
         ),
       );
     }

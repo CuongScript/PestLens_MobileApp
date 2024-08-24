@@ -5,6 +5,7 @@ import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/services/s3_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserBriefInfoRow extends StatelessWidget {
   final UserFullInfoModel user;
@@ -20,8 +21,8 @@ class UserBriefInfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     String roleDisplayName =
         user.roles.isNotEmpty && user.roles.first == Role.ROLE_ADMIN
-            ? 'Admin Account'
-            : 'Farmer Account';
+            ? AppLocalizations.of(context)!.adminAccount
+            : AppLocalizations.of(context)!.farmerAccount;
 
     TextStyle statusTextStyle;
     switch (user.accountStatus) {

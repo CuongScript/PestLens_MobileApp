@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
 import 'package:pest_lens_app/services/insect_record_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyBarChart extends StatefulWidget {
   final VoidCallback onCalendarButtonPressed;
@@ -82,9 +84,9 @@ class _MyBarChartState extends State<MyBarChart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Aggregation Number of Insects',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.arggeNumber,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -101,7 +103,7 @@ class _MyBarChartState extends State<MyBarChart> {
               child: _insectTotals.isEmpty
                   ? Center(
                       child: Text(
-                        'No data available ',
+                        AppLocalizations.of(context)!.noData,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[600],

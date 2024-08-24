@@ -58,7 +58,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       // Handling any kind of exception during the request
       messenger.showSnackBar(
         SnackBar(
-          content: Text('$errorForgotPassword \nException: $e'),
+          content: Text('${errorForgotPassword} \nException: $e'),
         ),
       );
     }

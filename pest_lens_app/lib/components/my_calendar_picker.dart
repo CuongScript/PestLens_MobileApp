@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyCalendarPicker extends StatefulWidget {
   final Function(DateTimeRange?) onDateRangeSelected;
@@ -36,8 +37,8 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
 
       if (end.difference(start).inDays > 30) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Please select a range of 30 days or less')),
+          SnackBar(
+              content: Text(AppLocalizations.of(context)!.selectRange)),
         );
         return;
       }
@@ -59,9 +60,9 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              const Text(
-                'Select Date Range',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                AppLocalizations.of(context)!.selectDateRange,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: const Icon(Icons.refresh),
@@ -91,7 +92,7 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                         PickerDateRange(sd, ed);
                   });
                 },
-                tooltip: 'Set to Current Date',
+                tooltip: AppLocalizations.of(context)!.setToCurrentDate,
               )
             ]),
             const SizedBox(height: 16),
@@ -133,7 +134,7 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Cancel'),
+                    child: Text(AppLocalizations.of(context)!.cancel),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -143,7 +144,7 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                       widget.onDateRangeSelected(selectedRange);
                       Navigator.pop(context);
                     },
-                    child: const Text('Confirm'),
+                    child: Text(AppLocalizations.of(context)!.confirm),
                   ),
                 ),
               ],

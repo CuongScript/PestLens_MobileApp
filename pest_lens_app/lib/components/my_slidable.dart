@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:pest_lens_app/models/account_status_enum.dart';
 import 'package:pest_lens_app/components/user_brief_info_row.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MySlidable extends StatelessWidget {
   final UserFullInfoModel user;
@@ -22,17 +23,21 @@ class MySlidable extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(isActivate ? 'Activate User' : 'Deactivate User'),
-          content: Text(
-              'Are you sure you want to ${isActivate ? 'activate' : 'deactivate'} this user?'),
+          title: Text(isActivate
+              ? AppLocalizations.of(context)!.activeUser
+              : AppLocalizations.of(context)!.deactiveUser),
+          content: Text(isActivate
+              ? AppLocalizations.of(context)!.activateUser
+              : AppLocalizations.of(context)!.deactivateUser),
+          // 'Are you sure you want to ${isActivate ? 'activate' : 'deactivate'} this user?'),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Confirm'),
+              child: Text(AppLocalizations.of(context)!.confirm),
             ),
           ],
         );
@@ -57,7 +62,7 @@ class MySlidable extends StatelessWidget {
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
           icon: Icons.check,
-          label: 'Activate',
+          label: AppLocalizations.of(context)!.activate,
         ),
       );
     } else if (user.accountStatus == AccountStatusEnum.PENDING) {
@@ -72,7 +77,7 @@ class MySlidable extends StatelessWidget {
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
           icon: Icons.check,
-          label: 'Activate',
+          label: AppLocalizations.of(context)!.activate,
         ),
       );
       actions.add(
@@ -86,7 +91,7 @@ class MySlidable extends StatelessWidget {
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
           icon: Icons.delete,
-          label: 'Deactivate',
+          label: AppLocalizations.of(context)!.deactivate,
         ),
       );
     }
@@ -104,7 +109,7 @@ class MySlidable extends StatelessWidget {
           backgroundColor: Colors.red,
           foregroundColor: Colors.white,
           icon: Icons.delete,
-          label: 'Deactivate',
+          label: AppLocalizations.of(context)!.deactivate,
         ),
       );
     }

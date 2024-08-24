@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:pest_lens_app/services/s3_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageFullScreenPage extends StatelessWidget {
   final File? imageFile;
@@ -28,7 +29,9 @@ class ImageFullScreenPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Text(
+                    '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
           } else if (snapshot.hasData && snapshot.data != null) {
             return Center(
               child: InteractiveViewer(
@@ -43,7 +46,7 @@ class ImageFullScreenPage extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: Text('No image data'));
+            return Center(child: Text(AppLocalizations.of(context)!.noImgData));
           }
         },
       ),

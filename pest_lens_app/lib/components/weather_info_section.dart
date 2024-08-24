@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/services/famer_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WeatherInfoSection extends StatefulWidget {
   const WeatherInfoSection({Key? key}) : super(key: key);
@@ -41,11 +42,11 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
         });
       }
     } catch (e) {
-      print('Error fetching weather data: $e');
+      print('${AppLocalizations.of(context)!.weatherDataErrorFetch}: $e');
       if (_mounted) {
         setState(() {
           _isLoading = false;
-          _errorMessage = 'Weather information is not available';
+          _errorMessage = AppLocalizations.of(context)!.weatherInfoError;
         });
       }
     }

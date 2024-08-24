@@ -8,7 +8,7 @@ import 'package:pest_lens_app/models/farmer_register_model.dart';
 import 'package:pest_lens_app/provider/user_register_model_provider.dart';
 import 'package:pest_lens_app/pages/authen/signup_profile_page.dart';
 import 'package:pest_lens_app/utils/textfield_validator.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/components/signup_popup_dialog.dart';
 
 class SignUpPage extends ConsumerWidget {
@@ -68,8 +68,8 @@ class SignUpPage extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 100),
-                    const Text(
-                      "Create Account", // Replace with actual string if using localization
+                    Text(
+                      AppLocalizations.of(context)!.createAccount,
                       style: CustomTextStyles.appName,
                     ),
                     const SizedBox(height: 37),
@@ -80,11 +80,11 @@ class SignUpPage extends ConsumerWidget {
                       prefixIcon:
                           const Icon(Icons.person_outline, color: Colors.black),
                       hintText:
-                          "Username", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.username,
                       showRevealButton: false,
                       textInputAction: TextInputAction.next,
                       labelText:
-                          "Username", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.username,
                       validator: (value) => TextfieldValidator.validateUsername(
                           value, newContext),
                       onChanged: (value) {
@@ -99,11 +99,11 @@ class SignUpPage extends ConsumerWidget {
                       prefixIcon:
                           const Icon(Icons.email_outlined, color: Colors.black),
                       hintText:
-                          "Email", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.logInEmail, // Replace with actual string if using localization
                       showRevealButton: false,
                       textInputAction: TextInputAction.next,
                       labelText:
-                          "Email", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.logInEmail, // Replace with actual string if using localization
                       validator: (value) =>
                           TextfieldValidator.validateEmail(value, newContext),
                       onChanged: (value) {
@@ -118,11 +118,11 @@ class SignUpPage extends ConsumerWidget {
                       prefixIcon:
                           const Icon(Icons.lock_outline, color: Colors.black),
                       hintText:
-                          "Password", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.logInPass, // Replace with actual string if using localization
                       showRevealButton: true,
                       textInputAction: TextInputAction.next,
                       labelText:
-                          "Password", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.logInPass, // Replace with actual string if using localization
                       validator: (value) => TextfieldValidator.validatePassword(
                           value, newContext),
                       onChanged: (value) {
@@ -137,11 +137,11 @@ class SignUpPage extends ConsumerWidget {
                       prefixIcon:
                           const Icon(Icons.lock_outline, color: Colors.black),
                       hintText:
-                          "Re-enter Password", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.reEnterPass, // Replace with actual string if using localization
                       showRevealButton: true,
                       textInputAction: TextInputAction.done,
                       labelText:
-                          "Re-enter Password", // Replace with actual string if using localization
+                          AppLocalizations.of(context)!.reEnterPass, // Replace with actual string if using localization
                       validator: (value) =>
                           TextfieldValidator.validateRePassword(
                               value, passwordController.text, newContext),
@@ -158,12 +158,12 @@ class SignUpPage extends ConsumerWidget {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          buttonText: "Back",
+                          buttonText: AppLocalizations.of(context)!.back,
                           isFilled: false,
                         ),
                         MySubmitButton(
                           onTap: signUserUp,
-                          buttonText: "Next",
+                          buttonText: AppLocalizations.of(context)!.next,
                           isFilled: true,
                         ),
                       ],

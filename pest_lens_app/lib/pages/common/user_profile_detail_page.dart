@@ -7,6 +7,7 @@ import 'package:pest_lens_app/models/account_status_enum.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:pest_lens_app/components/my_submit_button.dart';
 import 'package:pest_lens_app/components/my_text_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserProfileDetailPage extends StatelessWidget {
   final UserFullInfoModel user;
@@ -18,7 +19,7 @@ class UserProfileDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile Details',
+        title: Text(AppLocalizations.of(context)!.userProfileDetail,
             style: CustomTextStyles.pageTitle),
         leading: IconButton(
           icon: const MyBackButton(),
@@ -36,37 +37,37 @@ class UserProfileDetailPage extends StatelessWidget {
               isReadOnly: true,
             ),
             const SizedBox(height: 24),
-            _buildInfoField('Username', user.username, Icons.person),
+            _buildInfoField(AppLocalizations.of(context)!.username, user.username, Icons.person),
             const SizedBox(height: 20),
-            _buildInfoField('Email', user.email, Icons.email),
+            _buildInfoField(AppLocalizations.of(context)!.logInEmail, user.email, Icons.email),
             const SizedBox(height: 20),
-            _buildInfoField('First Name', user.firstName, Icons.person_outline),
+            _buildInfoField(AppLocalizations.of(context)!.firstName, user.firstName, Icons.person_outline),
             const SizedBox(height: 20),
-            _buildInfoField('Last Name', user.lastName, Icons.person_outline),
+            _buildInfoField(AppLocalizations.of(context)!.lastName, user.lastName, Icons.person_outline),
             const SizedBox(height: 20),
-            _buildInfoField('Phone', user.phoneNumber, Icons.phone),
+            _buildInfoField(AppLocalizations.of(context)!.phone, user.phoneNumber, Icons.phone),
             const SizedBox(height: 20),
             _buildInfoField(
-                'Role',
+                AppLocalizations.of(context)!.role,
                 user.roles.map((r) => r.toString().split('.').last).join(', '),
                 Icons.work),
             const SizedBox(height: 20),
             _buildInfoField(
-                'Account Status',
+                AppLocalizations.of(context)!.accountStatus,
                 user.accountStatus.toString().split('.').last,
                 Icons.verified_user),
             const SizedBox(height: 20),
-            _buildInfoField('Created At', _formatDate(user.createdAt),
+            _buildInfoField(AppLocalizations.of(context)!.createdAt, _formatDate(user.createdAt),
                 Icons.calendar_today),
             const SizedBox(height: 20),
             _buildInfoField(
-                'Last Login', _formatDate(user.lastLogin), Icons.access_time),
+                AppLocalizations.of(context)!.lastLogin, _formatDate(user.lastLogin), Icons.access_time),
             const SizedBox(height: 20),
-            _buildInfoField('Activated At', _formatDate(user.activatedAt),
+            _buildInfoField(AppLocalizations.of(context)!.activateAt, _formatDate(user.activatedAt),
                 Icons.check_circle_outline),
             const SizedBox(height: 20),
             _buildInfoField(
-                'New User', user.newUser ? 'Yes' : 'No', Icons.new_releases),
+                AppLocalizations.of(context)!.newUser, user.newUser ? AppLocalizations.of(context)!.yes : AppLocalizations.of(context)!.no, Icons.new_releases),
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -98,13 +99,13 @@ class UserProfileDetailPage extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     final activatedButton = MySubmitButton(
       onTap: () => onStatusChange(user, true),
-      buttonText: 'Activate',
+      buttonText: AppLocalizations.of(context)!.activate,
       isFilled: true,
       filledColor: Colors.green,
     );
     final deactivatedButton = MySubmitButton(
       onTap: () => onStatusChange(user, false),
-      buttonText: 'Deactivate',
+      buttonText: AppLocalizations.of(context)!.deactivate,
       isFilled: true,
       filledColor: Colors.red,
     );

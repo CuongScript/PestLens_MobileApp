@@ -16,6 +16,7 @@ import 'package:pest_lens_app/models/insect_model.dart';
 import 'package:pest_lens_app/services/insect_record_service.dart';
 import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/utils/constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FarmerMainPage extends StatefulWidget {
   const FarmerMainPage({super.key});
@@ -68,7 +69,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
         _processedInsectData = _insectRecordService.processInsectData(data);
       });
     } catch (e) {
-      print('Error fetching insect data: $e');
+      print('${AppLocalizations.of(context)!.errorFetchInsectData}: $e');
       setState(() {
         _insectData = [];
         _processedInsectData = [];
@@ -83,8 +84,8 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
         onDateRangeSelected: (range) {
           if (range != null) {
             if (range.end.difference(range.start).inDays > 30) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Please select a range of 30 days or less '),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(AppLocalizations.of(context)!.selectRange),
               ));
               return;
             }
@@ -121,7 +122,8 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: primaryBackgroundColor,
-          title: const Text('PH Farm', style: CustomTextStyles.pageTitle),
+          title: Text(AppLocalizations.of(context)!.farmTitle,
+              style: CustomTextStyles.pageTitle),
           elevation: 0,
           actions: [
             if (!_isDefaultMode)
@@ -152,13 +154,13 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                   endDate: _endDate,
                   onCalendarButtonPressed: _showCalendarPicker,
                 ),
-                const MyCameraBox(
+                 MyCameraBox(
                   url: Config.camera1APIUrl,
-                  title: "Camera Feed 1",
+                  title: AppLocalizations.of(context)!.camFeed1,
                 ),
-                const MyCameraBox(
+                 MyCameraBox(
                   url: Config.camera2APIUrl,
-                  title: "Camera Feed 2",
+                  title: AppLocalizations.of(context)!.camFeed2,
                   token: Config.camera2Token,
                 ),
               ],
@@ -184,9 +186,9 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                             fontSize: 16,
                           ),
                         ),
-                        const Text(
-                          'Quantity',
-                          style: TextStyle(
+                        Text(
+                          AppLocalizations.of(context)!.quantity,
+                          style: const TextStyle(
                             color: Color(0xFF0064c3),
                             fontWeight: FontWeight.bold,
                             fontSize: 16,

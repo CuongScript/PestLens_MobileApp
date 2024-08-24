@@ -8,6 +8,7 @@ import 'package:pest_lens_app/models/insect_model.dart';
 import 'package:pest_lens_app/services/famer_service.dart';
 import 'package:pest_lens_app/pages/farmer/insect_lookup_result_page.dart';
 import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsectLookupPage extends StatefulWidget {
   const InsectLookupPage({super.key});
@@ -73,7 +74,7 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
       if (e is Exception) {
         errorMessage = e.toString().replaceAll("Exception: ", "");
       } else {
-        errorMessage = 'An unexpected error occurred. Please try again.';
+        errorMessage = AppLocalizations.of(context)!.unexpectedError;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -82,7 +83,7 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 5),
           action: SnackBarAction(
-            label: 'Dismiss',
+            label: AppLocalizations.of(context)!.dismiss,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
             },
@@ -131,7 +132,8 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
-        title: const Text('Insect Lookup', style: CustomTextStyles.pageTitle),
+        title: Text(AppLocalizations.of(context)!.insectLookup,
+            style: CustomTextStyles.pageTitle),
         elevation: 0,
       ),
       body: Stack(
@@ -141,10 +143,10 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Center the insect in the image\nEnsure the insect is clearly focused',
+                Text(
+                  AppLocalizations.of(context)!.centerImg,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                  style: const TextStyle(fontSize: 16, color: Colors.black54),
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -153,12 +155,12 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
                     GestureDetector(
                       onTap: _pickImageFromGallery,
                       child: _buildImageSourceButton(
-                          'Photos', Icons.photo_library, _pickImageFromGallery),
+                          AppLocalizations.of(context)!.photos, Icons.photo_library, _pickImageFromGallery),
                     ),
                     GestureDetector(
                       onTap: _takePhoto,
                       child: _buildImageSourceButton(
-                          'Camera', Icons.camera_alt, _takePhoto),
+                          AppLocalizations.of(context)!.camera, Icons.camera_alt, _takePhoto),
                     ),
                   ],
                 ),
@@ -174,7 +176,7 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
                 const SizedBox(height: 20),
                 MySubmitButton(
                   onTap: _image != null ? _detectInsects : null,
-                  buttonText: "Identify Insect",
+                  buttonText: AppLocalizations.of(context)!.identifyInsect,
                   isFilled: true,
                   filledColor: const Color(0xFF0064C3),
                 ),

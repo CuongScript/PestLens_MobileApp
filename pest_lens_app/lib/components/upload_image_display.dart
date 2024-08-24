@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:pest_lens_app/pages/farmer/image_full_screen_page.dart';
 import 'package:pest_lens_app/services/s3_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UploadImageDisplay extends StatefulWidget {
   final File? imageFile;
@@ -30,12 +31,12 @@ class _UploadImageDisplayState extends State<UploadImageDisplay> {
   void _loadImage() {
     if (widget.imageFile != null) {
       _imageFuture = widget.imageFile!.readAsBytes().catchError((error) {
-        print('Error reading local file: $error');
+        print('${AppLocalizations.of(context)!.errorReadLocalFile}: $error');
       });
     } else if (widget.objectKey != null) {
       _imageFuture =
           S3Service().getImageData(widget.objectKey!).catchError((error) {
-        print('Error fetching image from S3: $error');
+        print('${AppLocalizations.of(context)!.errorFetchImgS3}: $error');
       });
     } else {
       _imageFuture = Future.value(null);
@@ -55,7 +56,7 @@ class _UploadImageDisplayState extends State<UploadImageDisplay> {
         } else if (snapshot.hasData && snapshot.data != null) {
           return _buildImageWidget(snapshot.data!);
         } else {
-          return const Center(child: Text('No image data'));
+          return Center(child: Text(AppLocalizations.of(context)!.noImgData));
         }
       },
     );
@@ -68,9 +69,9 @@ class _UploadImageDisplayState extends State<UploadImageDisplay> {
         children: [
           const Icon(Icons.error_outline, size: 60, color: Colors.red),
           const SizedBox(height: 16),
-          const Text(
-            'Failed to load image',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          Text(
+            AppLocalizations.of(context)!.failImgUpload,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           ElevatedButton(
@@ -79,7 +80,7 @@ class _UploadImageDisplayState extends State<UploadImageDisplay> {
                 _loadImage();
               });
             },
-            child: const Text('Retry'),
+            child: Text(AppLocalizations.of(context)!.retry),
           ),
         ],
       ),

@@ -12,6 +12,7 @@ import 'package:pest_lens_app/provider/user_register_model_provider.dart';
 import 'package:pest_lens_app/services/auth_service.dart';
 import 'package:pest_lens_app/utils/textfield_validator.dart';
 import 'package:pest_lens_app/components/signup_popup_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignupProfilePage extends ConsumerStatefulWidget {
   const SignupProfilePage({super.key});
@@ -76,7 +77,7 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
               () {
                 showSignupPopup(context, true,
                     message:
-                        'Signup successful, but profile image upload failed.');
+                        AppLocalizations.of(context)!.successSignAndFailImgUpload);
               },
             );
           } else {
@@ -111,8 +112,8 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                const Text(
-                  "User Profile",
+                Text(
+                  AppLocalizations.of(context)!.userProfile,
                   style: CustomTextStyles.appName,
                 ),
                 const SizedBox(height: 28),
@@ -126,10 +127,10 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
                   obscureText: false,
                   prefixIcon:
                       const Icon(Icons.person_outline, color: Colors.black),
-                  hintText: "First Name",
+                  hintText: AppLocalizations.of(context)!.firstName,
                   showRevealButton: false,
                   textInputAction: TextInputAction.next,
-                  labelText: "First Name",
+                  labelText: AppLocalizations.of(context)!.firstName,
                   validator: (value) =>
                       TextfieldValidator.validateFirstName(value, context),
                   onChanged: (value) {
@@ -143,10 +144,10 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
                   obscureText: false,
                   prefixIcon:
                       const Icon(Icons.email_outlined, color: Colors.black),
-                  hintText: "Last Name",
+                  hintText: AppLocalizations.of(context)!.lastName,
                   showRevealButton: false,
                   textInputAction: TextInputAction.next,
-                  labelText: "Last Name",
+                  labelText: AppLocalizations.of(context)!.lastName,
                   validator: (value) =>
                       TextfieldValidator.validateLastName(value, context),
                   onChanged: (value) {
@@ -160,10 +161,10 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
                   obscureText: false,
                   prefixIcon: const Icon(Icons.phone_android_outlined,
                       color: Colors.black),
-                  hintText: "Phone Number",
+                  hintText: AppLocalizations.of(context)!.phoneNum,
                   showRevealButton: false,
                   textInputAction: TextInputAction.done,
-                  labelText: "Phone Number",
+                  labelText: AppLocalizations.of(context)!.phoneNum,
                   validator: (value) =>
                       TextfieldValidator.validatePhoneNumber(value, context),
                   onChanged: (value) {
@@ -181,12 +182,12 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
 
                         Navigator.pop(context);
                       },
-                      buttonText: "Cancel",
+                      buttonText: AppLocalizations.of(context)!.cancel,
                       isFilled: false,
                     ),
                     MySubmitButton(
                       onTap: signUserUp,
-                      buttonText: "SignUp",
+                      buttonText: AppLocalizations.of(context)!.signUp,
                       isFilled: true,
                     ),
                   ],

@@ -107,11 +107,12 @@ class _LoginPageState extends State<LoginPage> {
                     prefixIcon:
                         const Icon(Icons.email_outlined, color: Colors.black),
                     hintText:
-                        'Enter ${AppLocalizations.of(context)!.username} or ${AppLocalizations.of(context)!.logInEmail}',
+                        // 'Enter ${AppLocalizations.of(context)!.username} or ${AppLocalizations.of(context)!.logInEmail}',
+                        '',
                     showRevealButton: false,
                     textInputAction: TextInputAction.next,
                     labelText:
-                        '${AppLocalizations.of(context)!.username} or ${AppLocalizations.of(context)!.logInEmail}',
+                        '${AppLocalizations.of(context)!.username} / ${AppLocalizations.of(context)!.logInEmail}',
                   ),
 
                   const SizedBox(height: 20),
@@ -123,7 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                     prefixIcon:
                         const Icon(Icons.lock_outline, color: Colors.black),
                     hintText:
-                        'Enter ${AppLocalizations.of(context)!.logInPass}',
+                        // 'Enter ${AppLocalizations.of(context)!.logInPass}',
+                        '',
                     showRevealButton: true,
                     textInputAction: TextInputAction.done,
                     labelText: AppLocalizations.of(context)!.logInPass,

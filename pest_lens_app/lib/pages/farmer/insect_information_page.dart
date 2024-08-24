@@ -9,6 +9,7 @@ import 'package:pest_lens_app/components/my_filter_button.dart';
 import 'package:pest_lens_app/pages/farmer/insect_profile_page.dart';
 import 'package:pest_lens_app/provider/filtered_insects_provider.dart';
 import 'package:pest_lens_app/services/insect_information_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsectInformationPage extends ConsumerStatefulWidget {
   const InsectInformationPage({Key? key}) : super(key: key);
@@ -76,8 +77,10 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
       final images = await _service.fetchInsectImages(insect.englishName);
       return images.isNotEmpty ? images.first : '';
     } catch (e) {
-      print('Error fetching image for ${insect.englishName}: $e');
-      _showErrorSnackBar('Failed to load image for ${insect.englishName}');
+      print(
+          '${AppLocalizations.of(context)!.errorFetchImg} ${insect.englishName}: $e');
+      _showErrorSnackBar(
+          '${AppLocalizations.of(context)!.errorLoadImg} ${insect.englishName}');
       return '';
     }
   }
@@ -89,8 +92,8 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Insect Information',
+        title: Text(
+          AppLocalizations.of(context)!.insectInfo,
           style: CustomTextStyles.pageTitle,
         ),
         actions: [
@@ -100,7 +103,9 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
             onPressed: () {
               ref.refresh(allInsectsProvider);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Insect data refreshed')),
+                SnackBar(
+                    content: Text(
+                        AppLocalizations.of(context)!.insectDataRefreshed)),
               );
             },
           ),
@@ -115,7 +120,7 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
                 Expanded(
                   child: MySearchBar(
                     onChanged: _handleSearch,
-                    hintText: 'Search insects',
+                    hintText: AppLocalizations.of(context)!.searchInsect,
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -175,8 +180,9 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) {
                 _showErrorSnackBar(
-                    'Failed to load insects. Please try again later.');
-                return const Center(child: Text('Error loading insects'));
+                    AppLocalizations.of(context)!.errorLoadInsectImg);
+                return Center(
+                    child: Text(AppLocalizations.of(context)!.errorLoadInsect));
               },
             ),
           ),

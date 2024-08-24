@@ -5,6 +5,7 @@ import 'package:pest_lens_app/components/my_back_button.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/upload_image_display.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsectLookupResultPage extends StatefulWidget {
   final String objectKey;
@@ -37,7 +38,8 @@ class _InsectLookupResultPageState extends State<InsectLookupResultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Count Result', style: CustomTextStyles.pageTitle),
+        title: Text(AppLocalizations.of(context)!.aiCountResult,
+            style: CustomTextStyles.pageTitle),
         leading: IconButton(
           icon: const MyBackButton(),
           onPressed: () => Navigator.of(context).pop(),

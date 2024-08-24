@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/pages/authen/login_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showSignupPopup(BuildContext context, bool success, {String? message}) {
   showDialog(
@@ -17,15 +18,17 @@ void showSignupPopup(BuildContext context, bool success, {String? message}) {
             ),
             const SizedBox(height: 20),
             Text(
-              success ? "Signup Success" : "Signup Failed",
+              success
+                  ? AppLocalizations.of(context)!.signupSuccess
+                  : AppLocalizations.of(context)!.signUpFailed,
               style: CustomTextStyles.labelTextField,
             ),
             const SizedBox(height: 10),
             Text(
               message ??
                   (success
-                      ? "Your account has been created successfully."
-                      : "There was an error creating your account. Please try again."),
+                      ? AppLocalizations.of(context)!.accountCreatedSuccess
+                      : AppLocalizations.of(context)!.accountCreatedFailed),
               textAlign: TextAlign.center,
               style: CustomTextStyles.labelTextField,
             ),
@@ -40,13 +43,13 @@ void showSignupPopup(BuildContext context, bool success, {String? message}) {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    child: const Text("Proceed to Login"),
+                    child: Text(AppLocalizations.of(context)!.comeToLogin),
                   )
                 : ElevatedButton(
                     onPressed: () {
                       Navigator.pop(dialogContext);
                     },
-                    child: const Text("Try Again"),
+                    child: Text(AppLocalizations.of(context)!.tryAgain),
                   ),
           ],
         ),
@@ -60,20 +63,19 @@ void showImageUploadWarning(BuildContext context, VoidCallback onContinue) {
     context: context,
     builder: (BuildContext dialogContext) {
       return AlertDialog(
-        title: const Text('Warning'),
-        content: const Text(
-          'Profile image upload failed, but the signup process can continue. '
-          'You can try uploading your profile image later.',
+        title: Text(AppLocalizations.of(context)!.warning),
+        content: Text(
+          AppLocalizations.of(context)!.profileImgFail,
         ),
         actions: <Widget>[
           TextButton(
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
             onPressed: () {
               Navigator.of(dialogContext).pop();
             },
           ),
           TextButton(
-            child: const Text('Continue Signup'),
+            child: Text(AppLocalizations.of(context)!.continueSignup),
             onPressed: () {
               Navigator.of(dialogContext).pop();
               onContinue();
