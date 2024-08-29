@@ -36,6 +36,42 @@ class AuthService {
     }
   }
 
+  Future<User?> signUserInOauth(String idToken) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $idToken'
+    };
+
+    var request = http.Request(
+        'GET', Uri.parse('${Config.apiUrl}/api/users/oauth/google'));
+    request.headers.addAll(headers);
+
+    try {
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        var responseData = await response.stream.bytesToString();
+        var jsonResponse = json.decode(responseData);
+
+        User user = User.fromJson(jsonResponse);
+
+        // Save user information
+        await UserPreferences.saveUser(user);
+
+        // Register device ID
+        await registerDeviceId(user.username, user.tokenType, user.accessToken);
+
+        return user;
+      } else {
+        print('Failed to sign in with OAuth: ${response.reasonPhrase}');
+        return null;
+      }
+    } catch (e) {
+      print('Error during OAuth sign-in: $e');
+      return null;
+    }
+  }
+
   Future<bool> registerDeviceId(
       String username, String tokenType, String accessToken) async {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -53,7 +89,6 @@ class AuthService {
           'POST', Uri.parse('${Config.apiUrl}/api/users/register-device-id'));
 
       request.body = json.encode({"username": username, "deviceId": deviceId});
-
       request.headers.addAll(headers);
 
       try {
@@ -84,7 +119,6 @@ class AuthService {
         profileImageKey = await _s3Service.uploadProfileImage(profileImage);
       } catch (e) {
         print('Failed to upload profile image: $e');
-        // Return with error, but don't stop the signup process
         return {
           'success': false,
           'message':

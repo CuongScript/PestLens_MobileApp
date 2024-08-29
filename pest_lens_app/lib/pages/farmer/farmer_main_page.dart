@@ -159,7 +159,6 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                 const MyCameraBox(
                   url: Config.camera2APIUrl,
                   title: "Camera Feed 2",
-                  token: Config.camera2Token,
                 ),
               ],
             ),

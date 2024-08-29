@@ -4,7 +4,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/services/famer_service.dart';
 
 class WeatherInfoSection extends StatefulWidget {
-  const WeatherInfoSection({Key? key}) : super(key: key);
+  const WeatherInfoSection({super.key});
 
   @override
   _WeatherInfoSectionState createState() => _WeatherInfoSectionState();

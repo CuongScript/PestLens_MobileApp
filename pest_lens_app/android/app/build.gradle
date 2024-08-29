@@ -45,6 +45,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+                // Add this for Google Sign-In
+        manifestPlaceholders += [
+            'appAuthRedirectScheme': 'com.phuonghai.pestapp']
     }
 
     buildTypes {

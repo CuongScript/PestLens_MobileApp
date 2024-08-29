@@ -13,6 +13,8 @@ import 'package:pest_lens_app/pages/authen/signup_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
 import 'package:pest_lens_app/services/auth_service.dart';
+import 'package:pest_lens_app/utils/config.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,31 +39,67 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (user != null) {
-      // Check if the widget is still mounted before navigating
       if (!mounted) return;
-
-      // Navigate based on role
-      if (user.roles.contains(Role.ROLE_ADMIN)) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminTabPage()),
-        );
-      } else if (user.roles.contains(Role.ROLE_USER)) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const FarmerTabPage()),
-        );
-      }
+      _navigateBasedOnRole(user);
     } else {
-      // Clear the input fields
       usernameController.clear();
       passwordController.clear();
-
-      // Show an error message to the user
       messenger.showSnackBar(
-        SnackBar(
-          content: Text(invalidCredentialsText),
-        ),
+        SnackBar(content: Text(invalidCredentialsText)),
+      );
+    }
+  }
+
+  void signInWithGoogle() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final invalidCredentialsText =
+        AppLocalizations.of(context)!.invalidCredentials;
+
+    try {
+      final url = Uri.parse('${Config.googleAuthEndpoint}?'
+          'response_type=${Config.oauthResponseType}&'
+          'client_id=${Config.googleClientId}&'
+          'redirect_uri=${Uri.encodeComponent(Config.redirectUri)}&'
+          'scope=${Uri.encodeComponent(Config.oauthScopes)}&'
+          'access_type=${Config.oauthAccessType}&'
+          'include_granted_scopes=${Config.oauthIncludeGrantedScopes}&'
+          'state=${Config.oauthState}');
+
+      final result = await FlutterWebAuth.authenticate(
+        url: url.toString(),
+        callbackUrlScheme: Config.callbackUrlScheme,
+      );
+
+      final code = Uri.parse(result).queryParameters['code'];
+      if (code != null) {
+        User? user = await _authService.signUserInOauth(code);
+        if (user != null) {
+          if (!mounted) return;
+          _navigateBasedOnRole(user);
+        } else {
+          messenger.showSnackBar(
+            SnackBar(content: Text(invalidCredentialsText)),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error during Google Sign-In: $e');
+      messenger.showSnackBar(
+        const SnackBar(content: Text("Error during Google Sign-In")),
+      );
+    }
+  }
+
+  void _navigateBasedOnRole(User user) {
+    if (user.roles.contains(Role.ROLE_ADMIN)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminTabPage()),
+      );
+    } else if (user.roles.contains(Role.ROLE_USER)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const FarmerTabPage()),
       );
     }
   }
@@ -84,23 +122,13 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 50),
-
-                  // Logo
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 90.0),
-                    child: Image.asset(
-                      'lib/assets/images/appIcon.png',
-                    ),
+                    child: Image.asset('lib/assets/images/appIcon.png'),
                   ),
-
                   const SizedBox(height: 39.05),
-
-                  // App name
                   const Text("InsectInsight", style: CustomTextStyles.appName),
-
                   const SizedBox(height: 56),
-
-                  // Username textfield
                   MyTextField(
                     controller: usernameController,
                     obscureText: false,
@@ -113,10 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                     labelText:
                         '${AppLocalizations.of(context)!.username} or ${AppLocalizations.of(context)!.logInEmail}',
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Password textfield
                   MyTextField(
                     controller: passwordController,
                     obscureText: true,
@@ -128,59 +153,56 @@ class _LoginPageState extends State<LoginPage> {
                     textInputAction: TextInputAction.done,
                     labelText: AppLocalizations.of(context)!.logInPass,
                   ),
-
                   const SizedBox(height: 20),
-
-                  // Forgot password
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
                                   builder: (context) =>
-                                      const ForgotPasswordPage(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.logInForgotPass,
-                              style: CustomTextStyles.forgotPass,
-                            ))
+                                      const ForgotPasswordPage()),
+                            );
+                          },
+                          child: Text(
+                            AppLocalizations.of(context)!.logInForgotPass,
+                            style: CustomTextStyles.forgotPass,
+                          ),
+                        )
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 30),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      //sign up
                       MySubmitButton(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SignUpPage(),
-                            ),
+                                builder: (context) => const SignUpPage()),
                           );
                         },
                         buttonText: AppLocalizations.of(context)!.signUp,
                         isFilled: false,
                       ),
-
-                      // Sign in button
                       MySubmitButton(
                         onTap: signUserIn,
                         buttonText: AppLocalizations.of(context)!.signIn,
                         isFilled: true,
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 20),
+                  MySubmitButton(
+                    onTap: signInWithGoogle,
+                    buttonText: "Google Sign in",
+                    isFilled: true,
                   ),
                 ],
               ),

@@ -34,15 +34,15 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
     super.initState();
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
+  // void _showErrorSnackBar(String message) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(message),
+  //       backgroundColor: Colors.red,
+  //       duration: const Duration(seconds: 3),
+  //     ),
+  //   );
+  // }
 
   void _handleFilterChanged(List<String> filters) {
     setState(() {
@@ -77,7 +77,7 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
       return images.isNotEmpty ? images.first : '';
     } catch (e) {
       print('Error fetching image for ${insect.englishName}: $e');
-      _showErrorSnackBar('Failed to load image for ${insect.englishName}');
+      // _showErrorSnackBar('Failed to load image for ${insect.englishName}');
       return '';
     }
   }
@@ -174,8 +174,8 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) {
-                _showErrorSnackBar(
-                    'Failed to load insects. Please try again later.');
+                // _showErrorSnackBar(
+                //     'Failed to load insects. Please try again later.');
                 return const Center(child: Text('Error loading insects'));
               },
             ),
