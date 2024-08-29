@@ -35,15 +35,15 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
     super.initState();
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
+  // void _showErrorSnackBar(String message) {
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     SnackBar(
+  //       content: Text(message),
+  //       backgroundColor: Colors.red,
+  //       duration: const Duration(seconds: 3),
+  //     ),
+  //   );
+  // }
 
   void _handleFilterChanged(List<String> filters) {
     setState(() {
@@ -77,10 +77,10 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
       final images = await _service.fetchInsectImages(insect.englishName);
       return images.isNotEmpty ? images.first : '';
     } catch (e) {
-      print(
-          '${AppLocalizations.of(context)!.errorFetchImg} ${insect.englishName}: $e');
-      _showErrorSnackBar(
-          '${AppLocalizations.of(context)!.errorLoadImg} ${insect.englishName}');
+      // print(
+      //     '${AppLocalizations.of(context)!.errorFetchImg} ${insect.englishName}: $e');
+      // _showErrorSnackBar(
+      //     '${AppLocalizations.of(context)!.errorLoadImg} ${insect.englishName}');
       return '';
     }
   }
@@ -179,8 +179,6 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) {
-                _showErrorSnackBar(
-                    AppLocalizations.of(context)!.errorLoadInsectImg);
                 return Center(
                     child: Text(AppLocalizations.of(context)!.errorLoadInsect));
               },

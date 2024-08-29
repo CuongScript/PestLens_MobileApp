@@ -5,7 +5,7 @@ import 'package:pest_lens_app/services/famer_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WeatherInfoSection extends StatefulWidget {
-  const WeatherInfoSection({Key? key}) : super(key: key);
+  const WeatherInfoSection({super.key});
 
   @override
   _WeatherInfoSectionState createState() => _WeatherInfoSectionState();

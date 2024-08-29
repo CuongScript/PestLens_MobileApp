@@ -161,7 +161,6 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                  MyCameraBox(
                   url: Config.camera2APIUrl,
                   title: AppLocalizations.of(context)!.camFeed2,
-                  token: Config.camera2Token,
                 ),
               ],
             ),

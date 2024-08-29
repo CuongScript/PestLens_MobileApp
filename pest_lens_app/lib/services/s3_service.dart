@@ -11,7 +11,6 @@ import 'package:mime/mime.dart';
 class S3Service {
   static const String region = Config.s3Region;
   static const String bucket = Config.s3Bucket;
-  static const String userinfoBucket = 'pestapp-userinfo';
 
   final AWSSigV4Signer _signer;
   final AWSCredentialScope _scope;
@@ -60,7 +59,7 @@ class S3Service {
   }
 
   Future<Uint8List> getUserProfileImageData(String objectKey) async {
-    const String host = '$userinfoBucket.s3.$region.amazonaws.com';
+    const String host = '$bucket.s3.$region.amazonaws.com';
     final String endpoint = 'https://$host/$objectKey';
 
     final request = AWSHttpRequest(
@@ -96,7 +95,7 @@ class S3Service {
     final String originalFileName = path.basename(imageFile.path);
     final String uniqueFileName = _generateUniqueFileName(originalFileName);
     final String objectKey = 'profile_images/$uniqueFileName';
-    const String host = '$userinfoBucket.s3.$region.amazonaws.com';
+    const String host = '$bucket.s3.$region.amazonaws.com';
     final String endpoint = 'https://$host/$objectKey';
 
     final fileBytes = await imageFile.readAsBytes();

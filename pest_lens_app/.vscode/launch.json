@@ -6,8 +6,8 @@
       "request": "launch",
       "type": "dart",
       "args": [
-        "--dart-define=AWS_ACCESS_KEY_ID=AKIA47CRZX5XG36HJXNC",
-        "--dart-define=AWS_SECRET_ACCESS_KEY=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"
+        "--dart-define=AWS_ACCESS_KEY_ID=AKIA4PEHTJ6L4UQK4TPF",
+        "--dart-define=AWS_SECRET_ACCESS_KEY=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"
       ]
     },
     {

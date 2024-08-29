@@ -7,7 +7,7 @@ import 'package:pest_lens_app/preferences/insect_information_preferences.dart';
 
 class InsectInformationService {
   static const String _baseUrl = '${Config.apiUrl}/api/pests';
-  static const String _googleSearchApiUrl = Config.googleSearchAPiUrl;
+  static const String _googleSearchApiUrl = Config.googleSearchAPIUrl;
 
   Future<List<InsectInformationModel>> fetchInsectInformation() async {
     if (await InsectInformationPreferences.shouldFetchInsects()) {
