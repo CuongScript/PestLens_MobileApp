@@ -9,43 +9,10 @@ class Config {
       'c18cc3946046205eea7722e8f8cf48d6df8acfe7';
 
   // Camera URLs
-  static const String camera1APIUrl =
-      'https://814bffb9b389f652.mediapackage.ap-southeast-2.amazonaws.com/out/v1/eb9c9f2cbf2f42a481d5b5d7fe1d8b2e/index.m3u8';
-  static const String camera2APIUrl =
-      'http://tramquantrac.shop:10001/video_feed';
-  static const String camera2Token = "Noodle7532Giraffe";
+  static const String camera1APIUrl = 'rtsp://14.224.155.240:12000/stream';
+  static const String camera2APIUrl = 'rtsp://14.224.155.240:12001/stream';
 
   // AWS S3 Configuration
   static const String s3Region = 'ap-southeast-1';
   static const String s3Bucket = 'rmit-graduglorious';
-
-  // Google OAuth Configuration
-  static const String googleClientId =
-      '761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8.apps.googleusercontent.com';
-  static const String googleClientSecret =
-      ''; // Leave this empty for client-side apps
-  static const String redirectUri =
-      'com.googleusercontent.apps.761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8:/oauth2redirect';
-
-  // static const String redirectUri = 'http://192.168.68.62:8818';
-
-  // static const String redirectUri = 'https://2fulpo10rtwr.share.zrok.io';
-  // Google OAuth Endpoints
-  static const String googleAuthEndpoint =
-      'https://accounts.google.com/o/oauth2/v2/auth';
-  static const String googleTokenEndpoint =
-      'https://oauth2.googleapis.com/token';
-
-  // OAuth Scopes
-  static const String oauthScopes = 'openid email profile';
-
-  // Other OAuth parameters
-  static const String oauthResponseType = 'code';
-  static const String oauthAccessType = 'offline';
-  static const String oauthIncludeGrantedScopes = 'true';
-  static const String oauthState = 'state_parameter_passthrough_value';
-
-  // Callback URL scheme for mobile apps
-  static const String callbackUrlScheme =
-      'com.googleusercontent.apps.761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8';
 }

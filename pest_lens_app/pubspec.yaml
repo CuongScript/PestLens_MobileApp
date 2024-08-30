@@ -60,7 +60,7 @@ dependencies:
   flutter_local_notifications: ^17.2.2
   better_player: ^0.0.84
   webview_flutter: ^4.8.0
-  syncfusion_flutter_charts: ^26.2.9
+  syncfusion_flutter_charts: ^26.2.11
 
   firebase_core: any
   http_parser: any
@@ -68,6 +68,7 @@ dependencies:
   cached_network_image: ^3.4.0
   aws_signature_v4: ^0.6.1
   google_sign_in: ^6.2.1
+  flutter_vlc_player: ^7.4.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
