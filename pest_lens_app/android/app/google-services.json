@@ -12,7 +12,20 @@
           "package_name": "com.phuonghai.pestapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phuonghai.pestapp",
+            "certificate_hash": "c1e27ade32f226687b28f5e66b491a8483cc796c"
+          }
+        },
+        {
+          "client_id": "761576439452-hu1paonp717a5loklevg19jmug0gggps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAxivaEYbYf_P4OWtDzq2ir12uNa9GonHg"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761576439452-hu1paonp717a5loklevg19jmug0gggps.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "761576439452-n4vnfbpbpgdt5r91jqvpjtk1d2nte0iv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pestLensApp"
+              }
+            }
+          ]
         }
       }
     }

@@ -13,8 +13,6 @@ import 'package:pest_lens_app/pages/authen/signup_page.dart';
 import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
 import 'package:pest_lens_app/services/auth_service.dart';
-import 'package:pest_lens_app/utils/config.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -51,41 +49,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void signInWithGoogle() async {
-    final messenger = ScaffoldMessenger.of(context);
-    final invalidCredentialsText =
-        AppLocalizations.of(context)!.invalidCredentials;
-
-    try {
-      final url = Uri.parse('${Config.googleAuthEndpoint}?'
-          'response_type=${Config.oauthResponseType}&'
-          'client_id=${Config.googleClientId}&'
-          'redirect_uri=${Uri.encodeComponent(Config.redirectUri)}&'
-          'scope=${Uri.encodeComponent(Config.oauthScopes)}&'
-          'access_type=${Config.oauthAccessType}&'
-          'include_granted_scopes=${Config.oauthIncludeGrantedScopes}&'
-          'state=${Config.oauthState}');
-
-      final result = await FlutterWebAuth.authenticate(
-        url: url.toString(),
-        callbackUrlScheme: Config.callbackUrlScheme,
-      );
-
-      final code = Uri.parse(result).queryParameters['code'];
-      if (code != null) {
-        User? user = await _authService.signUserInOauth(code);
-        if (user != null) {
-          if (!mounted) return;
-          _navigateBasedOnRole(user);
-        } else {
-          messenger.showSnackBar(
-            SnackBar(content: Text(invalidCredentialsText)),
-          );
-        }
-      }
-    } catch (e) {
-      print('Error during Google Sign-In: $e');
-      messenger.showSnackBar(
-        const SnackBar(content: Text("Error during Google Sign-In")),
+    User? user = await _authService.signInWithGoogle();
+    if (user != null) {
+      if (!mounted) return;
+      _navigateBasedOnRole(user);
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to sign in with Google")),
       );
     }
   }
@@ -198,11 +169,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  MySubmitButton(
-                    onTap: signInWithGoogle,
-                    buttonText: "Google Sign in",
-                    isFilled: true,
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: MySubmitButton(
+                      onTap: signInWithGoogle,
+                      buttonText: "Google Sign in",
+                      isFilled: true,
+                      iconPath: 'lib/assets/images/google_logo.png',
+                    ),
                   ),
                 ],
               ),

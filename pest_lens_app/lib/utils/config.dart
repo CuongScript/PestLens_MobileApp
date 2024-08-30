@@ -21,12 +21,15 @@ class Config {
 
   // Google OAuth Configuration
   static const String googleClientId =
-      '693379957002-o2ko1b2qjtjkmi4gliq82u6ee1u4ubc2.apps.googleusercontent.com';
+      '761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8.apps.googleusercontent.com';
   static const String googleClientSecret =
-      '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';
+      ''; // Leave this empty for client-side apps
+  static const String redirectUri =
+      'com.googleusercontent.apps.761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8:/oauth2redirect';
+
   // static const String redirectUri = 'http://192.168.68.62:8818';
 
-  static const String redirectUri = 'https://2fulpo10rtwr.share.zrok.io';
+  // static const String redirectUri = 'https://2fulpo10rtwr.share.zrok.io';
   // Google OAuth Endpoints
   static const String googleAuthEndpoint =
       'https://accounts.google.com/o/oauth2/v2/auth';
@@ -44,5 +47,5 @@ class Config {
 
   // Callback URL scheme for mobile apps
   static const String callbackUrlScheme =
-      'com.googleusercontent.apps.693379957002-o2ko1b2qjtjkmi4gliq82u6ee1u4ubc2';
+      'com.googleusercontent.apps.761576439452-0gr3d11usb5ahqvt5oo9j85m1kblvfu8';
 }
