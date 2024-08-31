@@ -176,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: MySubmitButton(
                       onTap: signInWithGoogle,
-                      buttonText: "Google Sign in",
+                      buttonText: AppLocalizations.of(context)!.googleSignIn,
                       isFilled: true,
                       iconPath: 'lib/assets/images/google_logo.png',
                     ),

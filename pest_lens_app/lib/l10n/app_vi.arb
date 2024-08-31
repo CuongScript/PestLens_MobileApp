@@ -137,5 +137,6 @@
   "habitat": "Môi trường sống",
   "impact": "Tác động",
   "behavior": "Hành vi",
-  "errorOccurred": "Đã xảy ra lỗi!"
+  "errorOccurred": "Đã xảy ra lỗi!",
+  "googleSignIn": "Đăng nhập bằng Google"
 }

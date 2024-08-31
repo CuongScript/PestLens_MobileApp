@@ -137,5 +137,6 @@
   "habitat": "Habitat",
   "impact": "Impact",
   "behavior": "Behavior",
-  "errorOccurred": "An error occurred!"
+  "errorOccurred": "An error occurred!",
+  "googleSignIn": "Sign in with Google"
 }
