@@ -25,7 +25,6 @@ class SignUpPage extends ConsumerWidget {
     final emailFieldKey = GlobalKey<FormFieldState>();
     final passwordFieldKey = GlobalKey<FormFieldState>();
     final rePasswordFieldKey = GlobalKey<FormFieldState>();
-    bool isChecked = false;
 
     void signUserUp() async {
       if (formKey.currentState?.validate() ?? false) {
