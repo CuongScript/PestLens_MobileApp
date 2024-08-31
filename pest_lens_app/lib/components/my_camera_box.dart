@@ -20,9 +20,8 @@ class MyCameraBox extends StatefulWidget {
 }
 
 class _MyCameraBoxState extends State<MyCameraBox> {
-  late VlcPlayerController _controller;
-  bool _isLoading = true;
-  bool _hasError = false;
+  VlcPlayerController? _controller;
+  bool _isInitialized = false;
   String _errorMessage = '';
 
   @override
@@ -31,44 +30,50 @@ class _MyCameraBoxState extends State<MyCameraBox> {
     _initializePlayer();
   }
 
-  void _initializePlayer() {
-    _controller = VlcPlayerController.network(
-      widget.url,
-      hwAcc: HwAcc.full,
-      autoPlay: true,
-      options: VlcPlayerOptions(
-        advanced: VlcAdvancedOptions([
-          VlcAdvancedOptions.networkCaching(2000),
-        ]),
-        rtp: VlcRtpOptions([
-          VlcRtpOptions.rtpOverRtsp(true),
-        ]),
-      ),
-    );
+  Future<void> _initializePlayer() async {
+    try {
+      final controller = VlcPlayerController.network(
+        widget.url,
+        hwAcc: HwAcc.full,
+        autoPlay: true,
+        options: VlcPlayerOptions(
+          advanced: VlcAdvancedOptions([
+            VlcAdvancedOptions.networkCaching(2000),
+          ]),
+          rtp: VlcRtpOptions([
+            VlcRtpOptions.rtpOverRtsp(true),
+          ]),
+          http: VlcHttpOptions([
+            VlcHttpOptions.httpReconnect(true),
+          ]),
+        ),
+      );
 
-    _controller.addListener(() {
-      if (_controller.value.hasError) {
+      await controller.initialize();
+
+      if (mounted) {
         setState(() {
-          _hasError = true;
-          _isLoading = false;
-          _errorMessage = 'Error loading stream';
-        });
-      } else if (_controller.value.isPlaying) {
-        setState(() {
-          _isLoading = false;
+          _controller = controller;
+          _isInitialized = true;
+          _errorMessage = '';
         });
       }
-    });
+    } catch (error) {
+      print('Error initializing VLC player: $error');
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Failed to initialize player: $error';
+        });
+      }
+    }
   }
 
   void _retry() {
     setState(() {
-      _isLoading = true;
-      _hasError = false;
+      _isInitialized = false;
       _errorMessage = '';
     });
-    _controller.stop();
-    _controller.play();
+    _initializePlayer();
   }
 
   void _goFullScreen() {
@@ -85,7 +90,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -126,39 +131,39 @@ class _MyCameraBoxState extends State<MyCameraBox> {
             padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
             child: AspectRatio(
               aspectRatio: 16 / 9,
-              child: Stack(
-                children: [
-                  VlcPlayer(
-                    controller: _controller,
-                    aspectRatio: 16 / 9,
-                    placeholder:
-                        const Center(child: CircularProgressIndicator()),
-                  ),
-                  if (_isLoading)
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  if (_hasError)
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Camera not Available',
-                              style: CustomTextStyles.cameraErrorMessage),
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: _retry,
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+              child: _buildPlayerWidget(),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPlayerWidget() {
+    if (!_isInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_errorMessage.isNotEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(_errorMessage, style: CustomTextStyles.cameraErrorMessage),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _retry,
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return VlcPlayer(
+      controller: _controller!,
+      aspectRatio: 16 / 9,
+      placeholder: const Center(child: CircularProgressIndicator()),
     );
   }
 }
