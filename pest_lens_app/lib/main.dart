@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/l10n/l10n.dart';
 import 'package:pest_lens_app/pages/welcome/splash_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     ref.read(notificationServiceProvider).init();
 
     Locale currentLocale = ref.watch(localeProvider);
