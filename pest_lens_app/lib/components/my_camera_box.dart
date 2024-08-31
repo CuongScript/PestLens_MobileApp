@@ -37,7 +37,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
   void _initializeWebView() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color.fromARGB(0, 0, 0, 0))
+      ..setBackgroundColor(const Color.fromARGB(0, 255, 255, 255))
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
@@ -61,27 +61,25 @@ class _MyCameraBoxState extends State<MyCameraBox> {
               _errorMessage = '${error.errorCode}: ${error.description}';
             });
           },
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith(widget.url)) {
-              return NavigationDecision.navigate;
-            }
-            return NavigationDecision.prevent;
-          },
         ),
       );
 
-    _loadUrl();
+    _loadHtmlContent();
   }
 
-  void _loadUrl() {
-    if (widget.token != null) {
-      _controller.loadRequest(
-        Uri.parse(widget.url),
-        headers: {'Authorization': 'Bearer ${widget.token}'},
-      );
-    } else {
-      _controller.loadRequest(Uri.parse(widget.url));
-    }
+  void _loadHtmlContent() {
+    final String htmlContent = '''
+      <html>
+        <body style="margin:0;padding:0;">
+          <div style="width:100%;height:100%;">
+            <iframe width="100%" height="100%" src="${widget.url}" frameborder="0" allowfullscreen></iframe>
+            <p align="right" style="margin:0;padding:5px;">powered by <a href="https://rtsp.me" title="RTSP.ME - Free website RTSP video steaming service" target="_blank">rtsp.me</a></p>
+          </div>
+        </body>
+      </html>
+    ''';
+
+    _controller.loadHtmlString(htmlContent);
   }
 
   void _startLoadingTimer() {
@@ -90,7 +88,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
         if (_isLoading) {
           _hasError = true;
           _isLoading = false;
-          _errorMessage = 'Loading timed out after 5 seconds';
+          _errorMessage = 'Loading timed out after 10 seconds';
         }
       });
     });
@@ -113,7 +111,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
       _hasError = false;
       _errorMessage = '';
     });
-    _loadUrl();
+    _loadHtmlContent();
   }
 
   void _goFullScreen() {
