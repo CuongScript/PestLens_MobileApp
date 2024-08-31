@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class CameraFullScreenPage extends StatefulWidget {
   final String url;
@@ -12,39 +12,43 @@ class CameraFullScreenPage extends StatefulWidget {
 }
 
 class _CameraFullScreenPageState extends State<CameraFullScreenPage> {
-  late VlcPlayerController _controller;
+  late WebViewController _controller;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _controller = VlcPlayerController.network(
-      widget.url,
-      hwAcc: HwAcc.full,
-      autoPlay: true,
-      options: VlcPlayerOptions(
-        advanced: VlcAdvancedOptions([
-          VlcAdvancedOptions.networkCaching(2000),
-        ]),
-        rtp: VlcRtpOptions([
-          VlcRtpOptions.rtpOverRtsp(true),
-        ]),
-      ),
-    );
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageFinished: (String url) {
+            setState(() {
+              _isLoading = false;
+            });
+          },
+        ),
+      );
 
-    _controller.addListener(() {
-      if (_controller.value.isPlaying) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    if (widget.token != null) {
+      _controller.setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith(widget.url)) {
+              return NavigationDecision.navigate;
+            }
+            return NavigationDecision.prevent;
+          },
+        ),
+      );
+      _controller.loadRequest(
+        Uri.parse(widget.url),
+        headers: {'Authorization': 'Bearer ${widget.token}'},
+      );
+    } else {
+      _controller.loadRequest(Uri.parse(widget.url));
+    }
   }
 
   @override
@@ -53,11 +57,7 @@ class _CameraFullScreenPageState extends State<CameraFullScreenPage> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          VlcPlayer(
-            controller: _controller,
-            aspectRatio: 16 / 9,
-            placeholder: const Center(child: CircularProgressIndicator()),
-          ),
+          WebViewWidget(controller: _controller),
           if (_isLoading)
             const Center(
               child: CircularProgressIndicator(),

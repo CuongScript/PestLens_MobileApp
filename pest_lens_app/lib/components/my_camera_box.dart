@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pest_lens_app/pages/farmer/camera_full_screen_page.dart';
 
 class MyCameraBox extends StatefulWidget {
@@ -20,60 +21,98 @@ class MyCameraBox extends StatefulWidget {
 }
 
 class _MyCameraBoxState extends State<MyCameraBox> {
-  VlcPlayerController? _controller;
-  bool _isInitialized = false;
+  late WebViewController _controller;
+  bool _isLoading = true;
+  bool _hasError = false;
   String _errorMessage = '';
+  Timer? _loadingTimer;
 
   @override
   void initState() {
     super.initState();
-    _initializePlayer();
+    _initializeWebView();
   }
 
-  Future<void> _initializePlayer() async {
-    try {
-      final controller = VlcPlayerController.network(
-        widget.url,
-        hwAcc: HwAcc.full,
-        autoPlay: true,
-        options: VlcPlayerOptions(
-          advanced: VlcAdvancedOptions([
-            VlcAdvancedOptions.networkCaching(2000),
-          ]),
-          rtp: VlcRtpOptions([
-            VlcRtpOptions.rtpOverRtsp(true),
-          ]),
-          http: VlcHttpOptions([
-            VlcHttpOptions.httpReconnect(true),
-          ]),
+  void _initializeWebView() {
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color.fromARGB(0, 0, 0, 0))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            _startLoadingTimer();
+            _safeSetState(() {
+              _isLoading = true;
+              _hasError = false;
+            });
+          },
+          onPageFinished: (String url) {
+            _cancelLoadingTimer();
+            _safeSetState(() {
+              _isLoading = false;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {
+            _cancelLoadingTimer();
+            _safeSetState(() {
+              _hasError = true;
+              _isLoading = false;
+              _errorMessage = '${error.errorCode}: ${error.description}';
+            });
+          },
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith(widget.url)) {
+              return NavigationDecision.navigate;
+            }
+            return NavigationDecision.prevent;
+          },
         ),
       );
 
-      await controller.initialize();
+    _loadUrl();
+  }
 
-      if (mounted) {
-        setState(() {
-          _controller = controller;
-          _isInitialized = true;
-          _errorMessage = '';
-        });
-      }
-    } catch (error) {
-      print('Error initializing VLC player: $error');
-      if (mounted) {
-        setState(() {
-          _errorMessage = 'Failed to initialize player: $error';
-        });
-      }
+  void _loadUrl() {
+    if (widget.token != null) {
+      _controller.loadRequest(
+        Uri.parse(widget.url),
+        headers: {'Authorization': 'Bearer ${widget.token}'},
+      );
+    } else {
+      _controller.loadRequest(Uri.parse(widget.url));
+    }
+  }
+
+  void _startLoadingTimer() {
+    _loadingTimer = Timer(const Duration(seconds: 10), () {
+      _safeSetState(() {
+        if (_isLoading) {
+          _hasError = true;
+          _isLoading = false;
+          _errorMessage = 'Loading timed out after 5 seconds';
+        }
+      });
+    });
+  }
+
+  void _cancelLoadingTimer() {
+    _loadingTimer?.cancel();
+    _loadingTimer = null;
+  }
+
+  void _safeSetState(VoidCallback fn) {
+    if (mounted) {
+      setState(fn);
     }
   }
 
   void _retry() {
-    setState(() {
-      _isInitialized = false;
+    _safeSetState(() {
+      _isLoading = true;
+      _hasError = false;
       _errorMessage = '';
     });
-    _initializePlayer();
+    _loadUrl();
   }
 
   void _goFullScreen() {
@@ -90,7 +129,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _cancelLoadingTimer();
     super.dispose();
   }
 
@@ -131,39 +170,34 @@ class _MyCameraBoxState extends State<MyCameraBox> {
             padding: const EdgeInsets.fromLTRB(8, 8, 24, 8),
             child: AspectRatio(
               aspectRatio: 16 / 9,
-              child: _buildPlayerWidget(),
+              child: Stack(
+                children: [
+                  if (!_hasError) WebViewWidget(controller: _controller),
+                  if (_isLoading)
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  if (_hasError)
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Camera not Available',
+                              style: CustomTextStyles.cameraErrorMessage),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: _retry,
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildPlayerWidget() {
-    if (!_isInitialized) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (_errorMessage.isNotEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(_errorMessage, style: CustomTextStyles.cameraErrorMessage),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _retry,
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return VlcPlayer(
-      controller: _controller!,
-      aspectRatio: 16 / 9,
-      placeholder: const Center(child: CircularProgressIndicator()),
     );
   }
 }
