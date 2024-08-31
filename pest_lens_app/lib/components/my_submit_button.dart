@@ -5,6 +5,7 @@ class MySubmitButton extends StatelessWidget {
   final String buttonText;
   final bool isFilled;
   final Color? filledColor;
+  final String? iconPath; // New parameter for the icon path
 
   const MySubmitButton({
     super.key,
@@ -12,6 +13,7 @@ class MySubmitButton extends StatelessWidget {
     required this.buttonText,
     required this.isFilled,
     this.filledColor,
+    this.iconPath, // Add this to the constructor
   });
 
   @override
@@ -28,13 +30,24 @@ class MySubmitButton extends StatelessWidget {
           side: BorderSide(color: actualFilledColor, width: 2),
         ),
         onPressed: onTap,
-        child: Center(
-          child: Text(
-            buttonText,
-            style: TextStyle(
-              color: isFilled ? Colors.white : actualFilledColor,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (iconPath != null) ...[
+              Image.asset(
+                iconPath!,
+                height: 24,
+                width: 24,
+              ),
+              const SizedBox(width: 8), // Add some space between icon and text
+            ],
+            Text(
+              buttonText,
+              style: TextStyle(
+                color: isFilled ? Colors.white : actualFilledColor,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

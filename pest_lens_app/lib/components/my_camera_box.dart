@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pest_lens_app/pages/farmer/camera_full_screen_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -22,98 +21,55 @@ class MyCameraBox extends StatefulWidget {
 }
 
 class _MyCameraBoxState extends State<MyCameraBox> {
-  late WebViewController _controller;
+  late VlcPlayerController _controller;
   bool _isLoading = true;
   bool _hasError = false;
   String _errorMessage = '';
-  Timer? _loadingTimer;
 
   @override
   void initState() {
     super.initState();
-    _initializeWebView();
+    _initializePlayer();
   }
 
-  void _initializeWebView() {
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color.fromARGB(0, 0, 0, 0))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageStarted: (String url) {
-            _startLoadingTimer();
-            _safeSetState(() {
-              _isLoading = true;
-              _hasError = false;
-            });
-          },
-          onPageFinished: (String url) {
-            _cancelLoadingTimer();
-            _safeSetState(() {
-              _isLoading = false;
-            });
-          },
-          onWebResourceError: (WebResourceError error) {
-            _cancelLoadingTimer();
-            _safeSetState(() {
-              _hasError = true;
-              _isLoading = false;
-              _errorMessage = '${error.errorCode}: ${error.description}';
-            });
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith(widget.url)) {
-              return NavigationDecision.navigate;
-            }
-            return NavigationDecision.prevent;
-          },
-        ),
-      );
+  void _initializePlayer() {
+    _controller = VlcPlayerController.network(
+      widget.url,
+      hwAcc: HwAcc.full,
+      autoPlay: true,
+      options: VlcPlayerOptions(
+        advanced: VlcAdvancedOptions([
+          VlcAdvancedOptions.networkCaching(2000),
+        ]),
+        rtp: VlcRtpOptions([
+          VlcRtpOptions.rtpOverRtsp(true),
+        ]),
+      ),
+    );
 
-    _loadUrl();
-  }
-
-  void _loadUrl() {
-    if (widget.token != null) {
-      _controller.loadRequest(
-        Uri.parse(widget.url),
-        headers: {'Authorization': 'Bearer ${widget.token}'},
-      );
-    } else {
-      _controller.loadRequest(Uri.parse(widget.url));
-    }
-  }
-
-  void _startLoadingTimer() {
-    _loadingTimer = Timer(const Duration(seconds: 10), () {
-      _safeSetState(() {
-        if (_isLoading) {
+    _controller.addListener(() {
+      if (_controller.value.hasError) {
+        setState(() {
           _hasError = true;
           _isLoading = false;
           _errorMessage = AppLocalizations.of(context)!.loadTimeOut;
-        }
-      });
+        });
+      } else if (_controller.value.isPlaying) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 
-  void _cancelLoadingTimer() {
-    _loadingTimer?.cancel();
-    _loadingTimer = null;
-  }
-
-  void _safeSetState(VoidCallback fn) {
-    if (mounted) {
-      setState(fn);
-    }
-  }
-
   void _retry() {
-    _safeSetState(() {
+    setState(() {
       _isLoading = true;
       _hasError = false;
       _errorMessage = '';
     });
-    _loadUrl();
+    _controller.stop();
+    _controller.play();
   }
 
   void _goFullScreen() {
@@ -130,7 +86,7 @@ class _MyCameraBoxState extends State<MyCameraBox> {
 
   @override
   void dispose() {
-    _cancelLoadingTimer();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -173,7 +129,12 @@ class _MyCameraBoxState extends State<MyCameraBox> {
               aspectRatio: 16 / 9,
               child: Stack(
                 children: [
-                  if (!_hasError) WebViewWidget(controller: _controller),
+                  VlcPlayer(
+                    controller: _controller,
+                    aspectRatio: 16 / 9,
+                    placeholder:
+                        const Center(child: CircularProgressIndicator()),
+                  ),
                   if (_isLoading)
                     const Center(
                       child: CircularProgressIndicator(),

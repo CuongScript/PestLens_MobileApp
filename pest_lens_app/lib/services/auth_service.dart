@@ -2,13 +2,65 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/preferences/user_preferences.dart';
 import 'package:pest_lens_app/services/s3_service.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final S3Service _s3Service = S3Service();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+    ],
+  );
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      _googleSignIn.signOut();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Use the idToken to authenticate with your backend
+
+      final response = await http.get(
+        Uri.parse(
+            '${Config.apiUrl}/api/users/search?username=${Uri.encodeComponent(googleUser.email)}'),
+        headers: {
+          'Authorization': 'Bearer ${googleAuth.idToken}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final userData = json.decode(response.body);
+
+        User user = User(
+            id: userData['id'],
+            username: userData['username'],
+            roles: [Role.ROLE_USER],
+            accessToken: googleAuth.idToken.toString(),
+            tokenType: 'Bearer');
+        await UserPreferences.saveUser(user);
+
+        // Register device ID
+        await registerDeviceId(user.username, user.tokenType, user.accessToken);
+
+        return user;
+      } else {
+        print('Failed to sign in with Google: ${response.body}');
+        return null;
+      }
+    } catch (error) {
+      print('Error signing in with Google: $error');
+      return null;
+    }
+  }
 
   Future<User?> signUserIn(String username, String password) async {
     var headers = {'Content-Type': 'application/json'};
@@ -32,42 +84,6 @@ class AuthService {
 
       return user;
     } else {
-      return null;
-    }
-  }
-
-  Future<User?> signUserInOauth(String idToken) async {
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $idToken'
-    };
-
-    var request = http.Request(
-        'GET', Uri.parse('${Config.apiUrl}/api/users/oauth/google'));
-    request.headers.addAll(headers);
-
-    try {
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        var responseData = await response.stream.bytesToString();
-        var jsonResponse = json.decode(responseData);
-
-        User user = User.fromJson(jsonResponse);
-
-        // Save user information
-        await UserPreferences.saveUser(user);
-
-        // Register device ID
-        await registerDeviceId(user.username, user.tokenType, user.accessToken);
-
-        return user;
-      } else {
-        print('Failed to sign in with OAuth: ${response.reasonPhrase}');
-        return null;
-      }
-    } catch (e) {
-      print('Error during OAuth sign-in: $e');
       return null;
     }
   }
