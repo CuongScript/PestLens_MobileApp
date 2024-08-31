@@ -1,0 +1,37 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "pest_lens_app_aws",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+              "--dart-define=AWS_ACCESS_KEY_ID=AKIA4PEHTJ6L4UQK4TPF",
+              "--dart-define=AWS_SECRET_ACCESS_KEY=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"
+            ]
+        },
+        {
+            "name": "pest_lens_app",
+            "cwd": "pest_lens_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "pest_lens_app (profile mode)",
+            "cwd": "pest_lens_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "pest_lens_app (release mode)",
+            "cwd": "pest_lens_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

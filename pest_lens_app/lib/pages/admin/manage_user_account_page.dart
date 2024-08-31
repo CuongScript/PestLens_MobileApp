@@ -24,7 +24,18 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   final List<String> _selectedFilters = [];
   String _searchQuery = '';
   final AdminService _adminService = AdminService();
-  late Map<String, List<String>> _filterGroups;
+  Map<String, List<String>> _filterGroups = {
+    'User Status': [
+      'Active Users',
+      'New Users',
+      'Pending Users',
+      'Deactivated Users',
+    ],
+    'User Role': [
+      'Farmer Users',
+      'Admin Users',
+    ],
+  };
 
   @override
   void initState() {
