@@ -138,5 +138,9 @@
   "impact": "Impact",
   "behavior": "Behavior",
   "errorOccurred": "An error occurred!",
-  "googleSignIn": "Sign in with Google"
+  "googleSignIn": "Sign in with Google",
+  "activeUsersText": "Active Users",
+  "newUsersText": "New Users",
+  "pendingUsersText": "Pending Users",
+  "deactivatedUsersText": "Deactivated Users"
 }

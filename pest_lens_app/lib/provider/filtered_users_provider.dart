@@ -37,16 +37,22 @@ class FilteredUsersNotifier
               filters.any((filter) {
                 switch (filter) {
                   case 'Active Users':
+                  case 'Người dùng đang hoạt động':
                     return user.accountStatus == AccountStatusEnum.ACTIVE;
                   case 'New Users':
+                  case 'Người dùng mới':
                     return user.newUser;
                   case 'Pending Users':
+                  case 'Người dùng đang chờ xử lý':
                     return user.accountStatus == AccountStatusEnum.PENDING;
                   case 'Deactivated Users':
+                  case 'Người dùng đã hủy kích hoạt':
                     return user.accountStatus == AccountStatusEnum.DEACTIVATED;
                   case 'Farmer Users':
+                  case 'Nông dân':
                     return user.roles.contains(Role.ROLE_USER);
                   case 'Admin Users':
+                  case 'Quản trị viên':
                     return user.roles.contains(Role.ROLE_ADMIN);
                   default:
                     return false;
