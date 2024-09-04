@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:pest_lens_app/provider/language_provider.dart';
 import 'package:pest_lens_app/provider/notification_service_provider.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -20,6 +21,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Initialize Settings
+  await Settings.init(
+    cacheProvider: SharePreferenceCache(),
+  );
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -36,6 +43,8 @@ class MyApp extends ConsumerWidget {
     ref.read(notificationServiceProvider).init();
 
     Locale currentLocale = ref.watch(localeProvider);
+    ColorScheme _schemeColor = ColorScheme.fromSeed(
+        seedColor: const Color(0xFFF2F6FF), background: Colors.white);
 
     return MaterialApp(
       locale: currentLocale,
@@ -49,7 +58,7 @@ class MyApp extends ConsumerWidget {
       ],
       home: const SplashScreen(),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF2F6FF)),
+        colorScheme: _schemeColor,
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF2F6FF),
         appBarTheme: const AppBarTheme(

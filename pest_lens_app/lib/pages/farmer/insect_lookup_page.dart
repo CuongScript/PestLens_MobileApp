@@ -155,12 +155,16 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
                     GestureDetector(
                       onTap: _pickImageFromGallery,
                       child: _buildImageSourceButton(
-                          AppLocalizations.of(context)!.photos, Icons.photo_library, _pickImageFromGallery),
+                          AppLocalizations.of(context)!.photos,
+                          Icons.photo_library,
+                          _pickImageFromGallery),
                     ),
                     GestureDetector(
                       onTap: _takePhoto,
                       child: _buildImageSourceButton(
-                          AppLocalizations.of(context)!.camera, Icons.camera_alt, _takePhoto),
+                          AppLocalizations.of(context)!.camera,
+                          Icons.camera_alt,
+                          _takePhoto),
                     ),
                   ],
                 ),

@@ -110,7 +110,8 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('${AppLocalizations.of(context)!.error}: $error')),
+        error: (error, stack) => Center(
+            child: Text('${AppLocalizations.of(context)!.error}: $error')),
       ),
     );
   }

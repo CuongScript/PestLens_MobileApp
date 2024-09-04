@@ -411,6 +411,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.1"
+  flutter_settings_screens:
+    dependency: "direct main"
+    description:
+      name: flutter_settings_screens
+      sha256: b9e5ff87537fceeb67012560db6ef4bb0ff7d7a031e8184e1689538756ca99a0
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4"
   flutter_slidable:
     dependency: "direct main"
     description:
@@ -685,6 +693,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   nm:
     dependency: transitive
     description:
@@ -813,6 +829,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.2"
   riverpod:
     dependency: transitive
     description:
@@ -1046,10 +1070,10 @@ packages:
     dependency: transitive
     description:
       name: vm_service
-      sha256: "360c4271613beb44db559547d02f8b0dc044741d0eeb9aa6ccdb47e8ec54c63a"
+      sha256: "3923c89304b715fb1eb6423f017651664a03bf5f4b29983627c4da791f74a4ec"
       url: "https://pub.dev"
     source: hosted
-    version: "14.2.3"
+    version: "14.2.1"
   web:
     dependency: transitive
     description:

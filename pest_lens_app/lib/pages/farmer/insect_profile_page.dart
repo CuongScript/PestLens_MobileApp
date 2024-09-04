@@ -118,9 +118,13 @@ class _InsectProfilePageState extends ConsumerState<InsectProfilePage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _buildProfileSection(AppLocalizations.of(context)!.habitat, insect.habit),
-                      _buildProfileSection(AppLocalizations.of(context)!.impact, insect.impact),
-                      _buildProfileSection(AppLocalizations.of(context)!.behavior, insect.behaviour),
+                      _buildProfileSection(
+                          AppLocalizations.of(context)!.habitat, insect.habit),
+                      _buildProfileSection(
+                          AppLocalizations.of(context)!.impact, insect.impact),
+                      _buildProfileSection(
+                          AppLocalizations.of(context)!.behavior,
+                          insect.behaviour),
                     ],
                   ),
                 ),

@@ -75,8 +75,8 @@ class UserProfilePageState extends ConsumerState<SignupProfilePage> {
               context,
               () {
                 showSignupPopup(context, true,
-                    message:
-                        AppLocalizations.of(context)!.successSignAndFailImgUpload);
+                    message: AppLocalizations.of(context)!
+                        .successSignAndFailImgUpload);
               },
             );
           } else {

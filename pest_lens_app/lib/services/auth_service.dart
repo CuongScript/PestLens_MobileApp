@@ -8,6 +8,7 @@ import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/preferences/user_preferences.dart';
 import 'package:pest_lens_app/services/s3_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pest_lens_app/models/user_full_info_model.dart';
 
 class AuthService {
   final S3Service _s3Service = S3Service();
@@ -167,6 +168,47 @@ class AuthService {
       }
     } catch (e) {
       return {'success': false, 'message': 'Error during signup: $e'};
+    }
+  }
+
+  Future<bool> fetchUserFullInformation() async {
+    try {
+      // Retrieve user information from preferences
+      User? user = await UserPreferences.getUser();
+
+      if (user == null) {
+        print('No user information found in preferences');
+        return false;
+      }
+
+      var headers = {'Authorization': '${user.tokenType} ${user.accessToken}'};
+
+      var request = http.Request(
+          'GET',
+          Uri.parse(
+              '${Config.apiUrl}/api/users/search?username=${Uri.encodeComponent(user.username)}'));
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        String responseBody = await response.stream.bytesToString();
+        Map<String, dynamic> userData = json.decode(responseBody);
+
+        UserFullInfoModel userFullInfo = UserFullInfoModel.fromJson(userData);
+
+        // Save the full user information to preferences
+        await UserPreferences.saveCurrentUserProfileInformation(userFullInfo);
+
+        print('User full information fetched and saved successfully');
+        return true;
+      } else {
+        print('Failed to fetch user information: ${response.reasonPhrase}');
+        return false;
+      }
+    } catch (e) {
+      print('Error fetching user information: $e');
+      return false;
     }
   }
 }

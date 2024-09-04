@@ -37,8 +37,7 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
 
       if (end.difference(start).inDays > 30) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(AppLocalizations.of(context)!.selectRange)),
+          SnackBar(content: Text(AppLocalizations.of(context)!.selectRange)),
         );
         return;
       }
@@ -62,7 +61,8 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text(
                 AppLocalizations.of(context)!.selectDateRange,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 icon: const Icon(Icons.refresh),

@@ -142,5 +142,6 @@
   "activeUsersText": "Active Users",
   "newUsersText": "New Users",
   "pendingUsersText": "Pending Users",
-  "deactivatedUsersText": "Deactivated Users"
+  "deactivatedUsersText": "Deactivated Users",
+  "currentLanguage": "Current Language"
 }

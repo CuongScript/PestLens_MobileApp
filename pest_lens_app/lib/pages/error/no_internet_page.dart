@@ -5,7 +5,7 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 
 class NoInternetPage extends StatelessWidget {
   const NoInternetPage({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

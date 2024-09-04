@@ -78,12 +78,10 @@ class SignUpPage extends ConsumerWidget {
                       obscureText: false,
                       prefixIcon:
                           const Icon(Icons.person_outline, color: Colors.black),
-                      hintText:
-                          AppLocalizations.of(context)!.username,
+                      hintText: AppLocalizations.of(context)!.username,
                       showRevealButton: false,
                       textInputAction: TextInputAction.next,
-                      labelText:
-                          AppLocalizations.of(context)!.username,
+                      labelText: AppLocalizations.of(context)!.username,
                       validator: (value) => TextfieldValidator.validateUsername(
                           value, newContext),
                       onChanged: (value) {
@@ -97,12 +95,12 @@ class SignUpPage extends ConsumerWidget {
                       obscureText: false,
                       prefixIcon:
                           const Icon(Icons.email_outlined, color: Colors.black),
-                      hintText:
-                          AppLocalizations.of(context)!.logInEmail, // Replace with actual string if using localization
+                      hintText: AppLocalizations.of(context)!
+                          .logInEmail, // Replace with actual string if using localization
                       showRevealButton: false,
                       textInputAction: TextInputAction.next,
-                      labelText:
-                          AppLocalizations.of(context)!.logInEmail, // Replace with actual string if using localization
+                      labelText: AppLocalizations.of(context)!
+                          .logInEmail, // Replace with actual string if using localization
                       validator: (value) =>
                           TextfieldValidator.validateEmail(value, newContext),
                       onChanged: (value) {
@@ -116,12 +114,12 @@ class SignUpPage extends ConsumerWidget {
                       obscureText: true,
                       prefixIcon:
                           const Icon(Icons.lock_outline, color: Colors.black),
-                      hintText:
-                          AppLocalizations.of(context)!.logInPass, // Replace with actual string if using localization
+                      hintText: AppLocalizations.of(context)!
+                          .logInPass, // Replace with actual string if using localization
                       showRevealButton: true,
                       textInputAction: TextInputAction.next,
-                      labelText:
-                          AppLocalizations.of(context)!.logInPass, // Replace with actual string if using localization
+                      labelText: AppLocalizations.of(context)!
+                          .logInPass, // Replace with actual string if using localization
                       validator: (value) => TextfieldValidator.validatePassword(
                           value, newContext),
                       onChanged: (value) {
@@ -135,12 +133,12 @@ class SignUpPage extends ConsumerWidget {
                       obscureText: true,
                       prefixIcon:
                           const Icon(Icons.lock_outline, color: Colors.black),
-                      hintText:
-                          AppLocalizations.of(context)!.reEnterPass, // Replace with actual string if using localization
+                      hintText: AppLocalizations.of(context)!
+                          .reEnterPass, // Replace with actual string if using localization
                       showRevealButton: true,
                       textInputAction: TextInputAction.done,
-                      labelText:
-                          AppLocalizations.of(context)!.reEnterPass, // Replace with actual string if using localization
+                      labelText: AppLocalizations.of(context)!
+                          .reEnterPass, // Replace with actual string if using localization
                       validator: (value) =>
                           TextfieldValidator.validateRePassword(
                               value, passwordController.text, newContext),

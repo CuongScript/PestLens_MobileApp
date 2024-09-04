@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:pest_lens_app/assets/colors.dart';
+
 import 'package:pest_lens_app/components/my_back_button.dart';
 import 'package:pest_lens_app/components/my_text_form_field.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
@@ -19,13 +19,11 @@ class ResetPasswordPage extends StatelessWidget {
 
   Future<void> resetPass(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      var response = await http.post(
-        Uri.parse('${Config.apiUrl}/api/users/change-password'),
-        body: {
-          'token': token,
-          'password': passwordController.text,
-        }
-      );
+      var response = await http
+          .post(Uri.parse('${Config.apiUrl}/api/users/change-password'), body: {
+        'token': token,
+        'password': passwordController.text,
+      });
 
       if (response.statusCode == 200) {
         showResetPasswordPopup(context, true);
@@ -39,9 +37,7 @@ class ResetPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
-        backgroundColor: primaryBackgroundColor,
         leading: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: IconButton(
@@ -76,23 +72,27 @@ class ResetPasswordPage extends StatelessWidget {
                 MyTextFormField(
                   controller: passwordController,
                   obscureText: true,
-                  prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
+                  prefixIcon:
+                      const Icon(Icons.lock_outline, color: Colors.black),
                   hintText: AppLocalizations.of(context)!.logInPass,
                   showRevealButton: true,
                   textInputAction: TextInputAction.next,
                   labelText: AppLocalizations.of(context)!.logInPass,
-                  validator: (value) => TextfieldValidator.validatePassword(value, context),
+                  validator: (value) =>
+                      TextfieldValidator.validatePassword(value, context),
                 ),
                 const SizedBox(height: 28),
                 MyTextFormField(
                   controller: rePasswordController,
                   obscureText: true,
-                  prefixIcon: const Icon(Icons.lock_outline, color: Colors.black),
+                  prefixIcon:
+                      const Icon(Icons.lock_outline, color: Colors.black),
                   hintText: AppLocalizations.of(context)!.reEnterPass,
                   showRevealButton: true,
                   textInputAction: TextInputAction.done,
                   labelText: AppLocalizations.of(context)!.reEnterPass,
-                  validator: (value) => TextfieldValidator.validateRePassword(value, passwordController.text, context),
+                  validator: (value) => TextfieldValidator.validateRePassword(
+                      value, passwordController.text, context),
                 ),
                 const SizedBox(height: 33),
                 Padding(
