@@ -69,7 +69,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
         _processedInsectData = _insectRecordService.processInsectData(data);
       });
     } catch (e) {
-      print('${AppLocalizations.of(context)!.errorFetchInsectData}: $e');
+      print('Error fetch insect data: $e');
       setState(() {
         _insectData = [];
         _processedInsectData = [];
@@ -154,11 +154,11 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                   endDate: _endDate,
                   onCalendarButtonPressed: _showCalendarPicker,
                 ),
-                 MyCameraBox(
+                MyCameraBox(
                   url: Config.camera1APIUrl,
                   title: AppLocalizations.of(context)!.camFeed1,
                 ),
-                 MyCameraBox(
+                MyCameraBox(
                   url: Config.camera2APIUrl,
                   title: AppLocalizations.of(context)!.camFeed2,
                 ),

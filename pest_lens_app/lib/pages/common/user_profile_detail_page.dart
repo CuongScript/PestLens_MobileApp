@@ -11,9 +11,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserProfileDetailPage extends StatelessWidget {
   final UserFullInfoModel user;
-  final Function(UserFullInfoModel, bool) onStatusChange;
-  const UserProfileDetailPage(
-      {super.key, required this.user, required this.onStatusChange});
+  final Function(UserFullInfoModel, bool)? onStatusChange;
+  final bool isFromSettings;
+
+  const UserProfileDetailPage({
+    super.key,
+    required this.user,
+    this.onStatusChange,
+    this.isFromSettings = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class UserProfileDetailPage extends StatelessWidget {
             style: CustomTextStyles.pageTitle),
         leading: IconButton(
           icon: const MyBackButton(),
-          onPressed: () => {Navigator.of(context).pop()},
+          onPressed: () => Navigator.of(context).pop(),
         ),
         leadingWidth: 45,
       ),
@@ -37,42 +43,54 @@ class UserProfileDetailPage extends StatelessWidget {
               isReadOnly: true,
             ),
             const SizedBox(height: 24),
-            _buildInfoField(AppLocalizations.of(context)!.username, user.username, Icons.person),
+            _buildInfoField(AppLocalizations.of(context)!.username,
+                user.username, Icons.person),
             const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.logInEmail, user.email, Icons.email),
+            _buildInfoField(AppLocalizations.of(context)!.logInEmail,
+                user.email, Icons.email),
             const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.firstName, user.firstName, Icons.person_outline),
+            _buildInfoField(AppLocalizations.of(context)!.firstName,
+                user.firstName, Icons.person_outline),
             const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.lastName, user.lastName, Icons.person_outline),
+            _buildInfoField(AppLocalizations.of(context)!.lastName,
+                user.lastName, Icons.person_outline),
             const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.phone, user.phoneNumber, Icons.phone),
+            _buildInfoField(AppLocalizations.of(context)!.phone,
+                user.phoneNumber, Icons.phone),
             const SizedBox(height: 20),
             _buildInfoField(
                 AppLocalizations.of(context)!.role,
                 user.roles.map((r) => r.toString().split('.').last).join(', '),
                 Icons.work),
-            const SizedBox(height: 20),
-            _buildInfoField(
-                AppLocalizations.of(context)!.accountStatus,
-                user.accountStatus.toString().split('.').last,
-                Icons.verified_user),
-            const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.createdAt, _formatDate(user.createdAt),
-                Icons.calendar_today),
-            const SizedBox(height: 20),
-            _buildInfoField(
-                AppLocalizations.of(context)!.lastLogin, _formatDate(user.lastLogin), Icons.access_time),
-            const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.activateAt, _formatDate(user.activatedAt),
-                Icons.check_circle_outline),
-            const SizedBox(height: 20),
-            _buildInfoField(
-                AppLocalizations.of(context)!.newUser, user.newUser ? AppLocalizations.of(context)!.yes : AppLocalizations.of(context)!.no, Icons.new_releases),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: _buildActionButtons(context),
-            ),
+            if (!isFromSettings) ...[
+              const SizedBox(height: 20),
+              _buildInfoField(
+                  AppLocalizations.of(context)!.accountStatus,
+                  user.accountStatus.toString().split('.').last,
+                  Icons.verified_user),
+              const SizedBox(height: 20),
+              _buildInfoField(AppLocalizations.of(context)!.createdAt,
+                  _formatDate(user.createdAt), Icons.calendar_today),
+              const SizedBox(height: 20),
+              _buildInfoField(AppLocalizations.of(context)!.lastLogin,
+                  _formatDate(user.lastLogin), Icons.access_time),
+              const SizedBox(height: 20),
+              _buildInfoField(AppLocalizations.of(context)!.activateAt,
+                  _formatDate(user.activatedAt), Icons.check_circle_outline),
+              const SizedBox(height: 20),
+              _buildInfoField(
+                  AppLocalizations.of(context)!.newUser,
+                  user.newUser
+                      ? AppLocalizations.of(context)!.yes
+                      : AppLocalizations.of(context)!.no,
+                  Icons.new_releases),
+              const SizedBox(height: 24),
+              if (onStatusChange != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: _buildActionButtons(context),
+                ),
+            ],
             const SizedBox(height: 20),
           ],
         ),
@@ -98,13 +116,13 @@ class UserProfileDetailPage extends StatelessWidget {
 
   Widget _buildActionButtons(BuildContext context) {
     final activatedButton = MySubmitButton(
-      onTap: () => onStatusChange(user, true),
+      onTap: () => onStatusChange!(user, true),
       buttonText: AppLocalizations.of(context)!.activate,
       isFilled: true,
       filledColor: Colors.green,
     );
     final deactivatedButton = MySubmitButton(
-      onTap: () => onStatusChange(user, false),
+      onTap: () => onStatusChange!(user, false),
       buttonText: AppLocalizations.of(context)!.deactivate,
       isFilled: true,
       filledColor: Colors.red,
@@ -115,7 +133,7 @@ class UserProfileDetailPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           activatedButton,
-          const SizedBox(height: 10), // Add some spacing between buttons
+          const SizedBox(height: 10),
           deactivatedButton,
         ],
       );

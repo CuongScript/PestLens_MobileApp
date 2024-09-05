@@ -10,6 +10,7 @@ import 'package:pest_lens_app/provider/language_provider.dart';
 import 'package:pest_lens_app/services/auth_service.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pest_lens_app/pages/common/user_profile_detail_page.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -138,7 +139,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
         onTap: () {
-          // Navigate to user profile detail page
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserProfileDetailPage(
+                user: userFullInfo!,
+                isFromSettings: true,
+              ),
+            ),
+          );
         },
       ),
     );
