@@ -21,7 +21,7 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notificationService = ref.read(notificationServiceProvider);
       notificationService.subscribeToTopic('USER_CREATED');
-      notificationService.subscribeToTopic('PEST_COUNT');
+      notificationService.subscribeToTopic('PEST_ALERT');
 
       // Load notifications when the page mounts
       ref.read(notificationProvider.notifier).loadNotifications();

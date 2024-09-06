@@ -1,6 +1,6 @@
 class Config {
-  static const String apiUrl = 'http://192.168.1.14:8818';
-  static const String mlAPIUrl = 'http://192.168.1.14:8000';
+  static const String apiUrl = 'http://13.212.33.40:8080';
+  static const String mlAPIUrl = 'http://52.221.235.222:8080';
   static const String googleSearchAPIUrl = 'https://google.serper.dev/images';
   static const String googleSearchAPIKey =
       'c18cc3946046205eea7722e8f8cf48d6df8acfe7';
