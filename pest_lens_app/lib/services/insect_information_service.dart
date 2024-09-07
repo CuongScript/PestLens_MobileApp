@@ -47,12 +47,8 @@ class InsectInformationService {
   }
 
   Future<void> _fetchAndSetImages(InsectInformationModel insect) async {
-    try {
-      List<String> imageUrls = await fetchInsectImages(insect.englishName);
-      insect.imageUrls = imageUrls;
-    } catch (e) {
-      print('Error fetching images for ${insect.englishName}: $e');
-    }
+    List<String> imageUrls = await fetchInsectImages(insect.englishName);
+    insect.imageUrls = imageUrls;
   }
 
   Future<InsectInformationModel> fetchInsectDetails(String insectName) async {
@@ -81,12 +77,9 @@ class InsectInformationService {
           InsectInformationModel.fromJson(insectJson);
 
       // Fetch images for the insect
-      try {
-        List<String> imageUrls = await fetchInsectImages(insect.englishName);
-        insect.imageUrls = imageUrls;
-      } catch (e) {
-        print('Error fetching images for ${insect.englishName}: $e');
-      }
+
+      List<String> imageUrls = await fetchInsectImages(insect.englishName);
+      insect.imageUrls = imageUrls;
 
       // Update the cached insects with this new information
       final cachedInsects =
@@ -141,11 +134,9 @@ class InsectInformationService {
 
         return images;
       } else {
-        print('Failed to load images for $insectName: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      print('Error fetching images for $insectName: $e');
       return [];
     }
   }

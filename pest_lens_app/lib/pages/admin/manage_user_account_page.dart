@@ -43,7 +43,7 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
     Future.microtask(() {
       ref.read(allUsersProvider.notifier).fetchAllUsers();
     });
-    
+
     // Initialize _filterGroups based on the locale
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final locale = Localizations.localeOf(context);
@@ -82,10 +82,10 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
   }
 
   void _handleFilterChanged(List<String> filters) {
-    List<String> _tempFilters = List.from(_selectedFilters);
+    List<String> tempFilters = List.from(_selectedFilters);
     setState(() {
       _selectedFilters.clear();
-      _selectedFilters.addAll(_tempFilters);
+      _selectedFilters.addAll(tempFilters);
     });
     _applyFilters();
   }
@@ -241,4 +241,3 @@ class _ManageUserAccountPageState extends ConsumerState<ManageUserAccountPage> {
     );
   }
 }
-

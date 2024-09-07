@@ -122,36 +122,20 @@ class S3Service {
 
       // Check and ensure the body is in the correct format
       final requestBody = signedRequest.body;
-      if (requestBody is Stream<List<int>>) {
-        // Convert the Stream to a List<int>
-        final byteList = await requestBody.toList();
-        final combinedBytes = byteList.expand((bytes) => bytes).toList();
-        final response = await http.put(
-          signedRequest.uri,
-          headers: signedRequest.headers,
-          body: combinedBytes,
-        );
+      // Convert the Stream to a List<int>
+      final byteList = await requestBody.toList();
+      final combinedBytes = byteList.expand((bytes) => bytes).toList();
+      final response = await http.put(
+        signedRequest.uri,
+        headers: signedRequest.headers,
+        body: combinedBytes,
+      );
 
-        if (response.statusCode == 200) {
-          return objectKey;
-        } else {
-          throw Exception(
-              'Failed to upload image: ${response.statusCode} - ${response.body}');
-        }
+      if (response.statusCode == 200) {
+        return objectKey;
       } else {
-        // If already List<int>, proceed with the original body
-        final response = await http.put(
-          signedRequest.uri,
-          headers: signedRequest.headers,
-          body: requestBody,
-        );
-
-        if (response.statusCode == 200) {
-          return objectKey;
-        } else {
-          throw Exception(
-              'Failed to upload image: ${response.statusCode} - ${response.body}');
-        }
+        throw Exception(
+            'Failed to upload image: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       throw Exception('Error uploading image to S3: $e');

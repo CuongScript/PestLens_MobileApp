@@ -25,6 +25,8 @@ class ResetPasswordPage extends StatelessWidget {
         'password': passwordController.text,
       });
 
+      if (!context.mounted) return;
+
       if (response.statusCode == 200) {
         showResetPasswordPopup(context, true);
         // Navigator.of(context).popUntil((route) => route.isFirst);

@@ -26,6 +26,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   UserFullInfoModel? userFullInfo;
   double _pestThreshold = 50.0; // Default value
   int _averageDays = 7; // Default value
+  bool _isLoggingOut = false;
 
   @override
   void initState() {
@@ -55,7 +56,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  void _logout(BuildContext context) async {
+  Future<void> _logout(BuildContext context) async {
+    setState(() {
+      _isLoggingOut = true;
+    });
+
     final notificationService = ref.read(notificationServiceProvider);
 
     // Unsubscribe from all topics
@@ -64,6 +69,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
     // Clear user preferences
     await UserPreferences.clearUser();
+
+    setState(() {
+      _isLoggingOut = false;
+    });
 
     if (!context.mounted) return;
 
@@ -79,34 +88,44 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   Widget build(BuildContext context) {
     final currentLocale = ref.watch(localeProvider);
 
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: primaryBackgroundColor,
-        title: Text(AppLocalizations.of(context)!.setting,
-            style: CustomTextStyles.pageTitle),
-        elevation: 0,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        children: [
-          _buildUserInfoTile(),
-          const SizedBox(height: 24),
-          _buildSettingsSection([
-            _buildNotificationTile(),
-            _buildPestAlertTile(),
-            _buildLanguageTile(currentLocale),
-            _buildLogoutTile(),
-          ]),
-        ],
-      ),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: primaryBackgroundColor,
+          appBar: AppBar(
+            backgroundColor: primaryBackgroundColor,
+            title: Text(AppLocalizations.of(context)!.setting,
+                style: CustomTextStyles.pageTitle),
+            elevation: 0,
+          ),
+          body: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            children: [
+              _buildUserInfoTile(),
+              const SizedBox(height: 24),
+              _buildSettingsSection([
+                _buildNotificationTile(),
+                _buildPestAlertTile(),
+                _buildLanguageTile(currentLocale),
+                _buildLogoutTile(),
+              ]),
+            ],
+          ),
+        ),
+        if (_isLoggingOut)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+      ],
     );
   }
 
   Widget _buildUserInfoTile() {
     if (userFullInfo == null) {
-      return const SizedBox
-          .shrink(); // Return an empty widget if userFullInfo is null
+      return const SizedBox.shrink();
     }
 
     return Container(
@@ -267,7 +286,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         AppLocalizations.of(context)!.logout,
         style: CustomTextStyles.subtitle,
       ),
-      onTap: () => _logout(context),
+      onTap: _isLoggingOut ? null : () => _logout(context),
     );
   }
 }

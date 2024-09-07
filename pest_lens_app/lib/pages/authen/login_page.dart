@@ -28,8 +28,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final AuthService _authService = AuthService();
+  bool _isLoading = false;
+
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
 
   void signUserIn() async {
+    _setLoading(true);
     final messenger = ScaffoldMessenger.of(context);
     final invalidCredentialsText =
         AppLocalizations.of(context)!.invalidCredentials;
@@ -41,8 +49,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     if (user != null) {
       if (!mounted) return;
-      _navigateBasedOnRole(user);
+      await _navigateBasedOnRole(user);
     } else {
+      _setLoading(false);
       usernameController.clear();
       passwordController.clear();
       messenger.showSnackBar(
@@ -52,11 +61,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void signInWithGoogle() async {
+    _setLoading(true);
     User? user = await _authService.signInWithGoogle();
     if (user != null) {
       if (!mounted) return;
-      _navigateBasedOnRole(user);
+      await _navigateBasedOnRole(user);
     } else {
+      _setLoading(false);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Failed to sign in with Google")),
@@ -64,13 +75,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  void _navigateBasedOnRole(User user) async {
+  Future<void> _navigateBasedOnRole(User user) async {
     final notificationService = ref.read(notificationServiceProvider);
 
     // Subscribe to topics based on user role
     if (user.roles.contains(Role.ROLE_ADMIN)) {
       await notificationService.subscribeToTopic('USER_CREATED');
       await notificationService.unsubscribeFromTopic('PEST_ALERT');
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AdminTabPage()),
@@ -78,11 +90,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } else if (user.roles.contains(Role.ROLE_USER)) {
       await notificationService.subscribeToTopic('PEST_ALERT');
       await notificationService.unsubscribeFromTopic('USER_CREATED');
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const FarmerTabPage()),
       );
     }
+
+    // Set loading to false after navigation
+    _setLoading(false);
   }
 
   @override
@@ -96,105 +112,114 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             children: [LanguageSelectionDropdown()],
           ),
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 50),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 90.0),
-                    child: Image.asset('lib/assets/images/appIcon.png'),
-                  ),
-                  const SizedBox(height: 39.05),
-                  const Text("InsectInsight", style: CustomTextStyles.appName),
-                  const SizedBox(height: 56),
-                  MyTextField(
-                    controller: usernameController,
-                    obscureText: false,
-                    prefixIcon:
-                        const Icon(Icons.email_outlined, color: Colors.black),
-                    hintText:
-                        // 'Enter ${AppLocalizations.of(context)!.username} or ${AppLocalizations.of(context)!.logInEmail}',
-                        '',
-                    showRevealButton: false,
-                    textInputAction: TextInputAction.next,
-                    labelText:
-                        '${AppLocalizations.of(context)!.username} / ${AppLocalizations.of(context)!.logInEmail}',
-                  ),
-                  const SizedBox(height: 20),
-                  MyTextField(
-                    controller: passwordController,
-                    obscureText: true,
-                    prefixIcon:
-                        const Icon(Icons.lock_outline, color: Colors.black),
-                    hintText:
-                        // 'Enter ${AppLocalizations.of(context)!.logInPass}',
-                        '',
-                    showRevealButton: true,
-                    textInputAction: TextInputAction.done,
-                    labelText: AppLocalizations.of(context)!.logInPass,
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordPage()),
-                            );
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.logInForgotPass,
-                            style: CustomTextStyles.forgotPass,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
+        body: Stack(
+          children: [
+            SafeArea(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      MySubmitButton(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SignUpPage()),
-                          );
-                        },
-                        buttonText: AppLocalizations.of(context)!.signUp,
-                        isFilled: false,
+                      const SizedBox(height: 50),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 90.0),
+                        child: Image.asset('lib/assets/images/appIcon.png'),
                       ),
-                      MySubmitButton(
-                        onTap: signUserIn,
-                        buttonText: AppLocalizations.of(context)!.signIn,
-                        isFilled: true,
+                      const SizedBox(height: 39.05),
+                      const Text("InsectInsight",
+                          style: CustomTextStyles.appName),
+                      const SizedBox(height: 56),
+                      MyTextField(
+                        controller: usernameController,
+                        obscureText: false,
+                        prefixIcon: const Icon(Icons.email_outlined,
+                            color: Colors.black),
+                        hintText: '',
+                        showRevealButton: false,
+                        textInputAction: TextInputAction.next,
+                        labelText:
+                            '${AppLocalizations.of(context)!.username} / ${AppLocalizations.of(context)!.logInEmail}',
+                      ),
+                      const SizedBox(height: 20),
+                      MyTextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        prefixIcon:
+                            const Icon(Icons.lock_outline, color: Colors.black),
+                        hintText: '',
+                        showRevealButton: true,
+                        textInputAction: TextInputAction.done,
+                        labelText: AppLocalizations.of(context)!.logInPass,
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgotPasswordPage()),
+                                );
+                              },
+                              child: Text(
+                                AppLocalizations.of(context)!.logInForgotPass,
+                                style: CustomTextStyles.forgotPass,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MySubmitButton(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SignUpPage()),
+                              );
+                            },
+                            buttonText: AppLocalizations.of(context)!.signUp,
+                            isFilled: false,
+                          ),
+                          MySubmitButton(
+                            onTap: _isLoading ? null : signUserIn,
+                            buttonText: AppLocalizations.of(context)!.signIn,
+                            isFilled: true,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: MySubmitButton(
+                          onTap: _isLoading ? null : signInWithGoogle,
+                          buttonText:
+                              AppLocalizations.of(context)!.googleSignIn,
+                          isFilled: true,
+                          iconPath: 'lib/assets/images/google_logo.png',
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: MySubmitButton(
-                      onTap: signInWithGoogle,
-                      buttonText: AppLocalizations.of(context)!.googleSignIn,
-                      isFilled: true,
-                      iconPath: 'lib/assets/images/google_logo.png',
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
+            if (_isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.5),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
         ),
       ),
     );

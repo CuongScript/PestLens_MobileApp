@@ -54,11 +54,9 @@ class AuthService {
 
         return user;
       } else {
-        print('Failed to sign in with Google: ${response.body}');
         return null;
       }
     } catch (error) {
-      print('Error signing in with Google: $error');
       return null;
     }
   }
@@ -94,9 +92,6 @@ class AuthService {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     String? deviceId = await firebaseMessaging.getToken();
     if (deviceId != null) {
-      print('User device id: $deviceId');
-      print('User username: $username');
-
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': '$tokenType $accessToken'
@@ -112,15 +107,10 @@ class AuthService {
         http.StreamedResponse response = await request.send();
 
         if (response.statusCode == 200) {
-          print(
-              'Success to register device ID: ${await response.stream.bytesToString()}');
-          return true;
         } else {
-          print('Failed to register device ID: ${response.reasonPhrase}');
           return false;
         }
       } catch (e) {
-        print('Error registering device ID: $e');
         return false;
       }
     }
@@ -135,7 +125,6 @@ class AuthService {
       try {
         profileImageKey = await _s3Service.uploadProfileImage(profileImage);
       } catch (e) {
-        print('Failed to upload profile image: $e');
         return {
           'success': false,
           'message':
@@ -177,7 +166,6 @@ class AuthService {
       User? user = await UserPreferences.getUser();
 
       if (user == null) {
-        print('No user information found in preferences');
         return false;
       }
 
@@ -200,14 +188,11 @@ class AuthService {
         // Save the full user information to preferences
         await UserPreferences.saveCurrentUserProfileInformation(userFullInfo);
 
-        print('User full information fetched and saved successfully');
         return true;
       } else {
-        print('Failed to fetch user information: ${response.reasonPhrase}');
         return false;
       }
     } catch (e) {
-      print('Error fetching user information: $e');
       return false;
     }
   }

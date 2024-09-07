@@ -27,7 +27,6 @@ class InsectRecordService {
         throw Exception('Failed to load insect data ${response.body}');
       }
     } catch (e) {
-      print('Error fetching insect data: $e');
       return [];
     }
   }

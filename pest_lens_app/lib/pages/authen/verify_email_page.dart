@@ -8,7 +8,6 @@ import 'package:pest_lens_app/pages/authen/reset_password_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:pest_lens_app/utils/config.dart';
 import 'dart:async';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   final String email;
@@ -40,7 +39,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
       _canResendCode = false;
     });
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingSeconds > 0) {
         setState(() {
           _remainingSeconds--;
@@ -67,7 +66,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
     var response = await http.post(
         Uri.parse('${Config.apiUrl}/api/users/validate-token'),
         body: {'token': code});
-
+    if (!mounted) return;
     if (response.statusCode == 200 &&
         response.body.contains("Token validated")) {
       Navigator.push(
@@ -84,9 +83,12 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
     final response = await http.post(
         Uri.parse('${Config.apiUrl}/api/users/reset-password'),
         body: {'email': widget.email});
+
     if (response.statusCode != 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(AppLocalizations.of(context)!.errorForgotPassword)));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context)!.errorForgotPassword)));
+      }
     }
   }
 
@@ -100,8 +102,12 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
 
   @override
   void dispose() {
-    _codeControllers.forEach((controller) => controller.dispose());
-    _focusNodes.forEach((node) => node.dispose());
+    for (var controller in _codeControllers) {
+      controller.dispose();
+    }
+    for (var node in _focusNodes) {
+      node.dispose();
+    }
     _timer?.cancel();
     super.dispose();
   }
@@ -174,7 +180,7 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
                 color: Colors.grey.withOpacity(0.5),
                 spreadRadius: 1,
                 blurRadius: 10,
-                offset: Offset(0, 4))
+                offset: const Offset(0, 4))
           ],
         ),
         child: TextField(
@@ -185,16 +191,17 @@ class VerifyEmailPageState extends State<VerifyEmailPage> {
               counterText: "",
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.black)),
+                  borderSide: const BorderSide(color: Colors.black)),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.white)),
+                  borderSide: const BorderSide(color: Colors.white)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.black, width: 2.0)),
+                  borderSide:
+                      const BorderSide(color: Colors.black, width: 2.0)),
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide(color: Colors.red)),
+                  borderSide: const BorderSide(color: Colors.red)),
               filled: true,
               fillColor: Colors.white),
           textAlign: TextAlign.center,

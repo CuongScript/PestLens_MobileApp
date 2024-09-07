@@ -9,11 +9,10 @@ class ImageFullScreenPage extends StatelessWidget {
   final String? objectKey;
 
   const ImageFullScreenPage({
-    Key? key,
+    super.key,
     this.imageFile,
     this.objectKey,
-  })  : assert(imageFile != null || objectKey != null),
-        super(key: key);
+  }) : assert(imageFile != null || objectKey != null);
 
   @override
   Widget build(BuildContext context) {

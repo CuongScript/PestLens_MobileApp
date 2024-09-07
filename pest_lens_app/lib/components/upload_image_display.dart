@@ -30,14 +30,9 @@ class _UploadImageDisplayState extends State<UploadImageDisplay> {
 
   void _loadImage() {
     if (widget.imageFile != null) {
-      _imageFuture = widget.imageFile!.readAsBytes().catchError((error) {
-        print('${AppLocalizations.of(context)!.errorReadLocalFile}: $error');
-      });
+      _imageFuture = widget.imageFile!.readAsBytes();
     } else if (widget.objectKey != null) {
-      _imageFuture =
-          S3Service().getImageData(widget.objectKey!).catchError((error) {
-        print('${AppLocalizations.of(context)!.errorFetchImgS3}: $error');
-      });
+      _imageFuture = S3Service().getImageData(widget.objectKey!);
     } else {
       _imageFuture = Future.value(null);
     }

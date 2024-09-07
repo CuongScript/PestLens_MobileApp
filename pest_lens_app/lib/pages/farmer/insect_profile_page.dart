@@ -11,8 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class InsectProfilePage extends ConsumerStatefulWidget {
   final String insectName;
 
-  const InsectProfilePage({Key? key, required this.insectName})
-      : super(key: key);
+  const InsectProfilePage({super.key, required this.insectName});
 
   @override
   _InsectProfilePageState createState() => _InsectProfilePageState();

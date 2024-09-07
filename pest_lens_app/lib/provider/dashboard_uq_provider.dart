@@ -44,7 +44,6 @@
 //   return DashboardUQNotifier(AdminService());
 // });
 
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/models/dashboard_item.dart';
@@ -74,11 +73,17 @@ class DashboardUQNotifier
         if (user['accountStatus'] == 'INACTIVE') inactiveUsers++;
       }
 
+      if (!context.mounted) return;
       // Get localized strings based on the current locale
-      final activeUsersText = AppLocalizations.of(context)?.activeUsersText ?? "Active Users";
-      final newUsersText = AppLocalizations.of(context)?.newUsersText ?? "New Users";
-      final pendingUsersText = AppLocalizations.of(context)?.pendingUsersText ?? "Pending Users";
-      final deactivatedUsersText = AppLocalizations.of(context)?.deactivatedUsersText ?? "Deactivated Users";
+      final activeUsersText =
+          AppLocalizations.of(context)?.activeUsersText ?? "Active Users";
+      final newUsersText =
+          AppLocalizations.of(context)?.newUsersText ?? "New Users";
+      final pendingUsersText =
+          AppLocalizations.of(context)?.pendingUsersText ?? "Pending Users";
+      final deactivatedUsersText =
+          AppLocalizations.of(context)?.deactivatedUsersText ??
+              "Deactivated Users";
 
       state = AsyncValue.data([
         DashboardItem(activeUsersText, activeUsers, Colors.green),

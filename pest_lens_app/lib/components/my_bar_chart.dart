@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
 import 'package:pest_lens_app/services/insect_record_service.dart';

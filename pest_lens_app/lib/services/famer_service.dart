@@ -20,7 +20,6 @@ class FarmerService {
 
     if (response.statusCode == 200) {
       final weatherData = json.decode(response.body);
-      print(response.body);
       return {
         'temperature': weatherData['main']['temp'],
         'windSpeed': weatherData['wind']['speed'],

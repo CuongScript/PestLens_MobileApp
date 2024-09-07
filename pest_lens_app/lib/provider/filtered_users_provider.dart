@@ -25,7 +25,6 @@ class FilteredUsersNotifier
     state = _allUsers.when(
       data: (users) {
         if (searchQuery.isEmpty && filters.isEmpty) {
-          print('Returning all users. Count: ${users.length}');
           return AsyncValue.data(users);
         }
 
