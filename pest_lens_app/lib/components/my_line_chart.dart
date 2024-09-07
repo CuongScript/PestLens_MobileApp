@@ -146,10 +146,8 @@ class _MyLineChartState extends State<MyLineChart> {
                                 intervalType: DateTimeIntervalType.days,
                                 interval: 1,
                               )
-                            : const NumericAxis(
-                                minimum: 0,
-                                maximum: 24,
-                                interval: 4,
+                            : const CategoryAxis(
+                                labelPlacement: LabelPlacement.onTicks,
                               ),
                         series: _getSeriesData(),
                         tooltipBehavior: TooltipBehavior(enable: true),

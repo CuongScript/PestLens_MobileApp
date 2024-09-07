@@ -99,6 +99,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
           }
         },
         onDefaultModeSelected: _resetToDefaultMode,
+        initialDateRange: DateTimeRange(start: _startDate, end: _endDate),
       ),
     );
   }
@@ -128,7 +129,7 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
           actions: [
             if (!_isDefaultMode)
               IconButton(
-                icon: const Icon(Icons.refresh),
+                icon: const Icon(Icons.live_tv_outlined),
                 onPressed: _resetToDefaultMode,
               ),
           ]),

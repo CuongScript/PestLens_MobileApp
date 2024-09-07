@@ -97,8 +97,10 @@ class InsectRecordService {
     }
 
     List<Map<String, dynamic>> result = [];
-    for (int hour = 0; hour < 24; hour++) {
-      Map<String, dynamic> entry = {'hour': hour};
+    for (int hour = 0; hour <= 24; hour++) {
+      Map<String, dynamic> entry = {
+        'hour': '${hour.toString().padLeft(2, '0')}:00',
+      };
       entry.addAll(hourlyTotals[hour] ?? {});
       result.add(entry);
     }

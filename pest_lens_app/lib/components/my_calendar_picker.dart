@@ -76,11 +76,10 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                           millisecond: 0,
                           microsecond: 0);
                   DateTime ed = DateTime.now().copyWith(
-                      hour: 23,
-                      minute: 59,
-                      second: 59,
-                      millisecond: 999,
-                      microsecond: 999);
+                    hour: 23,
+                    minute: 59,
+                    second: 59,
+                  );
 
                   selectedRange = DateTimeRange(
                     start: sd,
