@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/utils/config.dart';
+import 'package:pest_lens_app/models/role_enum.dart';
 
 final notificationProvider =
     StateNotifierProvider<NotificationNotifier, AsyncValue<List<Notification>>>(
@@ -44,6 +45,7 @@ class NotificationNotifier
         List<dynamic> jsonList = json.decode(responseBody);
 
         List<Notification> notifications = jsonList
+            .where((json) => !_shouldFilterNotification(json, user))
             .map((json) => Notification(
                   id: json['id'].toString(),
                   title: json['message'],
@@ -59,6 +61,11 @@ class NotificationNotifier
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }
+  }
+
+  bool _shouldFilterNotification(Map<String, dynamic> json, User user) {
+    return user.roles.contains(Role.ROLE_ADMIN) &&
+        json['topic'] == 'PEST_ALERT';
   }
 
   void addNotification(Notification notification) {

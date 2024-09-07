@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
+import 'package:pest_lens_app/models/role_enum.dart';
 import 'package:pest_lens_app/pages/authen/login_page.dart';
 import 'package:pest_lens_app/preferences/user_preferences.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
@@ -80,7 +81,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16),
         children: [
-          if (userFullInfo != null) _buildUserInfoTile(),
+          _buildUserInfoTile(),
           const SizedBox(height: 24),
           _buildSettingsSection([
             _buildNotificationTile(),
@@ -94,6 +95,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Widget _buildUserInfoTile() {
+    if (userFullInfo == null) {
+      return const SizedBox
+          .shrink(); // Return an empty widget if userFullInfo is null
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -186,6 +192,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Widget _buildPestAlertTile() {
+    if (userFullInfo != null && userFullInfo!.roles.contains(Role.ROLE_ADMIN)) {
+      return const SizedBox.shrink();
+    }
     return ExpandableSettingsTile(
       title: "Pest Alert Settings",
       leading: const Icon(Icons.pest_control, color: fontTitleColor),

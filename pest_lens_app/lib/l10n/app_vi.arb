@@ -142,5 +142,11 @@
   "activeUsersText": "Đang hoạt động",
   "newUsersText": "Người dùng mới",
   "pendingUsersText": "Chờ xác nhận",
-  "deactivatedUsersText": "Ngừng hoạt động"
+  "deactivatedUsersText": "Ngừng hoạt động",
+  "currentLanguage": "Ngôn Ngữ",
+  "liveMonitor" : "Trực Tiếp",
+  "selectCustomDate": "Bật Trực Tiếp",
+    "liveMonitoringActivated": "Đã kích hoạt giám sát trực tiếp",
+  "insectDataUpdateInfo": "Dữ liệu côn trùng sẽ được cập nhật sau {minutes} phút",
+  "insectDataUpdatedRecently": "Dữ liệu côn trùng vừa được cập nhật gần đây"
 }

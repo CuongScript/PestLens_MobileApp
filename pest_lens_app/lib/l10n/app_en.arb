@@ -143,5 +143,10 @@
   "newUsersText": "New Users",
   "pendingUsersText": "Pending Users",
   "deactivatedUsersText": "Deactivated Users",
-  "currentLanguage": "Current Language"
+  "currentLanguage": "Current Language",
+  "liveMonitor" : "Live Monitor",
+  "selectCustomDate": "Enable Live Monitor",
+  "liveMonitoringActivated": "Live monitoring activated",
+  "insectDataUpdateInfo": "Insect data will be updated in {minutes} minutes",
+  "insectDataUpdatedRecently": "Insect data was recently updated"
 }

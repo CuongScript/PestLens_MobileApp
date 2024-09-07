@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/insect_listview.dart';
+import 'package:pest_lens_app/components/live_custom_date_monitor_button.dart';
 import 'package:pest_lens_app/components/my_bar_chart.dart';
 import 'package:pest_lens_app/components/my_line_chart.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
@@ -35,28 +36,65 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
   DateTime _startDate = defaultStartDate;
   DateTime _endDate = defaultEndDate;
   Timer? _dataUpdateTimer;
+  Timer? _indicatorTimer;
   bool _isDefaultMode = true;
+  int _currentPageIndex = 0;
+  final int _totalPages = 4;
+  bool _showIndicators = true;
 
   @override
   void initState() {
     super.initState();
     _fetchInsectData();
     _startDataUpdateTimer();
+    _startIndicatorTimer();
+    _pageController.addListener(_pageListener);
   }
 
   @override
   void dispose() {
+    _pageController.removeListener(_pageListener);
     _pageController.dispose();
     _dataUpdateTimer?.cancel();
+    _indicatorTimer?.cancel();
     super.dispose();
+  }
+
+  void _pageListener() {
+    setState(() {
+      _currentPageIndex = _pageController.page?.round() ?? 0;
+    });
+    _resetIndicatorTimer();
   }
 
   void _startDataUpdateTimer() {
     _dataUpdateTimer = Timer.periodic(const Duration(hours: 1), (timer) {
-      if (_isDefaultMode) {
-        _fetchInsectData();
+      if (!_isDefaultMode) {
+        _resetDataUpdateTimer();
+        _resetToLiveMode();
       }
     });
+  }
+
+  void _resetDataUpdateTimer() {
+    _dataUpdateTimer?.cancel();
+    _startDataUpdateTimer();
+  }
+
+  void _startIndicatorTimer() {
+    _indicatorTimer?.cancel();
+    _indicatorTimer = Timer(const Duration(seconds: 3), () {
+      setState(() {
+        _showIndicators = false;
+      });
+    });
+  }
+
+  void _resetIndicatorTimer() {
+    setState(() {
+      _showIndicators = true;
+    });
+    _startIndicatorTimer();
   }
 
   Future<void> _fetchInsectData() async {
@@ -69,7 +107,6 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
         _processedInsectData = _insectRecordService.processInsectData(data);
       });
     } catch (e) {
-      print('Error fetch insect data: $e');
       setState(() {
         _insectData = [];
         _processedInsectData = [];
@@ -92,25 +129,25 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
             setState(() {
               _startDate = range.start;
               _endDate = range.end.add(const Duration(hours: 23, minutes: 59));
-              _isDefaultMode = false;
+              _isDefaultMode = true;
             });
 
             _fetchInsectData();
           }
         },
-        onDefaultModeSelected: _resetToDefaultMode,
+        onDefaultModeSelected: _resetToLiveMode,
         initialDateRange: DateTimeRange(start: _startDate, end: _endDate),
       ),
     );
   }
 
-  void _resetToDefaultMode() {
+  void _resetToLiveMode() {
     setState(() {
       _startDate = DateTime(
           DateTime.now().year, DateTime.now().month, DateTime.now().day);
       _endDate = DateTime(DateTime.now().year, DateTime.now().month,
           DateTime.now().day, 23, 59, 00);
-      _isDefaultMode = true;
+      _isDefaultMode = false;
     });
     _fetchInsectData();
   }
@@ -127,86 +164,184 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
               style: CustomTextStyles.pageTitle),
           elevation: 0,
           actions: [
-            if (!_isDefaultMode)
-              IconButton(
-                icon: const Icon(Icons.live_tv_outlined),
-                onPressed: _resetToDefaultMode,
-              ),
+            _buildMonitoringButton(),
           ]),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const WeatherInfoSection(),
-            const SizedBox(
-              height: 8,
-            ),
-            ExpandablePageView(
-              controller: _pageController,
-              children: [
-                MyLineChart(
-                    insectData: _insectData,
-                    startDate: _startDate,
-                    endDate: _endDate,
-                    onCalendarButtonPressed: _showCalendarPicker),
-                MyBarChart(
-                  insectData: _insectData,
-                  startDate: _startDate,
-                  endDate: _endDate,
-                  onCalendarButtonPressed: _showCalendarPicker,
-                ),
-                MyCameraBox(
-                  url: Config.camera1APIUrl,
-                  title: AppLocalizations.of(context)!.camFeed1,
-                ),
-                MyCameraBox(
-                  url: Config.camera2APIUrl,
-                  title: AppLocalizations.of(context)!.camFeed2,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Expanded(
-              child: Column(
+      body: GestureDetector(
+        onTapDown: (_) => _resetIndicatorTimer(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const WeatherInfoSection(),
+              const SizedBox(
+                height: 8,
+              ),
+              Stack(
+                alignment: Alignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          difference == 0
-                              ? dateFormat.format(_startDate)
-                              : '${dateFormat.format(_startDate)} - ${dateFormat.format(_endDate)}',
-                          style: const TextStyle(
-                            color: Color(0xFF0064c3),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.quantity,
-                          style: const TextStyle(
-                            color: Color(0xFF0064c3),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+                  ExpandablePageView(
+                    controller: _pageController,
+                    children: [
+                      MyLineChart(
+                          insectData: _insectData,
+                          startDate: _startDate,
+                          endDate: _endDate,
+                          onCalendarButtonPressed: _showCalendarPicker),
+                      MyBarChart(
+                        insectData: _insectData,
+                        startDate: _startDate,
+                        endDate: _endDate,
+                        onCalendarButtonPressed: _showCalendarPicker,
+                      ),
+                      MyCameraBox(
+                        url: Config.camera1APIUrl,
+                        title: AppLocalizations.of(context)!.camFeed1,
+                      ),
+                      MyCameraBox(
+                        url: Config.camera2APIUrl,
+                        title: AppLocalizations.of(context)!.camFeed2,
+                      ),
+                    ],
+                  ),
+                  if (_showIndicators && _currentPageIndex > 0)
+                    Positioned(
+                      left: 0,
+                      child: _buildSwipeIndicator(Icons.chevron_left, () {
+                        if (_currentPageIndex > 0) {
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      }, isLeft: true),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: InsectListView(insects: _processedInsectData),
-                  ),
+                  if (_showIndicators && _currentPageIndex < _totalPages - 1)
+                    Positioned(
+                      right: 0,
+                      child: _buildSwipeIndicator(Icons.chevron_right, () {
+                        if (_currentPageIndex < 3) {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        }
+                      }, isLeft: false),
+                    ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            difference == 0
+                                ? dateFormat.format(_startDate)
+                                : '${dateFormat.format(_startDate)} - ${dateFormat.format(_endDate)}',
+                            style: const TextStyle(
+                              color: Color(0xFF0064c3),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.quantity,
+                            style: const TextStyle(
+                              color: Color(0xFF0064c3),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: InsectListView(insects: _processedInsectData),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSwipeIndicator(IconData icon, VoidCallback onTap,
+      {required bool isLeft}) {
+    return GestureDetector(
+      onTap: () {
+        onTap();
+        _resetIndicatorTimer();
+      },
+      child: Container(
+        width: 20,
+        height: 30,
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.2),
+          borderRadius: BorderRadius.only(
+            topRight: isLeft ? const Radius.circular(30) : Radius.zero,
+            bottomRight: isLeft ? const Radius.circular(30) : Radius.zero,
+            topLeft: !isLeft ? const Radius.circular(30) : Radius.zero,
+            bottomLeft: !isLeft ? const Radius.circular(30) : Radius.zero,
+          ),
+        ),
+        child: Center(
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMonitoringButton() {
+    return LiveCustomDateMonitorButton(
+      isLive: !_isDefaultMode,
+      onPressed: () {
+        if (_isDefaultMode) {
+          _resetToLiveMode();
+        } else {
+          // Calculate time until next update using _indicatorTimer
+          int remainingSeconds = 0;
+          if (_dataUpdateTimer != null && _dataUpdateTimer!.isActive) {
+            remainingSeconds = _dataUpdateTimer!.tick;
+          }
+          final minutes = (remainingSeconds / 60).ceil();
+
+          // Show SnackBar
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                minutes > 0
+                    ? AppLocalizations.of(context)!
+                        .insectDataUpdateInfo(minutes)
+                    : AppLocalizations.of(context)!.insectDataUpdatedRecently,
+                style: const TextStyle(fontSize: 16),
+              ),
+              duration: const Duration(seconds: 2),
+              action: SnackBarAction(
+                label: AppLocalizations.of(context)!.dismiss,
+                onPressed: () {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  }
+                },
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
