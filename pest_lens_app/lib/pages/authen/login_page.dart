@@ -14,14 +14,17 @@ import 'package:pest_lens_app/pages/farmer/farmer_tab_page.dart';
 import 'package:pest_lens_app/services/connectivity_wrapper.dart';
 import 'package:pest_lens_app/services/auth_service.dart';
 
-class LoginPage extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pest_lens_app/provider/notification_service_provider.dart';
+
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final AuthService _authService = AuthService();
@@ -61,13 +64,20 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _navigateBasedOnRole(User user) {
+  void _navigateBasedOnRole(User user) async {
+    final notificationService = ref.read(notificationServiceProvider);
+
+    // Subscribe to topics based on user role
     if (user.roles.contains(Role.ROLE_ADMIN)) {
+      await notificationService.subscribeToTopic('USER_CREATED');
+      await notificationService.unsubscribeFromTopic('PEST_ALERT');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AdminTabPage()),
       );
     } else if (user.roles.contains(Role.ROLE_USER)) {
+      await notificationService.subscribeToTopic('PEST_ALERT');
+      await notificationService.unsubscribeFromTopic('USER_CREATED');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const FarmerTabPage()),

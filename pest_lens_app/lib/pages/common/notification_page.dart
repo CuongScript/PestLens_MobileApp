@@ -6,7 +6,6 @@ import 'package:pest_lens_app/components/notification_card.dart';
 import 'package:pest_lens_app/provider/notification_service_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/preferences/user_preferences.dart';
-import 'package:pest_lens_app/models/role_enum.dart';
 
 class NotificationPage extends ConsumerStatefulWidget {
   const NotificationPage({super.key});
@@ -19,23 +18,8 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
   @override
   void initState() {
     super.initState();
-    // Subscribe to FCM topics and load notifications
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final notificationService = ref.read(notificationServiceProvider);
-
-      // Get the user from preferences
-      final user = await UserPreferences.getUser();
-
-      if (user != null) {
-        // Subscribe to topics based on user role
-        if (user.roles.contains(Role.ROLE_ADMIN)) {
-          notificationService.subscribeToTopic('USER_CREATED');
-        } else if (user.roles.contains(Role.ROLE_USER)) {
-          notificationService.subscribeToTopic('PEST_ALERT');
-        }
-      }
-
-      // Load notifications when the page mounts
       ref.read(notificationProvider.notifier).loadNotifications();
     });
   }

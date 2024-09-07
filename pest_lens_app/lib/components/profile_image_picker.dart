@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pest_lens_app/assets/colors.dart';
@@ -73,9 +74,15 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   }
 
   Widget _buildPlaceholderImage() {
-    return Image.asset(
-      'lib/assets/images/placeholder_profile_image.png',
-      fit: BoxFit.cover,
+    return CircleAvatar(
+      radius: 30,
+      backgroundColor: Colors.grey[300],
+      child: const ClipOval(
+        child: Icon(
+          Icons.face_rounded,
+          size: 60,
+        ),
+      ),
     );
   }
 

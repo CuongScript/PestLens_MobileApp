@@ -8,6 +8,7 @@ import 'package:pest_lens_app/preferences/user_preferences.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/provider/language_provider.dart';
+import 'package:pest_lens_app/provider/notification_service_provider.dart';
 import 'package:pest_lens_app/services/auth_service.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -55,10 +56,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   void _logout(BuildContext context) async {
+    final notificationService = ref.read(notificationServiceProvider);
+
+    // Unsubscribe from all topics
+    await notificationService.unsubscribeFromTopic('USER_CREATED');
+    await notificationService.unsubscribeFromTopic('PEST_ALERT');
+
+    // Clear user preferences
     await UserPreferences.clearUser();
 
     if (!context.mounted) return;
 
+    // Navigate to login page
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -126,7 +135,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     placeholder: (context, url) =>
                         const CircularProgressIndicator(),
                     errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                        const Icon(Icons.face_rounded),
                     fit: BoxFit.cover,
                     width: 60,
                     height: 60,

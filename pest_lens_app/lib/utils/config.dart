@@ -1,5 +1,6 @@
 class Config {
-  static const String apiUrl = 'http://13.212.33.40:8080';
+  // static const String apiUrl = 'http://13.212.33.40:8080'; aws server
+  static const String apiUrl = 'http://192.168.68.66:8818'; // local server
   static const String mlAPIUrl = 'http://52.221.235.222:8080';
   static const String googleSearchAPIUrl = 'https://google.serper.dev/images';
   static const String googleSearchAPIKey =
