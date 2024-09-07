@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart' as charts;
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/models/dashboard_item.dart';
-import 'package:pest_lens_app/provider/dashboard_touch_provider.dart';
 import 'package:pest_lens_app/provider/dashboard_uq_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -12,27 +11,13 @@ class PieChartWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dataAsync = ref.watch(dashboardUQProvider);
-    final touchedIndex = ref.watch(dashBoardTouchedIndexProvider);
-    final touchNotifier = ref.read(dashBoardTouchedIndexProvider.notifier);
-
-    void pieTouchHandler(
-        charts.FlTouchEvent event, charts.PieTouchResponse? pieTouchResponse) {
-      if (pieTouchResponse == null || pieTouchResponse.touchedSection == null) {
-        touchNotifier.updateIndex(-1);
-        return;
-      }
-      if (event is charts.FlTapUpEvent) {
-        final index = pieTouchResponse.touchedSection!.touchedSectionIndex;
-        touchNotifier.updateIndex(index);
-      }
-    }
 
     return Card(
       elevation: 2,
       color: Colors.white,
       margin: const EdgeInsets.all(16),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,67 +28,101 @@ class PieChartWidget extends ConsumerWidget {
             ),
             const Divider(),
             SizedBox(
-              height: 250,
+              height: 310,
               child: dataAsync.when(
-                data: (data) => Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    charts.PieChart(
-                      charts.PieChartData(
-                        pieTouchData: charts.PieTouchData(
-                          touchCallback: pieTouchHandler,
-                        ),
-                        sections: _createSampleData(data, touchedIndex),
-                        sectionsSpace: 1,
-                        centerSpaceRadius: 60,
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        '${AppLocalizations.of(context)!.total}\n${data.fold<int>(0, (sum, item) => sum + item.count)}',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                data: (data) => _buildDonutChart(context, data),
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('${AppLocalizations.of(context)!.error}: $error')),
+                error: (error, stack) => Center(
+                    child:
+                        Text('${AppLocalizations.of(context)!.error}: $error')),
               ),
             ),
-            const SizedBox(height: 30),
           ],
         ),
       ),
     );
   }
 
-  List<charts.PieChartSectionData> _createSampleData(
-      List<DashboardItem> data, int touchedIndex) {
-    // Filter out items with count 0
+  Widget _buildDonutChart(BuildContext context, List<DashboardItem> data) {
     final nonZeroData = data.where((item) => item.count > 0).toList();
+    final total = nonZeroData.fold<int>(0, (sum, item) => sum + item.count);
 
-    return List.generate(nonZeroData.length, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 18.0 : 16.0;
-      final radius = isTouched ? 70.0 : 60.0;
-      final item = nonZeroData[i];
-      return charts.PieChartSectionData(
-        color: item.color,
-        value: item.count.toDouble(),
-        title: '${item.count}',
-        radius: radius,
-        titleStyle: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-        ),
-        titlePositionPercentageOffset: 1.4,
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = constraints.biggest;
+        final centerX = size.width / 2;
+        final centerY = size.height / 2.2;
+
+        return Stack(
+          children: [
+            SfCircularChart(
+              margin: const EdgeInsets.all(0),
+              legend: const Legend(
+                isVisible: true,
+                position: LegendPosition.bottom,
+                overflowMode: LegendItemOverflowMode.scroll,
+                shouldAlwaysShowScrollbar: true,
+                toggleSeriesVisibility: true,
+                textStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              series: <CircularSeries>[
+                DoughnutSeries<DashboardItem, String>(
+                  dataSource: nonZeroData,
+                  xValueMapper: (DashboardItem item, _) => item.title,
+                  yValueMapper: (DashboardItem item, _) => item.count,
+                  pointColorMapper: (DashboardItem item, _) => item.color,
+                  dataLabelMapper: (DashboardItem item, _) => '${item.count}',
+                  dataLabelSettings: const DataLabelSettings(
+                    isVisible: true,
+                    labelPosition: ChartDataLabelPosition.outside,
+                    connectorLineSettings:
+                        ConnectorLineSettings(type: ConnectorType.curve),
+                    textStyle: TextStyle(
+                      fontSize: 16, // Increased font size
+                      fontWeight: FontWeight.bold, // Made the text bold
+                      color: Colors
+                          .black, // Ensured text color is black for visibility
+                    ),
+                  ),
+                  enableTooltip: true,
+                  innerRadius: '50%',
+                  explode: true,
+                  explodeIndex: -1,
+                  explodeOffset: '10%',
+                ),
+              ],
+              tooltipBehavior: TooltipBehavior(
+                enable: true,
+                format: 'point.x : point.y',
+              ),
+            ),
+            Positioned(
+              left: centerX,
+              top: centerY,
+              child: Transform.translate(
+                offset: const Offset(-50, -30),
+                child: Container(
+                  width: 100,
+                  height: 50,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '${AppLocalizations.of(context)!.total}\n$total',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
