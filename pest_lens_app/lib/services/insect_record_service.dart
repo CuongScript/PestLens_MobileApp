@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
+import 'package:pest_lens_app/models/user.dart';
+import 'package:pest_lens_app/preferences/user_preferences.dart';
 import 'package:pest_lens_app/utils/config.dart';
+import 'package:pest_lens_app/models/insect_alert_model.dart';
 
 class InsectRecordService {
   static const String baseUrl = '${Config.apiUrl}/api';
@@ -128,5 +131,29 @@ class InsectRecordService {
 
     return result
       ..sort((a, b) => (b['count'] as int).compareTo(a['count'] as int));
+  }
+
+  Future<List<InsectAlertModel>> fetchInsectAlerts(
+      {int days = 6, double threshold = 1}) async {
+    final user = await UserPreferences.getUser();
+    final url =
+        Uri.parse('$baseUrl/pest-data/alerts?days=$days&threshold=$threshold');
+    final headers = {
+      'Authorization': 'Bearer ${user?.accessToken}',
+    };
+
+    try {
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = json.decode(response.body);
+        return jsonData.map((data) => InsectAlertModel.fromJson(data)).toList();
+      } else {
+        throw Exception('Failed to load insect alerts: ${response.body}');
+      }
+    } catch (e) {
+      print('Error fetching insect alerts: $e');
+      return [];
+    }
   }
 }

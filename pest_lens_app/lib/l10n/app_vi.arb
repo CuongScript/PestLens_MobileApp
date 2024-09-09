@@ -148,5 +148,19 @@
   "selectCustomDate": "Bật Trực Tiếp",
     "liveMonitoringActivated": "Đã kích hoạt giám sát trực tiếp",
   "insectDataUpdateInfo": "Dữ liệu côn trùng sẽ được cập nhật sau {minutes} phút",
-  "insectDataUpdatedRecently": "Dữ liệu côn trùng vừa được cập nhật gần đây"
+  "insectDataUpdatedRecently": "Dữ liệu côn trùng vừa được cập nhật gần đây",
+  "averageInsectAmount": "Phân tích Trung bình",
+  "averageAmountOf": "So sánh Số lượng và Thay đổi Trung bình",
+  "counting" : "Đếm",
+  "averageDif": "Thay Đổi Trung Bình",
+  "dates":"ngày",
+  "insectInfo": "Thông tin côn trùng",
+  "countDetails": "Chi tiết số lượng",
+  "chartDescription": "Mô tả biểu đồ",
+  "previousCount": "Số lượng trước đây",
+  "currentCount": "Số lượng hiện tại",
+  "percentageIncrease": "Phần trăm thay đổi",
+  "dateRange": "Khoảng thời gian",
+  "englishName": "Tên tiếng Anh",
+  "vietnameseName": "Tên tiếng Việt"
 }

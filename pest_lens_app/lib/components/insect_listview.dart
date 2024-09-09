@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
+import 'package:pest_lens_app/pages/farmer/average_insect_amount_page.dart';
 
 class InsectListView extends StatelessWidget {
   final List<Insect> insects;
@@ -11,7 +12,19 @@ class InsectListView extends StatelessWidget {
     return ListView.builder(
       itemCount: insects.length,
       itemBuilder: (context, index) {
-        return InsectTile(insect: insects[index]);
+        return InsectTile(
+          insect: insects[index],
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AverageInsectAmountPage(
+                  insectName: insects[index].name,
+                ),
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -19,8 +32,9 @@ class InsectListView extends StatelessWidget {
 
 class InsectTile extends StatelessWidget {
   final Insect insect;
+  final VoidCallback onTap;
 
-  const InsectTile({super.key, required this.insect});
+  const InsectTile({super.key, required this.insect, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -30,38 +44,41 @@ class InsectTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       color: Colors.white,
       shadowColor: Colors.grey.withOpacity(0.3),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: insect.color,
-                shape: BoxShape.circle,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: insect.color,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.bug_report, color: Colors.white),
               ),
-              child: const Icon(Icons.bug_report, color: Colors.white),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                insect.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  insect.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            Text(
-              insect.quantity.toString(),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: insect.color,
+              Text(
+                insect.quantity.toString(),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: insect.color,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

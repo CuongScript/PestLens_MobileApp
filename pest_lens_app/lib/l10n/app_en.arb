@@ -148,5 +148,20 @@
   "selectCustomDate": "Enable Live Monitor",
   "liveMonitoringActivated": "Live monitoring activated",
   "insectDataUpdateInfo": "Insect data will be updated in {minutes} minutes",
-  "insectDataUpdatedRecently": "Insect data was recently updated"
+  "insectDataUpdatedRecently": "Insect data was recently updated",
+  "averageInsectAmount": "Average Analysis",
+    "averageAmountOf": "Count Comparision and Average Change",
+    "dates":"days",
+    "counting" : "Count",
+    "averageDif": "Average Difference",
+  "insectInfo": "Insect Information",
+  "countDetails": "Count Details",
+  "chartDescription": "Chart Description",
+  "previousCount": "Previous Count",
+  "currentCount": "Current Count",
+  "percentageIncrease": "Percentage Change",
+  "dateRange": "Date Range",
+  "englishName": "English Name",
+  "vietnameseName": "Vietnamese Name"
+
 }

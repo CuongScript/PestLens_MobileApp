@@ -99,7 +99,9 @@ class _MyLineChartState extends State<MyLineChart> {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(15)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -20,6 +20,25 @@ class CustomTextStyles {
     color: fontTitleColor,
   );
 
+  static const TextStyle cardTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Color(0xFF0064c3),
+  );
+
+  static const TextStyle cardContent = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 16,
+    color: Colors.black87,
+  );
+
+  static const TextStyle cardContentPoint = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 16,
+    color: Colors.black87,
+    fontWeight: FontWeight.bold,
+  );
+
   static const TextStyle pageTitle2 = TextStyle(
     fontFamily: 'Inter',
     fontSize: 22,

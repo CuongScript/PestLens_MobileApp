@@ -12,7 +12,7 @@ import 'package:pest_lens_app/services/insect_information_service.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InsectInformationPage extends ConsumerStatefulWidget {
-  const InsectInformationPage({Key? key}) : super(key: key);
+  const InsectInformationPage({super.key});
 
   @override
   _InsectInformationPageState createState() => _InsectInformationPageState();
@@ -35,15 +35,15 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
     super.initState();
   }
 
-  // void _showErrorSnackBar(String message) {
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(
-  //       content: Text(message),
-  //       backgroundColor: Colors.red,
-  //       duration: const Duration(seconds: 3),
-  //     ),
-  //   );
-  // }
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
 
   void _handleFilterChanged(List<String> filters) {
     setState(() {
@@ -79,8 +79,10 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
     } catch (e) {
       // print(
       //     '${AppLocalizations.of(context)!.errorFetchImg} ${insect.englishName}: $e');
-      // _showErrorSnackBar(
-      //     '${AppLocalizations.of(context)!.errorLoadImg} ${insect.englishName}');
+      if (mounted) {
+        _showErrorSnackBar(
+            '${AppLocalizations.of(context)!.errorLoadImg} ${insect.englishName}');
+      }
       return '';
     }
   }
