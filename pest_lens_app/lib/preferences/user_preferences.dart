@@ -61,6 +61,7 @@ class UserPreferences {
   static Future<UserFullInfoModel?> getCurrentUserProfileInformation() async {
     final prefs = await SharedPreferences.getInstance();
     String? email = prefs.getString('email');
+    String? username = prefs.getString('username');
     String? firstName = prefs.getString('firstName');
     String? lastName = prefs.getString('lastName');
     String? phoneNumber = prefs.getString('phoneNumber');
@@ -75,6 +76,7 @@ class UserPreferences {
 
     if (email != null &&
         firstName != null &&
+        username != null &&
         lastName != null &&
         createdAt != null &&
         roles != null &&
@@ -83,7 +85,7 @@ class UserPreferences {
         newUser != null) {
       return UserFullInfoModel(
         id: '',
-        username: '',
+        username: username,
         email: email,
         firstName: firstName,
         lastName: lastName,

@@ -35,11 +35,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<void> _checkAndFetchUserInfo() async {
-    userFullInfo = await UserPreferences.getCurrentUserProfileInformation();
-    if (userFullInfo == null) {
-      await _fetchUserFullInfo();
-    }
-    setState(() {});
+    // userFullInfo = await UserPreferences.getCurrentUserProfileInformation();
+
+    await _fetchUserFullInfo();
   }
 
   Future<void> _fetchUserFullInfo() async {

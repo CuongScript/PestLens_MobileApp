@@ -55,13 +55,22 @@ class UserProfileDetailPage extends StatelessWidget {
             _buildInfoField(AppLocalizations.of(context)!.lastName,
                 user.lastName, Icons.person_outline),
             const SizedBox(height: 20),
-            _buildInfoField(AppLocalizations.of(context)!.phone,
-                user.phoneNumber, Icons.phone),
-            const SizedBox(height: 20),
-            _buildInfoField(
-                AppLocalizations.of(context)!.role,
-                user.roles.map((r) => r.toString().split('.').last).join(', '),
-                Icons.work),
+            if (user.phoneNumber != null && user.phoneNumber != '') ...[
+              _buildInfoField(AppLocalizations.of(context)!.phone,
+                  user.phoneNumber, Icons.phone),
+              const SizedBox(height: 20),
+            ],
+            if (user.roles.isNotEmpty) ...[
+              _buildInfoField(
+                  AppLocalizations.of(context)!.role,
+                  user.roles
+                      .map((r) => r.toString().split('.').last)
+                      .join(', '),
+                  Icons.work),
+            ] else ...[
+              _buildInfoField(
+                  AppLocalizations.of(context)!.role, "ROLE_USER", Icons.work),
+            ],
             if (!isFromSettings) ...[
               const SizedBox(height: 20),
               _buildInfoField(
@@ -99,6 +108,12 @@ class UserProfileDetailPage extends StatelessWidget {
   }
 
   Widget _buildInfoField(String label, String? value, IconData icon) {
+    if (value == 'ROLE_USER') {
+      value = 'Farmer';
+    } else if (value == 'ROLE_ADMIN') {
+      value = 'Administator';
+    }
+
     return MyTextFormField(
       controller: TextEditingController(text: value ?? 'N/A'),
       obscureText: false,
