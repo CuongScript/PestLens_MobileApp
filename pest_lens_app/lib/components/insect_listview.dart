@@ -4,8 +4,13 @@ import 'package:pest_lens_app/pages/farmer/average_insect_amount_page.dart';
 
 class InsectListView extends StatelessWidget {
   final List<Insect> insects;
+  final bool isAverageNavigation;
 
-  const InsectListView({super.key, required this.insects});
+  const InsectListView({
+    super.key,
+    required this.insects,
+    this.isAverageNavigation = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +20,7 @@ class InsectListView extends StatelessWidget {
         return InsectTile(
           insect: insects[index],
           onTap: () {
+            if (!isAverageNavigation) return;
             Navigator.push(
               context,
               MaterialPageRoute(

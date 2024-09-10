@@ -211,10 +211,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       settingKey: 'key-notification',
       title: "Notification",
       activeColor: appNameColor,
+      
+      defaultValue: true,
       leading: const Icon(Icons.notifications_rounded, color: fontTitleColor),
       titleTextStyle: CustomTextStyles.subtitle,
       onChange: (bool value) {
-        // Handle notification toggle
+        print('Notification: $value');
       },
     );
   }

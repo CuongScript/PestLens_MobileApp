@@ -41,8 +41,7 @@ class _WeatherInfoSectionState extends State<WeatherInfoSection> {
           _errorMessage = null;
         });
       }
-    } catch (e) {
-      print('${AppLocalizations.of(context)!.weatherDataErrorFetch}: $e');
+    } catch (e) { 
       if (_mounted) {
         setState(() {
           _isLoading = false;

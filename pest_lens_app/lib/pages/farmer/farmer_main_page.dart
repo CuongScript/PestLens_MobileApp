@@ -263,7 +263,10 @@ class _FarmerMainPageState extends State<FarmerMainPage> {
                     ),
                     const SizedBox(height: 8),
                     Expanded(
-                      child: InsectListView(insects: _processedInsectData),
+                      child: InsectListView(
+                        insects: _processedInsectData,
+                        isAverageNavigation: true,
+                      ),
                     ),
                   ],
                 ),

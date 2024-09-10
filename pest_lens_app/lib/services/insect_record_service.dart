@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pest_lens_app/models/insect_count_model.dart';
 import 'package:pest_lens_app/models/insect_model.dart';
-import 'package:pest_lens_app/models/user.dart';
 import 'package:pest_lens_app/preferences/user_preferences.dart';
 import 'package:pest_lens_app/utils/config.dart';
 import 'package:pest_lens_app/models/insect_alert_model.dart';
