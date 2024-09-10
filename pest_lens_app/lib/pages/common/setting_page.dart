@@ -24,8 +24,8 @@ class SettingsPage extends ConsumerStatefulWidget {
 class _SettingsPageState extends ConsumerState<SettingsPage> {
   final AuthService _authService = AuthService();
   UserFullInfoModel? userFullInfo;
-  double _pestThreshold = 50.0; // Default value
-  int _averageDays = 7; // Default value
+  double _pestThreshold = 100; // Default value
+  double _averageDays = 6.0; // Default value
   bool _isLoggingOut = false;
 
   @override
@@ -211,7 +211,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       settingKey: 'key-notification',
       title: "Notification",
       activeColor: appNameColor,
-      
       defaultValue: true,
       leading: const Icon(Icons.notifications_rounded, color: fontTitleColor),
       titleTextStyle: CustomTextStyles.subtitle,
@@ -248,7 +247,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         SliderSettingsTile(
           title: 'Number of Average Days',
           settingKey: 'average-days',
-          defaultValue: _averageDays.toDouble(),
+          defaultValue: _averageDays,
           decimalPrecision: 0,
           min: 1,
           max: 30,
@@ -256,7 +255,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           leading: const Icon(Icons.calendar_today),
           onChange: (value) {
             setState(() {
-              _averageDays = value.toInt();
+              _averageDays = value;
             });
           },
         ),

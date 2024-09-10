@@ -133,7 +133,7 @@ class InsectRecordService {
   }
 
   Future<List<InsectAlertModel>> fetchInsectAlerts(
-      {int days = 6, double threshold = 1}) async {
+      {int days = 6, double threshold = 50}) async {
     final user = await UserPreferences.getUser();
     final url =
         Uri.parse('$baseUrl/pest-data/alerts?days=$days&threshold=$threshold');
