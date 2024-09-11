@@ -133,7 +133,10 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text(AppLocalizations.of(context)!.cancel),
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -143,7 +146,10 @@ class _MyCalendarPickerState extends State<MyCalendarPicker> {
                       widget.onDateRangeSelected(selectedRange);
                       Navigator.pop(context);
                     },
-                    child: Text(AppLocalizations.of(context)!.confirm),
+                    child: Text(
+                      AppLocalizations.of(context)!.confirm,
+                      style: const TextStyle(fontSize: 14),
+                    ),
                   ),
                 ),
               ],

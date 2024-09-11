@@ -47,7 +47,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     )));
       } else {
         // Handling all other status codes as failures
-        var responseBody = await response.stream.bytesToString();
         messenger.showSnackBar(
           SnackBar(
             content: Text(errorForgotPassword),
@@ -58,7 +57,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       // Handling any kind of exception during the request
       messenger.showSnackBar(
         SnackBar(
-          content: Text('${errorForgotPassword} \nException: $e'),
+          content: Text('$errorForgotPassword \nException: $e'),
         ),
       );
     }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pest_lens_app/assets/colors.dart';
@@ -13,6 +16,7 @@ import 'package:pest_lens_app/services/auth_service.dart';
 import 'package:pest_lens_app/models/user_full_info_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pest_lens_app/pages/common/user_profile_detail_page.dart';
+import 'package:pest_lens_app/services/notification_service.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -27,6 +31,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   double _pestThreshold = 100; // Default value
   double _averageDays = 6.0; // Default value
   bool _isLoggingOut = false;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
@@ -61,9 +66,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
     final notificationService = ref.read(notificationServiceProvider);
 
-    // Unsubscribe from all topics
-    await notificationService.unsubscribeFromTopic('USER_CREATED');
-    await notificationService.unsubscribeFromTopic('PEST_ALERT');
+    // Unsubscribe from topics
+    if (Platform.isIOS) {
+      String? apnsToken = await _firebaseMessaging.getAPNSToken();
+      if (apnsToken != null) {
+        await _unsubscribeFromTopics(notificationService);
+      } else {
+        await Future<void>.delayed(const Duration(seconds: 3));
+        apnsToken = await _firebaseMessaging.getAPNSToken();
+        if (apnsToken != null) {
+          await _unsubscribeFromTopics(notificationService);
+        }
+      }
+    } else {
+      await _unsubscribeFromTopics(notificationService);
+    }
 
     // Clear user preferences
     await UserPreferences.clearUser();
@@ -80,6 +97,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       MaterialPageRoute(builder: (context) => const LoginPage()),
       (Route<dynamic> route) => false,
     );
+  }
+
+  Future<void> _unsubscribeFromTopics(
+      NotificationService notificationService) async {
+    await notificationService.unsubscribeFromTopic('USER_CREATED');
+    await notificationService.unsubscribeFromTopic('PEST_ALERT');
   }
 
   @override
@@ -212,9 +235,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       defaultValue: true,
       leading: const Icon(Icons.notifications_rounded, color: fontTitleColor),
       titleTextStyle: CustomTextStyles.subtitle,
-      onChange: (bool value) {
-        print('Notification: $value');
-      },
+      onChange: (bool value) {},
     );
   }
 

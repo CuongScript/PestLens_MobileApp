@@ -5,7 +5,6 @@ import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:pest_lens_app/components/notification_card.dart';
 import 'package:pest_lens_app/provider/notification_service_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:pest_lens_app/preferences/user_preferences.dart';
 
 class NotificationPage extends ConsumerStatefulWidget {
   const NotificationPage({super.key});

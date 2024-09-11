@@ -2,6 +2,28 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "pest_lens_app_aws (Android Device)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "eef771fcc2a9",
+      "args": [
+        "--release",
+        "--dart-define=AWS_ACCESS_KEY_ID=AKIA4PEHTJ6L4UQK4TPF",
+        "--dart-define=AWS_SECRET_ACCESS_KEY=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"
+      ]
+    },
+    {
+      "name": "pest_lens_app_aws (iOS Device)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "00008030-0019791C36C3C02E",
+      "args": [
+        "--release",
+        "--dart-define=AWS_ACCESS_KEY_ID=AKIA4PEHTJ6L4UQK4TPF",
+        "--dart-define=AWS_SECRET_ACCESS_KEY=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"
+      ]
+    },
+    {
       "name": "pest_lens_app_aws",
       "request": "launch",
       "type": "dart",

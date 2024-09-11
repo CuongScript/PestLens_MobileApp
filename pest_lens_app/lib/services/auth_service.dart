@@ -90,30 +90,38 @@ class AuthService {
   Future<bool> registerDeviceId(
       String username, String tokenType, String accessToken) async {
     final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    String? deviceId = await firebaseMessaging.getToken();
+    String? deviceId;
+
+    if (Platform.isIOS) {
+      deviceId = await firebaseMessaging.getAPNSToken();
+      if (deviceId == null) {
+        await Future.delayed(const Duration(seconds: 3));
+        deviceId = await firebaseMessaging.getAPNSToken();
+      }
+    } else {
+      deviceId = await firebaseMessaging.getToken();
+    }
+
     if (deviceId != null) {
       var headers = {
         'Content-Type': 'application/json',
         'Authorization': '$tokenType $accessToken'
       };
-
       var request = http.Request(
           'POST', Uri.parse('${Config.apiUrl}/api/users/register-device-id'));
-
       request.body = json.encode({"username": username, "deviceId": deviceId});
       request.headers.addAll(headers);
 
       try {
         http.StreamedResponse response = await request.send();
-
         if (response.statusCode == 200) {
-        } else {
-          return false;
+          return true;
         }
       } catch (e) {
-        return false;
+        print('Error registering device ID: $e');
       }
     }
+
     return false;
   }
 

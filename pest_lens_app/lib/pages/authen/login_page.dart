@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:pest_lens_app/assets/colors.dart';
 import 'package:pest_lens_app/components/language_selection_dropdown.dart';
@@ -16,6 +19,7 @@ import 'package:pest_lens_app/services/auth_service.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pest_lens_app/provider/notification_service_provider.dart';
+import 'package:pest_lens_app/services/notification_service.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -29,6 +33,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final passwordController = TextEditingController();
   final AuthService _authService = AuthService();
   bool _isLoading = false;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   void _setLoading(bool value) {
     setState(() {
@@ -79,18 +84,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final notificationService = ref.read(notificationServiceProvider);
 
     // Subscribe to topics based on user role
+    if (Platform.isIOS) {
+      String? apnsToken = await _firebaseMessaging.getAPNSToken();
+      if (apnsToken != null) {
+        await _handleTopicSubscriptions(user, notificationService);
+      } else {
+        await Future<void>.delayed(const Duration(seconds: 3));
+        apnsToken = await _firebaseMessaging.getAPNSToken();
+        if (apnsToken != null) {
+          await _handleTopicSubscriptions(user, notificationService);
+        }
+      }
+    } else {
+      await _handleTopicSubscriptions(user, notificationService);
+    }
+
+    // Navigate based on user role
+    if (!mounted) return;
     if (user.roles.contains(Role.ROLE_ADMIN)) {
-      await notificationService.subscribeToTopic('USER_CREATED');
-      await notificationService.unsubscribeFromTopic('PEST_ALERT');
-      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const AdminTabPage()),
       );
     } else if (user.roles.contains(Role.ROLE_USER)) {
-      await notificationService.subscribeToTopic('PEST_ALERT');
-      await notificationService.unsubscribeFromTopic('USER_CREATED');
-      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const FarmerTabPage()),
@@ -99,6 +115,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     // Set loading to false after navigation
     _setLoading(false);
+  }
+
+  Future<void> _handleTopicSubscriptions(
+      User user, NotificationService notificationService) async {
+    if (user.roles.contains(Role.ROLE_ADMIN)) {
+      await notificationService.subscribeToTopic('USER_CREATED');
+      await notificationService.unsubscribeFromTopic('PEST_ALERT');
+    } else if (user.roles.contains(Role.ROLE_USER)) {
+      await notificationService.subscribeToTopic('PEST_ALERT');
+      await notificationService.unsubscribeFromTopic('USER_CREATED');
+    }
   }
 
   @override

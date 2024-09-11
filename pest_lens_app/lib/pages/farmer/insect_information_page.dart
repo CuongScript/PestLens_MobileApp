@@ -103,6 +103,7 @@ class _InsectInformationPageState extends ConsumerState<InsectInformationPage> {
             icon: const Icon(Icons.refresh, size: 30, color: fontTitleColor),
             iconSize: 40,
             onPressed: () {
+              // ignore: unused_result
               ref.refresh(allInsectsProvider);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

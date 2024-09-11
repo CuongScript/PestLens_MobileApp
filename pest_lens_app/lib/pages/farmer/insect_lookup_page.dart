@@ -174,7 +174,8 @@ class _InsectLookupPageState extends State<InsectLookupPage> {
                     flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: UploadImageDisplay(imageFile: _image!),
+                      child: UploadImageDisplay(
+                          key: ValueKey(_image!.path), imageFile: _image!),
                     ),
                   ),
                 const SizedBox(height: 20),

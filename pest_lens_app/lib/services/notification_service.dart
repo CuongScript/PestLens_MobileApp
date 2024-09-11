@@ -43,8 +43,6 @@ class NotificationService {
   }
 
   void _handleMessage(RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
 
