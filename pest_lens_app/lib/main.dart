@@ -43,7 +43,7 @@ class MyApp extends ConsumerWidget {
     ref.read(notificationServiceProvider).init();
 
     Locale currentLocale = ref.watch(localeProvider);
-    ColorScheme _schemeColor = ColorScheme.fromSeed(
+    ColorScheme schemeColor = ColorScheme.fromSeed(
         seedColor: const Color(0xFFF2F6FF), background: Colors.white);
 
     return MaterialApp(
@@ -58,7 +58,7 @@ class MyApp extends ConsumerWidget {
       ],
       home: const SplashScreen(),
       theme: ThemeData(
-        colorScheme: _schemeColor,
+        colorScheme: schemeColor,
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF2F6FF),
         appBarTheme: const AppBarTheme(

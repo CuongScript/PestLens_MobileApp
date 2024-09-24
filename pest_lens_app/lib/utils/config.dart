@@ -7,8 +7,8 @@ class Config {
       'c18cc3946046205eea7722e8f8cf48d6df8acfe7';
 
   // Camera URLs
-  static const String camera1APIUrl = 'https://rtsp.me/embed/4RzrdaZ6';
-  static const String camera2APIUrl = 'https://rtsp.me/embed/4RzrdaZ6';
+  static const String camera1APIUrl = 'https://rtsp.me/embed/8BNz8RA8';
+  static const String camera2APIUrl = 'https://rtsp.me/embed/8BNz8RA8';
 
   // AWS S3 Configuration
   static const String s3Region = 'ap-southeast-1';

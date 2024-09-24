@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:pest_lens_app/components/my_text_style.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:pest_lens_app/pages/farmer/camera_full_screen_page.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyCameraBox extends StatefulWidget {
   final String url;

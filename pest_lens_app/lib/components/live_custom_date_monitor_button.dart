@@ -7,10 +7,10 @@ class LiveCustomDateMonitorButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const LiveCustomDateMonitorButton({
-    Key? key,
+    super.key,
     required this.isLive,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

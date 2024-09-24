@@ -12,11 +12,11 @@ class ProfileImagePicker extends StatefulWidget {
   final Function(File)? onImagePicked;
 
   const ProfileImagePicker({
-    Key? key,
+    super.key,
     this.imageUrl,
     this.isReadOnly = false,
     this.onImagePicked,
-  }) : super(key: key);
+  });
 
   @override
   State<ProfileImagePicker> createState() => _ProfileImagePickerState();

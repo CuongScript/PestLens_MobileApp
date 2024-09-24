@@ -104,7 +104,7 @@ class _InsectAlertBarChartState extends State<InsectAlertBarChart> {
                     ),
                   ),
                   Text(
-                    '${daysBetween} ${AppLocalizations.of(context)!.dates}',
+                    '$daysBetween ${AppLocalizations.of(context)!.dates}',
                     style: const TextStyle(
                       fontSize: 14,
                       color: Colors.black54,

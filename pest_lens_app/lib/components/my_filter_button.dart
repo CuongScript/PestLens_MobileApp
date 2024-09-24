@@ -6,11 +6,11 @@ class MyFilterButton extends StatefulWidget {
   final Map<String, List<String>> filterGroups;
 
   const MyFilterButton({
-    Key? key,
+    super.key,
     required this.selectedFilters,
     required this.onFilterChanged,
     required this.filterGroups,
-  }) : super(key: key);
+  });
 
   @override
   _MyFilterButtonState createState() => _MyFilterButtonState();
